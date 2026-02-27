@@ -1,15 +1,139 @@
-export default function Navbar() {
+import { useState, useEffect } from "react";
+import { Menu, X, ArrowRight } from "lucide-react";
+
+export default function Navbar({ dark, setDark }) {
+  const [scrolled, setScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+
+      setScrolled(scrollTop > 40);
+      setScrollProgress(Math.min(scrollTop / docHeight, 1));
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-white border-b border-neutral-200">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-        <div className="font-semibold text-lg">Yuvraj Malik</div>
-        <div className="flex gap-8 text-sm">
-          <a href="#work">Work</a>
-          <a href="#experience">Experience</a>
-          <a href="#skills">Skills</a>
-          <a href="#contact">Contact</a>
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled ? "pt-6 px-6" : "pt-0 px-0"
+        }`}
+      >
+        <nav
+          className={`relative mx-auto flex items-center justify-between transition-all duration-300 ${
+            scrolled
+              ? "max-w-6xl px-8 py-4 rounded-full bg-white/70 dark:bg-black/70 backdrop-blur-xl border border-neutral-200 dark:border-neutral-800 shadow-xl"
+              : "max-w-full px-10 py-6 border-b border-neutral-200 dark:border-neutral-800 bg-white/70 dark:bg-black/70 backdrop-blur-xl"
+          }`}
+        >
+          {/* Scroll Progress */}
+          <div
+            className="absolute bottom-0 left-0 h-[3px] bg-black dark:bg-white rounded-full transition-all duration-200"
+            style={{
+              width: `${scrollProgress * 100}%`,
+              opacity: scrolled ? 1 : 0,
+            }}
+          />
+
+          {/* Logo */}
+          <div className="text-lg font-semibold tracking-tight">
+            Yuvraj Malik
+          </div>
+
+          {/* Desktop */}
+          <div className="hidden md:flex items-center gap-6 text-sm">
+            <a
+              href="#about"
+              className="px-4 py-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition"
+            >
+              About
+            </a>
+            <a
+              href="#projects"
+              className="px-4 py-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition"
+            >
+              Projects
+            </a>
+            <a
+              href="#contact"
+              className="px-4 py-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition"
+            >
+              Contact
+            </a>
+
+            <button
+              onClick={() => setDark(!dark)}
+              className="px-4 py-2 rounded-full border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition"
+            >
+              {dark ? "Light" : "Dark"}
+            </button>
+
+            <a
+              href="#contact"
+              className="flex items-center gap-2 px-5 py-2 rounded-full bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition"
+            >
+              Let’s Talk
+              <ArrowRight size={16} />
+            </a>
+          </div>
+
+          {/* Mobile */}
+          <div className="md:hidden flex items-center gap-3">
+            <button
+              onClick={() => setDark(!dark)}
+              className="px-3 py-1 rounded-md border border-neutral-300 dark:border-neutral-700"
+            >
+              {dark ? "☀️" : "🌙"}
+            </button>
+
+            <button onClick={() => setMobileOpen(!mobileOpen)}>
+              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* Mobile Drawer */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm md:hidden">
+          <div className="absolute right-0 top-0 h-full w-72 bg-white dark:bg-neutral-900 p-6 shadow-2xl">
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="absolute top-4 right-4"
+            >
+              <X size={22} />
+            </button>
+
+            <div className="mt-16 flex flex-col gap-6 text-lg">
+              <a href="#about" onClick={() => setMobileOpen(false)}>
+                About
+              </a>
+              <a href="#projects" onClick={() => setMobileOpen(false)}>
+                Projects
+              </a>
+              <a href="#contact" onClick={() => setMobileOpen(false)}>
+                Contact
+              </a>
+
+              <a
+                href="#contact"
+                className="mt-6 px-5 py-3 rounded-full bg-black text-white dark:bg-white dark:text-black text-center"
+              >
+                Let’s Talk
+              </a>
+            </div>
+          </div>
         </div>
-      </div>
-    </nav>
+      )}
+    </>
   );
 }
