@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
+import AiFace from "./AiFace";
 
 export default function Navbar({ dark, setDark }) {
   const [scrolled, setScrolled] = useState(false);
@@ -29,7 +30,7 @@ export default function Navbar({ dark, setDark }) {
         }`}
       >
         <nav
-          className={`relative mx-auto flex items-center justify-between transition-all duration-300 ${
+          className={`relative mx-auto flex items-center md:grid md:grid-cols-[auto_1fr_auto] md:items-center md:gap-6 transition-all duration-300 ${
             scrolled
               ? "max-w-6xl px-8 py-4 rounded-full bg-white/70 dark:bg-black/70 backdrop-blur-xl border border-neutral-200 dark:border-neutral-800 shadow-xl"
               : "max-w-full px-10 py-6 border-b border-neutral-200 dark:border-neutral-800 bg-white/70 dark:bg-black/70 backdrop-blur-xl"
@@ -44,13 +45,20 @@ export default function Navbar({ dark, setDark }) {
             }}
           />
 
-          {/* Logo */}
-          <div className="text-lg font-semibold tracking-tight">
-            Yuvraj Malik
+          {/* Left - Logo */}
+          <div className="flex items-center shrink-0 md:justify-self-start">
+            <div className="text-lg font-semibold tracking-tight">
+              Yuvraj Malik
+            </div>
           </div>
 
-          {/* Desktop */}
-          <div className="hidden md:flex items-center gap-6 text-sm">
+          {/* Center - AiFace */}
+          <div className="hidden md:flex md:justify-self-center">
+            <AiFace />
+          </div>
+
+          {/* Right - Desktop Nav */}
+          <div className="hidden md:flex items-center justify-end gap-6 text-sm md:justify-self-end">
             <a
               href="#about"
               className="px-4 py-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition"
@@ -81,18 +89,18 @@ export default function Navbar({ dark, setDark }) {
               href="#contact"
               className="flex items-center gap-2 px-5 py-2 rounded-full bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition"
             >
-              Let’s Talk
+              Let's Talk
               <ArrowRight size={16} />
             </a>
           </div>
 
-          {/* Mobile */}
+          {/* Right - Mobile Controls */}
           <div className="md:hidden flex items-center gap-3">
             <button
               onClick={() => setDark(!dark)}
               className="px-3 py-1 rounded-md border border-neutral-300 dark:border-neutral-700"
             >
-              {dark ? "☀️" : "🌙"}
+              {dark ? "Light" : "Dark"}
             </button>
 
             <button onClick={() => setMobileOpen(!mobileOpen)}>
@@ -128,7 +136,7 @@ export default function Navbar({ dark, setDark }) {
                 href="#contact"
                 className="mt-6 px-5 py-3 rounded-full bg-black text-white dark:bg-white dark:text-black text-center"
               >
-                Let’s Talk
+                Let's Talk
               </a>
             </div>
           </div>

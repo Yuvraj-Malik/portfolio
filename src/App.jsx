@@ -30,7 +30,7 @@ export default function App() {
   return (
     <div className="bg-white dark:bg-[#0b0f14] text-black dark:text-white min-h-screen transition-colors duration-300">
       <Navbar dark={dark} setDark={setDark} />
-      <main className="pt-24">
+      <main className="pt-6">
         <Hero />
         <Work />
         <Experience />
