@@ -23,10 +23,16 @@ export default function Hero() {
   ];
 
   return (
-    <section id="hero" className="pt-20 pb-14 px-6">
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+    <section
+      id="hero"
+      className="relative h-screen flex items-center px-6 overflow-hidden"
+    >
+      {/* Subtle background depth */}
+      <div className="absolute inset-0 -z-20 opacity-[0.04] bg-[linear-gradient(to_right,black_1px,transparent_1px),linear-gradient(to_bottom,black_1px,transparent_1px)] bg-[size:48px_48px] dark:bg-[linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)]"></div>
+
+      <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-20 items-center">
         {/* LEFT */}
-        <div className="max-w-xl space-y-6">
+        <div className="max-w-xl space-y-6 -translate-y-6">
           {/* Welcome Line */}
           <p className="text-sm tracking-wide text-neutral-500 dark:text-neutral-400">
             <span className="relative group cursor-pointer font-medium">
@@ -39,7 +45,7 @@ export default function Hero() {
           </p>
 
           {/* Headline */}
-          <h1 className="text-4xl md:text-5xl font-semibold leading-[1.15] tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-semibold leading-[1.1] tracking-tight">
             Structured thinking.
             <br />
             <span className="underline decoration-neutral-400 underline-offset-4">
@@ -48,7 +54,7 @@ export default function Hero() {
           </h1>
 
           {/* Capability Strip */}
-          <p className="text-xs tracking-[0.2em] text-neutral-500 dark:text-neutral-400 uppercase">
+          <p className="text-xs tracking-[0.25em] text-neutral-500 dark:text-neutral-400 uppercase">
             Architecture · Interaction · Full-Stack
           </p>
 
@@ -64,9 +70,9 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* RIGHT - Digital Footprint */}
+        {/* RIGHT — Digital Footprint */}
         <div className="flex justify-center md:justify-end">
-          <div className="w-80 rounded-2xl border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 shadow-md p-6">
+          <div className="w-96 rounded-2xl border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 shadow-xl p-8">
             <h3 className="text-sm font-medium text-neutral-600 dark:text-neutral-300 mb-6">
               Digital Footprint
             </h3>
