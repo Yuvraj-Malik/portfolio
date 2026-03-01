@@ -18,10 +18,13 @@ const BOOT_LINES = [
 ];
 
 const SOCIAL_LINKS = [
-  { name: "GitHub", href: "https://github.com/yuvrajmalik" },
-  { name: "LinkedIn", href: "https://linkedin.com/in/yuvraj-malik" },
-  { name: "LeetCode", href: "https://leetcode.com/yuvraj" },
-  { name: "CodeChef", href: "https://codechef.com/users/yuvraj" },
+  { name: "GitHub", href: "https://github.com/Yuvraj-Malik" },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/in/yuvraj-malik-b00005303/",
+  },
+  { name: "LeetCode", href: "https://leetcode.com/u/Yuvraj_Malik/" },
+  { name: "CodeChef", href: "https://www.codechef.com/users/ymalik_be24" },
 ];
 
 const PRINCIPLES = [
