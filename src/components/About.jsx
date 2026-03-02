@@ -1,317 +1,515 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+
+function useDarkMode() {
+  const [dark, setDark] = useState(() =>
+    document.documentElement.classList.contains("dark"),
+  );
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setDark(document.documentElement.classList.contains("dark"));
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
+  return dark;
+}
 
 const skillGroups = [
   {
     id: "core",
     label: "Core Stack",
     skills: [
-      { name: "Python", level: 95 },
-      { name: "JavaScript", level: 90 },
-      { name: "React", level: 85 },
-      { name: "Node", level: 80 },
-      { name: "MongoDB", level: 75 },
-      { name: "MySQL", level: 70 },
-      { name: "Tailwind", level: 85 },
-      { name: "APIs", level: 80 },
+      { name: "Python", context: "AI · scripting · backends" },
+      { name: "JavaScript", context: "fullstack · logic · APIs" },
+      { name: "React", context: "UIs · SPAs · components" },
+      { name: "Node.js", context: "servers · REST · real-time" },
+      { name: "MongoDB", context: "NoSQL · data modeling" },
+      { name: "MySQL", context: "relational · queries" },
+      { name: "Tailwind", context: "styling · design systems" },
+      { name: "REST APIs", context: "integration · contracts" },
     ],
   },
   {
     id: "ai",
     label: "AI & Systems",
     skills: [
-      { name: "TensorFlow", level: 80 },
-      { name: "OpenCV", level: 85 },
-      { name: "MediaPipe", level: 78 },
-      { name: "Pandas", level: 82 },
-      { name: "NumPy", level: 80 },
-      { name: "Matplotlib", level: 75 },
+      { name: "TensorFlow", context: "model training · pipelines" },
+      { name: "OpenCV", context: "vision · image processing" },
+      { name: "MediaPipe", context: "gesture · pose detection" },
+      { name: "Pandas", context: "data wrangling · analysis" },
+      { name: "NumPy", context: "numerical · matrix ops" },
+      { name: "Matplotlib", context: "visualization · plots" },
     ],
   },
   {
     id: "tools",
     label: "Tools",
     skills: [
-      { name: "C / C++", level: 74 },
-      { name: "Data Structures", level: 80 },
-      { name: "GitHub", level: 88 },
-      { name: "Arduino", level: 65 },
-      { name: "VS Code", level: 92 },
-      { name: "Postman", level: 78 },
+      { name: "C / C++", context: "systems · DSA · low-level" },
+      { name: "Data Structures", context: "problem solving · LeetCode" },
+      { name: "GitHub", context: "version control · collab" },
+      { name: "Arduino", context: "hardware · prototyping" },
+      { name: "VS Code", context: "primary editor" },
+      { name: "Postman", context: "API testing · debugging" },
     ],
   },
 ];
 
-function Bar({ level, delay }) {
-  const [w, setW] = useState(0);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    setW(0);
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) setTimeout(() => setW(level), delay);
-      },
-      { threshold: 0.1 },
-    );
-    if (ref.current) io.observe(ref.current);
-    return () => io.disconnect();
-  }, [level, delay]);
+function SkillRow({ skill, dark, index }) {
+  const [hovered, setHovered] = useState(false);
 
   return (
     <div
-      ref={ref}
-      className="relative overflow-visible rounded-sm bg-neutral-200 dark:bg-neutral-800"
-      style={{ height: 2 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "9px 0",
+        borderBottom: `1px solid ${dark ? (hovered ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.05)") : hovered ? "rgba(0,0,0,0.12)" : "rgba(0,0,0,0.06)"}`,
+        transition: "all 0.15s ease",
+        cursor: "default",
+        animation: `about-fade-up 0.4s cubic-bezier(0.16,1,0.3,1) ${index * 40}ms both`,
+      }}
     >
-      <div
-        className="absolute top-0 left-0 rounded-sm bg-lime-500 dark:bg-lime-600"
+      <span
         style={{
-          height: 2,
-          width: `${w}%`,
-          transition: "width 0.7s cubic-bezier(0.4,0,0.2,1)",
+          fontFamily: "'DM Mono', monospace",
+          fontSize: 13,
+          color: hovered
+            ? dark
+              ? "#ffffff"
+              : "#000000"
+            : dark
+              ? "#c0c0c0"
+              : "#333",
+          transition: "color 0.15s ease",
+          letterSpacing: "0.02em",
         }}
-      />
-      <div
-        className="absolute rounded-sm bg-lime-500 dark:bg-lime-600"
+      >
+        {skill.name}
+      </span>
+      <span
         style={{
-          top: -3,
-          height: 8,
-          width: 2,
-          left: `${w}%`,
-          transition: "left 0.7s cubic-bezier(0.4,0,0.2,1)",
+          fontFamily: "'DM Mono', monospace",
+          fontSize: 11,
+          color: hovered ? (dark ? "#c3c3c3" : "#060606") : dark ? "#6f6f6f" : "#606060",
+          letterSpacing: "0.04em",
+          transition: "color 0.15s ease",
+          textAlign: "right",
         }}
-      />
+      >
+        {skill.context}
+      </span>
     </div>
   );
 }
 
 export default function About() {
+  const dark = useDarkMode();
   const [tab, setTab] = useState("core");
   const group = skillGroups.find((g) => g.id === tab);
 
+  const c = {
+    heading: dark ? "#ffffff" : "#050505",
+    subtext: dark ? "#b0b0b0" : "#555",
+    emphasis: dark ? "#ffffff" : "#111",
+    label: dark ? "#cfcfcf" : "#1d1d1d",
+    divider: dark ? "#333" : "#e8e8e8",
+    tabActive: dark ? "#f8f2f2" : "#000000",
+    tabInactive: dark ? "#555" : "#aaa",
+    tabBorder: dark ? "#ffffff" : "#050505",
+    cardBorder: dark ? "#afafaf" : "#383838",
+    cardBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.02)",
+    cardHover: dark ? "#555" : "#ccc",
+    stripBorder: dark ? "#afafaf" : "#383838",
+    stripBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.02)",
+    stripText: dark ? "#b0b0b0" : "#555",
+    photoBg: dark ? "#1a1a1a" : "#f0f0f0",
+    photoBorder: dark ? "#333" : "#e0e0e0",
+    photoIcon: dark ? "#444" : "#ccc",
+  };
+
   return (
-    <section
-      id="about"
-      className="min-h-screen flex flex-col justify-center px-6 scroll-mt-20 box-border"
-      style={{
-        paddingTop: "2rem",
-        paddingBottom: "2rem",
-        fontFamily: "'DM Sans', sans-serif",
-      }}
-    >
+    <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap');
-        @keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-        .about-fade { animation: fadeUp 0.35s ease forwards; }
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap');
+        @keyframes about-fade-up {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .about-a1 { animation: about-fade-up 0.6s cubic-bezier(0.16,1,0.3,1) 0.05s both; }
+        .about-a2 { animation: about-fade-up 0.6s cubic-bezier(0.16,1,0.3,1) 0.15s both; }
+        .about-a3 { animation: about-fade-up 0.6s cubic-bezier(0.16,1,0.3,1) 0.25s both; }
+        .about-stab {
+          background: none; border: none; cursor: pointer;
+          font-family: 'DM Mono', monospace; font-size: 11px;
+          letter-spacing: 0.08em; padding: 7px 16px;
+          border-bottom: 1.5px solid transparent; margin-bottom: -1px;
+          transition: color 0.2s, border-color 0.2s;
+        }
+        .about-stab:first-child { padding-left: 0; }
       `}</style>
 
-      <div className="max-w-6xl mx-auto w-full">
-        {/* Label row */}
-        <div className="flex items-center gap-3 mb-10">
-          <span className="font-mono text-xs tracking-widest uppercase text-neutral-500 dark:text-neutral-400">
-            — About
-          </span>
-          <div className="flex-1 h-px bg-neutral-200 dark:bg-neutral-700" />
-          <span className="font-mono text-xs text-neutral-400 dark:text-neutral-400">
-            02
-          </span>
-        </div>
+      <section
+        id="about"
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: "5.5rem 3rem 3rem 3rem",
+          scrollMarginTop: "25px",
+          boxSizing: "border-box",
+          position: "relative",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 0,
+            pointerEvents: "none",
+            backgroundImage: dark
+              ? "radial-gradient(circle, rgba(255,255,255,0.18) 1px, transparent 1px)"
+              : "radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+          }}
+        />
 
-        {/* Grid */}
-        <div className="grid md:grid-cols-2 gap-14 items-start">
-          {/* ── LEFT ── */}
-          <div>
-            {/* Heading — black in light, white in dark, no exceptions */}
-            <h2
-              className="font-light leading-snug tracking-tight mb-5 text-neutral-900 dark:text-white"
+        <div
+          style={{
+            maxWidth: 1200,
+            margin: "0 auto",
+            width: "100%",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          {/* Label row */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              marginBottom: 48,
+            }}
+            className="about-a1"
+          >
+            <span
               style={{
-                fontSize: "clamp(1.55rem, 2.6vw, 2.05rem)",
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 11,
+                color: c.label,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
               }}
             >
-              Not just a dev.{" "}
-              <span
-                className="italic text-lime-500 dark:text-lime-400"
-                style={{ fontFamily: "Georgia, serif" }}
-              >
-                A systems thinker
-              </span>{" "}
-              who ships.
-            </h2>
-
-            {/* Bio */}
-            <div className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-300 flex flex-col gap-3">
-              <p className="m-0">
-                I'm Yuvraj, a Computer Engineering student at TIET Patiala. I
-                enjoy building things that push me to learn beyond the classroom
-                — especially projects that feel slightly outside my comfort
-                zone.
-              </p>
-              <p className="m-0">
-                My work has focused on interactive systems and AI-driven
-                applications — from gesture-based controls and computer vision
-                to full-stack platforms. I break down complex ideas into
-                structured components and refine them until they perform
-                reliably.
-              </p>
-              <p className="m-0">
-                Right now I'm deepening my DSA fundamentals alongside building
-                projects — because writing ambitious systems matters, but
-                understanding what's under the hood matters just as much.
-              </p>
-            </div>
-
-            {/* Photo placeholder */}
-            <div className="mt-6 flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
-                  <circle
-                    cx="20"
-                    cy="15"
-                    r="8"
-                    className="fill-neutral-300 dark:fill-neutral-600"
-                  />
-                  <ellipse
-                    cx="20"
-                    cy="34"
-                    rx="13"
-                    ry="8"
-                    className="fill-neutral-300 dark:fill-neutral-600"
-                  />
-                </svg>
-              </div>
-              <div>
-                <p className="m-0 text-sm font-medium text-neutral-900 dark:text-white">
-                  Yuvraj Malik
-                </p>
-                <p className="m-0 mt-0.5 font-mono text-xs text-neutral-500 dark:text-neutral-500">
-                  CS Eng · TIET Patiala
-                </p>
-                <p className="m-0 mt-1 font-mono text-xs text-lime-500 dark:text-lime-600">
-                  // swap with your photo
-                </p>
-              </div>
-            </div>
+              — About
+            </span>
+            <div style={{ flex: 1, height: 1, background: c.divider }} />
+            <span
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 11,
+                color: c.label,
+              }}
+            >
+              02
+            </span>
           </div>
 
-          {/* ── RIGHT ── */}
-          <div>
-            {/* Skills header */}
-            <p className="font-mono text-xs tracking-widest uppercase text-neutral-500 dark:text-neutral-300 mb-3">
-              Skills & Expertise
-            </p>
-
-            {/* Tabs */}
-            <div className="flex border-b border-neutral-200 dark:border-neutral-800 mb-5">
-              {skillGroups.map((g) => (
-                <button
-                  key={g.id}
-                  onClick={() => setTab(g.id)}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    borderBottom:
-                      tab === g.id
-                        ? "2px solid #84cc16"
-                        : "2px solid transparent",
-                    color: tab === g.id ? "#84cc16" : "",
-                    cursor: "pointer",
-                    padding: "7px 16px",
-                    fontFamily: "'DM Mono', monospace",
-                    fontSize: 11,
-                    letterSpacing: "0.06em",
-                    marginBottom: -1,
-                    transition: "color 0.2s, border-color 0.2s",
-                  }}
-                  className={
-                    tab !== g.id
-                      ? "text-neutral-400 dark:text-neutral-600 hover:text-neutral-600 dark:hover:text-neutral-400"
-                      : ""
-                  }
-                >
-                  {g.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Skill rows */}
-            <div className="flex flex-col gap-3">
-              {group?.skills.map((skill, i) => (
-                <div
-                  key={`${tab}-${skill.name}`}
-                  className="flex items-center gap-3"
-                >
-                  <span
-                    className="font-mono text-xs text-neutral-500 dark:text-neutral-200"
-                    style={{ width: 110, flexShrink: 0 }}
-                  >
-                    {skill.name}
-                  </span>
-                  <div className="flex-1">
-                    <Bar level={skill.level} delay={i * 55} />
-                  </div>
-                  <span
-                    className="font-mono text-neutral-400 dark:text-neutral-300"
-                    style={{ fontSize: 10, width: 24, textAlign: "right" }}
-                  >
-                    {skill.level}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Stat cards */}
-            <div className="grid grid-cols-3 gap-2.5 mt-7">
-              {[
-                {
-                  label: "Projects",
-                  value: "10+",
-                  cls: "text-lime-500 dark:text-lime-400",
-                },
-                {
-                  label: "AI Systems",
-                  value: "4",
-                  cls: "text-cyan-400 dark:text-cyan-400",
-                },
-                {
-                  label: "Focus Now",
-                  value: "DSA",
-                  cls: "text-pink-400 dark:text-pink-400",
-                },
-              ].map((s) => (
-                <div
-                  key={s.label}
-                  className="border border-neutral-200 dark:border-neutral-800 rounded-lg py-3 px-2 text-center bg-neutral-50 dark:bg-neutral-900/30 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors duration-200 cursor-default"
-                >
-                  <div className={`font-mono text-xl font-light mb-1 ${s.cls}`}>
-                    {s.value}
-                  </div>
-                  <div
-                    className="font-mono text-neutral-500 dark:text-neutral-300"
-                    style={{ fontSize: 10, letterSpacing: "0.1em" }}
-                  >
-                    {s.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Philosophy strip */}
-            <div className="mt-2.5 border border-neutral-200 dark:border-neutral-800 rounded-lg px-4 py-3 bg-lime-50 dark:bg-neutral-900/20 flex items-start gap-2.5">
-              <span className="font-mono text-sm text-lime-500 dark:text-lime-600 flex-shrink-0">
-                //
-              </span>
-              <p
-                className="m-0 font-mono text-neutral-500 dark:text-neutral-300 leading-relaxed"
-                style={{ fontSize: 11 }}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 64,
+              alignItems: "start",
+            }}
+          >
+            {/* ── LEFT ── */}
+            <div className="about-a2">
+              <h2
+                style={{
+                  fontFamily: "'Instrument Serif', Georgia, serif",
+                  fontSize: "clamp(1.8rem, 3vw, 2.4rem)",
+                  fontWeight: 400,
+                  lineHeight: 1.15,
+                  letterSpacing: "-0.025em",
+                  color: c.heading,
+                  marginBottom: 20,
+                }}
               >
-                build ambitious things · understand them deeply · make them
-                actually work
+                Not just a dev.{" "}
+                <em
+                  style={{ fontStyle: "italic", color: dark ? "#999" : "#555" }}
+                >
+                  A systems thinker
+                </em>{" "}
+                who ships.
+              </h2>
+
+              <div
+                style={{
+                  fontSize: 15,
+                  color: c.subtext,
+                  lineHeight: 1.75,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 14,
+                }}
+              >
+                <p style={{ margin: 0 }}>
+                  I'm Yuvraj, a Computer Engineering student at TIET Patiala. I
+                  enjoy building things that push me to learn beyond the
+                  classroom — especially projects that feel slightly outside my
+                  comfort zone.
+                </p>
+                <p style={{ margin: 0 }}>
+                  My work has focused on interactive systems and AI-driven
+                  applications — from gesture-based controls and computer vision
+                  to full-stack platforms. I break down complex ideas into
+                  structured components and refine them until they perform
+                  reliably.
+                </p>
+                <p style={{ margin: 0 }}>
+                  Right now I'm deepening my DSA fundamentals alongside building
+                  projects — because writing ambitious systems matters, but{" "}
+                  <span style={{ color: c.emphasis, fontWeight: 500 }}>
+                    understanding what's under the hood matters just as much.
+                  </span>
+                </p>
+              </div>
+
+              {/* Photo */}
+              <div
+                style={{
+                  marginTop: 28,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 16,
+                  paddingTop: 28,
+                  borderTop: `1px solid ${c.divider}`,
+                }}
+              >
+                <div
+                  style={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: "50%",
+                    background: c.photoBg,
+                    border: `1px solid ${c.photoBorder}`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                    overflow: "hidden",
+                  }}
+                >
+                  <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="15" r="8" fill={c.photoIcon} />
+                    <ellipse
+                      cx="20"
+                      cy="34"
+                      rx="13"
+                      ry="8"
+                      fill={c.photoIcon}
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontFamily: "'Instrument Serif', Georgia, serif",
+                      fontSize: 18,
+                      color: c.heading,
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    Yuvraj Malik
+                  </p>
+                  <p
+                    style={{
+                      margin: "3px 0 0",
+                      fontFamily: "'DM Mono', monospace",
+                      fontSize: 11,
+                      color: c.label,
+                      letterSpacing: "0.06em",
+                    }}
+                  >
+                    CS Eng · TIET Patiala
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* ── RIGHT ── */}
+            <div className="about-a3">
+              <p
+                style={{
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: 11,
+                  color: c.label,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  marginBottom: 16,
+                }}
+              >
+                Skills & Expertise
               </p>
+
+              {/* Tabs */}
+              <div
+                style={{
+                  display: "flex",
+                  borderBottom: `1px solid ${c.divider}`,
+                  marginBottom: 4,
+                }}
+              >
+                {skillGroups.map((g) => (
+                  <button
+                    key={g.id}
+                    className="about-stab"
+                    onClick={() => setTab(g.id)}
+                    style={{
+                      color: tab === g.id ? c.tabActive : c.tabInactive,
+                      borderBottomColor:
+                        tab === g.id ? c.tabBorder : "transparent",
+                    }}
+                  >
+                    {g.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Skill rows — name left, context right, hover brightens */}
+              <div>
+                {group?.skills.map((skill, i) => (
+                  <SkillRow
+                    key={`${tab}-${skill.name}`}
+                    skill={skill}
+                    dark={dark}
+                    index={i}
+                  />
+                ))}
+              </div>
+
+              {/* Stat cards */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr 1fr",
+                  gap: 10,
+                  marginTop: 24,
+                }}
+              >
+                {[
+                  {
+                    label: "Projects",
+                    value: "10+",
+                    color: dark ? "#4ade80" : "#16a34a",
+                  },
+                  {
+                    label: "AI Systems",
+                    value: "4",
+                    color: dark ? "#22d3ee" : "#0891b2",
+                  },
+                  {
+                    label: "Focus Now",
+                    value: "DSA",
+                    color: dark ? "#f472b6" : "#db2777",
+                  },
+                ].map((s) => (
+                  <div
+                    key={s.label}
+                    style={{
+                      border: `1px solid ${c.cardBorder}`,
+                      borderRadius: 10,
+                      padding: "14px 8px",
+                      textAlign: "center",
+                      background: c.cardBg,
+                      transition: "border-color 0.2s",
+                      cursor: "default",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.borderColor = c.cardHover)
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.borderColor = c.cardBorder)
+                    }
+                  >
+                    <div
+                      style={{
+                        fontFamily: "'Instrument Serif', Georgia, serif",
+                        fontSize: 26,
+                        color: s.color,
+                        marginBottom: 4,
+                        letterSpacing: "-0.02em",
+                      }}
+                    >
+                      {s.value}
+                    </div>
+                    <div
+                      style={{
+                        fontFamily: "'DM Mono', monospace",
+                        fontSize: 10,
+                        color: c.label,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {s.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Philosophy */}
+              <div
+                style={{
+                  marginTop: 10,
+                  border: `1px solid ${c.stripBorder}`,
+                  borderRadius: 10,
+                  padding: "12px 16px",
+                  background: c.stripBg,
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 10,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "'DM Mono', monospace",
+                    fontSize: 13,
+                    color: c.label,
+                    flexShrink: 0,
+                  }}
+                >
+                  //
+                </span>
+                <p
+                  style={{
+                    margin: 0,
+                    fontFamily: "'DM Mono', monospace",
+                    fontSize: 11.5,
+                    color: c.stripText,
+                    lineHeight: 1.65,
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  build ambitious things · understand them deeply · make them
+                  actually work
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
