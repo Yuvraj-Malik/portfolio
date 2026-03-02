@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import Work from "./components/Work";
+import About from "./components/About";
 import Experience from "./components/Experience";
 import Skills from "./components/Skills";
 import Contact from "./components/Contact";
@@ -30,9 +30,9 @@ export default function App() {
   return (
     <div className="bg-white dark:bg-[#0b0f14] text-black dark:text-white min-h-screen transition-colors duration-300">
       <Navbar dark={dark} setDark={setDark} />
-      <main className="pt-6">
+      <main className="pt-0">
         <Hero />
-        <Work />
+        <About />
         <Experience />
         <Skills />
         <Contact />

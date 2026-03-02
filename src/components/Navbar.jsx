@@ -22,6 +22,8 @@ export default function Navbar({ dark, setDark }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const closeMobile = () => setMobileOpen(false);
+
   return (
     <>
       <header
@@ -47,9 +49,9 @@ export default function Navbar({ dark, setDark }) {
 
           {/* Left - Logo */}
           <div className="flex items-center shrink-0 md:justify-self-start">
-            <div className="text-lg font-semibold tracking-tight">
+            <a href="#hero" className="text-lg font-semibold tracking-tight">
               Yuvraj Malik
-            </div>
+            </a>
           </div>
 
           {/* Center - AiFace */}
@@ -57,7 +59,7 @@ export default function Navbar({ dark, setDark }) {
             <AiFace />
           </div>
 
-          {/* Right - Desktop Nav */}
+          {/* Desktop Nav */}
           <div className="hidden md:flex items-center justify-end gap-6 text-sm md:justify-self-end">
             <a
               href="#about"
@@ -65,12 +67,14 @@ export default function Navbar({ dark, setDark }) {
             >
               About
             </a>
+
             <a
               href="#projects"
               className="px-4 py-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition"
             >
               Projects
             </a>
+
             <a
               href="#contact"
               className="px-4 py-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition"
@@ -89,12 +93,12 @@ export default function Navbar({ dark, setDark }) {
               href="#contact"
               className="flex items-center gap-2 px-5 py-2 rounded-full bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition"
             >
-              Let's Talk
+              Let’s Talk
               <ArrowRight size={16} />
             </a>
           </div>
 
-          {/* Right - Mobile Controls */}
+          {/* Mobile Controls */}
           <div className="md:hidden flex items-center gap-3">
             <button
               onClick={() => setDark(!dark)}
@@ -114,29 +118,27 @@ export default function Navbar({ dark, setDark }) {
       {mobileOpen && (
         <div className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm md:hidden">
           <div className="absolute right-0 top-0 h-full w-72 bg-white dark:bg-neutral-900 p-6 shadow-2xl">
-            <button
-              onClick={() => setMobileOpen(false)}
-              className="absolute top-4 right-4"
-            >
+            <button onClick={closeMobile} className="absolute top-4 right-4">
               <X size={22} />
             </button>
 
             <div className="mt-16 flex flex-col gap-6 text-lg">
-              <a href="#about" onClick={() => setMobileOpen(false)}>
+              <a href="#about" onClick={closeMobile}>
                 About
               </a>
-              <a href="#projects" onClick={() => setMobileOpen(false)}>
+              <a href="#projects" onClick={closeMobile}>
                 Projects
               </a>
-              <a href="#contact" onClick={() => setMobileOpen(false)}>
+              <a href="#contact" onClick={closeMobile}>
                 Contact
               </a>
 
               <a
                 href="#contact"
+                onClick={closeMobile}
                 className="mt-6 px-5 py-3 rounded-full bg-black text-white dark:bg-white dark:text-black text-center"
               >
-                Let's Talk
+                Let’s Talk
               </a>
             </div>
           </div>
