@@ -548,356 +548,290 @@ function ProjectTabContent({ project, tab, dark, c }) {
   return null;
 }
 
-function ProjectCard({ project, dark, c, mode, isExpanded, onToggle }) {
-  const [activeTab, setActiveTab] = useState("Overview");
-  const expandRef = useRef(null);
-
-  useEffect(() => {
-    if (isExpanded && expandRef.current) {
-      setTimeout(() => {
-        expandRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-        });
-      }, 100);
-    }
-  }, [isExpanded]);
-
+// Card tile — sits in the 2-column grid
+function ProjectCard({ project, dark, c, mode, isExpanded, onToggle, index }) {
   const isShowcase = mode === "showcase";
 
   return (
     <div
+      onClick={onToggle}
       style={{
-        borderTop: `1px solid ${dark ? "#222" : "#e8e8e8"}`,
-        transition: "all 0.2s ease",
+        border: `1px solid ${isExpanded ? (dark ? "#444" : "#aaa") : dark ? "#222" : "#e8e8e8"}`,
+        borderRadius: 10,
+        padding: "20px 20px 18px 20px",
+        cursor: "pointer",
+        background: isExpanded
+          ? dark
+            ? "rgba(255,255,255,0.03)"
+            : "rgba(0,0,0,0.02)"
+          : "transparent",
+        transition: "border-color 0.15s ease, background 0.15s ease",
+      }}
+      onMouseEnter={(e) => {
+        if (!isExpanded)
+          e.currentTarget.style.borderColor = dark ? "#444" : "#bbb";
+        e.currentTarget.querySelector(".proj-title").style.color = dark
+          ? "#ffffff"
+          : "#000000";
+      }}
+      onMouseLeave={(e) => {
+        if (!isExpanded)
+          e.currentTarget.style.borderColor = dark ? "#222" : "#e8e8e8";
+        if (!isExpanded)
+          e.currentTarget.querySelector(".proj-title").style.color = dark
+            ? "#c0c0c0"
+            : "#333";
       }}
     >
-      {/* Card row */}
       <div
-        onClick={onToggle}
         style={{
-          display: "grid",
-          gridTemplateColumns: isShowcase ? "1fr auto" : "40px 1fr auto",
-          alignItems: "center",
-          gap: 24,
-          padding: "24px 0",
-          cursor: "pointer",
-          transition: "all 0.2s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.querySelector(".proj-title").style.color = dark
-            ? "#ffffff"
-            : "#000000";
-        }}
-        onMouseLeave={(e) => {
-          if (!isExpanded)
-            e.currentTarget.querySelector(".proj-title").style.color = dark
-              ? "#c0c0c0"
-              : "#333";
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+          marginBottom: 10,
         }}
       >
-        {/* Engineer mode index */}
-        {!isShowcase && (
-          <span
-            style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 11,
-              color: dark ? "#444" : "#ccc",
-              letterSpacing: "0.06em",
-            }}
-          >
-            {String(PROJECTS.indexOf(project) + 1).padStart(2, "0")}
-          </span>
-        )}
-
-        {/* Main info */}
-        <div style={{ minWidth: 0 }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              marginBottom: isShowcase ? 6 : 4,
-            }}
-          >
-            <span
-              className="proj-title"
-              style={{
-                fontFamily: isShowcase
-                  ? "'Instrument Serif', Georgia, serif"
-                  : "'DM Mono', monospace",
-                fontSize: isShowcase ? 22 : 15,
-                fontWeight: 400,
-                color: isExpanded
-                  ? dark
-                    ? "#ffffff"
-                    : "#000000"
-                  : dark
-                    ? "#c0c0c0"
-                    : "#333",
-                letterSpacing: isShowcase ? "-0.01em" : "0.02em",
-                transition: "color 0.15s ease",
-              }}
-            >
-              {project.title}
-            </span>
-            <StatusBadge status={project.status} dark={dark} />
-          </div>
-
-          {isShowcase && (
-            <p
-              style={{
-                margin: "0 0 10px 0",
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 12,
-                color: dark ? "#666" : "#999",
-                letterSpacing: "0.02em",
-                lineHeight: 1.5,
-              }}
-            >
-              {project.thesis}
-            </p>
-          )}
-
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {project.tech.map((t) => (
-              <TechPill key={t} label={t} dark={dark} />
-            ))}
-          </div>
-        </div>
-
-        {/* Right side */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 16,
-            flexShrink: 0,
-          }}
-        >
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           {!isShowcase && (
             <span
               style={{
                 fontFamily: "'DM Mono', monospace",
                 fontSize: 10,
-                color: dark ? "#555" : "#bbb",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
+                color: dark ? "#444" : "#ccc",
+                letterSpacing: "0.06em",
               }}
             >
-              {project.category}
+              {String(index + 1).padStart(2, "0")}
             </span>
           )}
           <span
+            className="proj-title"
             style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 14,
-              color: dark ? "#555" : "#bbb",
-              transition: "transform 0.2s ease, color 0.15s ease",
-              transform: isExpanded ? "rotate(45deg)" : "rotate(0deg)",
-              display: "inline-block",
+              fontFamily: isShowcase
+                ? "'Instrument Serif', Georgia, serif"
+                : "'DM Mono', monospace",
+              fontSize: isShowcase ? 18 : 14,
+              fontWeight: 400,
+              color: isExpanded
+                ? dark
+                  ? "#ffffff"
+                  : "#000000"
+                : dark
+                  ? "#c0c0c0"
+                  : "#333",
+              letterSpacing: isShowcase ? "-0.01em" : "0.02em",
+              transition: "color 0.15s ease",
             }}
           >
-            +
+            {project.title}
           </span>
+          <StatusBadge status={project.status} dark={dark} />
         </div>
-      </div>
-
-      {/* Expanded content */}
-      {isExpanded && (
-        <div
-          ref={expandRef}
+        <span
           style={{
-            borderTop: `1px solid ${dark ? "#1a1a1a" : "#f0f0f0"}`,
-            paddingTop: 32,
-            paddingBottom: 40,
-            animation: "proj-expand 0.25s cubic-bezier(0.16,1,0.3,1) both",
+            fontFamily: "'DM Mono', monospace",
+            fontSize: 14,
+            color: dark ? "#555" : "#bbb",
+            transform: isExpanded ? "rotate(45deg)" : "rotate(0deg)",
+            transition: "transform 0.2s ease",
+            display: "inline-block",
+            flexShrink: 0,
+            marginLeft: 8,
           }}
         >
+          +
+        </span>
+      </div>
+
+      {isShowcase && (
+        <p
+          style={{
+            margin: "0 0 12px 0",
+            fontFamily: "'DM Mono', monospace",
+            fontSize: 11,
+            color: dark ? "#666" : "#999",
+            letterSpacing: "0.02em",
+            lineHeight: 1.5,
+          }}
+        >
+          {project.thesis}
+        </p>
+      )}
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+        {project.tech.map((t) => (
+          <TechPill key={t} label={t} dark={dark} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Expanded detail panel — renders full-width below a row
+function ProjectExpanded({ project, dark, c }) {
+  const [activeTab, setActiveTab] = useState("Overview");
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      setTimeout(
+        () =>
+          ref.current.scrollIntoView({ behavior: "smooth", block: "nearest" }),
+        80,
+      );
+    }
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        gridColumn: "1 / -1",
+        borderTop: `1px solid ${dark ? "#1a1a1a" : "#efefef"}`,
+        borderBottom: `1px solid ${dark ? "#1a1a1a" : "#efefef"}`,
+        padding: "28px 0 32px 0",
+        animation: "proj-expand 0.2s cubic-bezier(0.16,1,0.3,1) both",
+      }}
+    >
+      <div
+        style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 40 }}
+      >
+        {/* Left — preview + buttons */}
+        <div>
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 48,
+              width: "100%",
+              height: 180,
+              borderRadius: 8,
+              background: dark ? "#111" : "#f5f5f5",
+              border: `1px solid ${dark ? "#1e1e1e" : "#ebebeb"}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 16,
             }}
           >
-            {/* Left — project meta */}
-            <div>
-              <p
+            <span
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 9,
+                color: dark ? "#2e2e2e" : "#d0d0d0",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+              }}
+            >
+              Preview placeholder
+            </span>
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
-                  margin: "0 0 4px 0",
-                  fontFamily: "'Instrument Serif', Georgia, serif",
-                  fontSize: 28,
-                  fontWeight: 400,
-                  color: dark ? "#ffffff" : "#050505",
-                  letterSpacing: "-0.02em",
-                  lineHeight: 1.1,
-                }}
-              >
-                {project.title}
-              </p>
-              <p
-                style={{
-                  margin: "0 0 24px 0",
                   fontFamily: "'DM Mono', monospace",
-                  fontSize: 12,
-                  color: dark ? "#777" : "#888",
-                  lineHeight: 1.6,
-                  letterSpacing: "0.02em",
+                  fontSize: 11,
+                  color: dark ? "#ccc" : "#444",
+                  textDecoration: "none",
+                  border: `1px solid ${dark ? "#333" : "#ddd"}`,
+                  borderRadius: 100,
+                  padding: "7px 14px",
+                  letterSpacing: "0.06em",
+                  transition: "all 0.15s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = dark ? "#888" : "#888";
+                  e.currentTarget.style.color = dark ? "#fff" : "#000";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = dark ? "#333" : "#ddd";
+                  e.currentTarget.style.color = dark ? "#ccc" : "#444";
                 }}
               >
-                {project.thesis}
-              </p>
-
-              {/* Preview placeholder */}
-              <div
+                GitHub →
+              </a>
+            )}
+            {project.live && (
+              <a
+                href={project.live}
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
-                  width: "100%",
-                  height: 200,
-                  borderRadius: 10,
-                  background: dark ? "#111" : "#f5f5f5",
-                  border: `1px solid ${dark ? "#222" : "#e8e8e8"}`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: 20,
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: 11,
+                  color: dark ? "#111" : "#fff",
+                  textDecoration: "none",
+                  background: dark ? "#f0f0f0" : "#111",
+                  borderRadius: 100,
+                  padding: "7px 14px",
+                  letterSpacing: "0.06em",
+                  transition: "opacity 0.15s ease",
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
               >
-                <span
-                  style={{
-                    fontFamily: "'DM Mono', monospace",
-                    fontSize: 10,
-                    color: dark ? "#333" : "#ccc",
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Preview placeholder
-                </span>
-              </div>
-
-              {/* Action buttons */}
-              <div style={{ display: "flex", gap: 10 }}>
-                {project.github && (
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      fontFamily: "'DM Mono', monospace",
-                      fontSize: 11,
-                      color: dark ? "#ccc" : "#444",
-                      textDecoration: "none",
-                      border: `1px solid ${dark ? "#333" : "#ddd"}`,
-                      borderRadius: 100,
-                      padding: "8px 16px",
-                      letterSpacing: "0.06em",
-                      transition: "all 0.15s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = dark
-                        ? "#888"
-                        : "#888";
-                      e.currentTarget.style.color = dark ? "#fff" : "#000";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = dark
-                        ? "#333"
-                        : "#ddd";
-                      e.currentTarget.style.color = dark ? "#ccc" : "#444";
-                    }}
-                  >
-                    GitHub →
-                  </a>
-                )}
-                {project.live && (
-                  <a
-                    href={project.live}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      fontFamily: "'DM Mono', monospace",
-                      fontSize: 11,
-                      color: dark ? "#111" : "#fff",
-                      textDecoration: "none",
-                      background: dark ? "#f0f0f0" : "#111",
-                      borderRadius: 100,
-                      padding: "8px 16px",
-                      letterSpacing: "0.06em",
-                      transition: "opacity 0.15s ease",
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.opacity = "0.8")
-                    }
-                    onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-                  >
-                    Live Demo ↗
-                  </a>
-                )}
-              </div>
-            </div>
-
-            {/* Right — tabs */}
-            <div>
-              {/* Tab bar */}
-              <div
-                style={{
-                  display: "flex",
-                  borderBottom: `1px solid ${dark ? "#222" : "#e8e8e8"}`,
-                  marginBottom: 20,
-                  gap: 0,
-                }}
-              >
-                {TABS.map((t) => (
-                  <button
-                    key={t}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveTab(t);
-                    }}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      borderBottom: `1.5px solid ${activeTab === t ? (dark ? "#fff" : "#000") : "transparent"}`,
-                      marginBottom: -1,
-                      cursor: "pointer",
-                      fontFamily: "'DM Mono', monospace",
-                      fontSize: 11,
-                      letterSpacing: "0.08em",
-                      padding: "6px 14px",
-                      color:
-                        activeTab === t
-                          ? dark
-                            ? "#f0f0f0"
-                            : "#111"
-                          : dark
-                            ? "#555"
-                            : "#aaa",
-                      transition: "color 0.15s ease, border-color 0.15s ease",
-                    }}
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
-
-              {/* Tab content */}
-              <div
-                key={activeTab}
-                style={{ animation: "proj-expand 0.15s ease both" }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <ProjectTabContent
-                  project={project}
-                  tab={activeTab}
-                  dark={dark}
-                  c={c}
-                />
-              </div>
-            </div>
+                Live Demo ↗
+              </a>
+            )}
           </div>
         </div>
-      )}
+
+        {/* Right — tabs */}
+        <div>
+          <div
+            style={{
+              display: "flex",
+              borderBottom: `1px solid ${dark ? "#222" : "#e8e8e8"}`,
+              marginBottom: 18,
+            }}
+          >
+            {TABS.map((t) => (
+              <button
+                key={t}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveTab(t);
+                }}
+                style={{
+                  background: "none",
+                  border: "none",
+                  borderBottom: `1.5px solid ${activeTab === t ? (dark ? "#fff" : "#000") : "transparent"}`,
+                  marginBottom: -1,
+                  cursor: "pointer",
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: 11,
+                  letterSpacing: "0.08em",
+                  padding: "5px 12px",
+                  color:
+                    activeTab === t
+                      ? dark
+                        ? "#f0f0f0"
+                        : "#111"
+                      : dark
+                        ? "#555"
+                        : "#aaa",
+                  transition: "color 0.15s ease, border-color 0.15s ease",
+                }}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+          <div
+            key={activeTab}
+            style={{ animation: "proj-expand 0.15s ease both" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ProjectTabContent
+              project={project}
+              tab={activeTab}
+              dark={dark}
+              c={c}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -948,7 +882,7 @@ export default function Projects() {
         id="projects"
         style={{
           minHeight: "100vh",
-          padding: "5.5rem 3rem 6rem 3rem",
+          padding: "7.5rem 3rem 4rem 3rem",
           boxSizing: "border-box",
           position: "relative",
         }}
@@ -981,7 +915,7 @@ export default function Projects() {
               display: "flex",
               alignItems: "center",
               gap: 12,
-              marginBottom: 48,
+              marginBottom: 32,
             }}
             className="proj-a1"
           >
@@ -1009,16 +943,16 @@ export default function Projects() {
           </div>
 
           {/* ── Intro ── */}
-          <div className="proj-a2" style={{ marginBottom: 64 }}>
+          <div className="proj-a2" style={{ marginBottom: 28 }}>
             <h2
               style={{
                 fontFamily: "'Instrument Serif', Georgia, serif",
-                fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
                 fontWeight: 400,
                 lineHeight: 1.05,
                 letterSpacing: "-0.03em",
                 color: c.heading,
-                marginBottom: 16,
+                marginBottom: 8,
               }}
             >
               Systems I've{" "}
@@ -1031,61 +965,16 @@ export default function Projects() {
             <p
               style={{
                 fontFamily: "'DM Mono', monospace",
-                fontSize: 13,
+                fontSize: 12,
                 color: dark ? "#666" : "#999",
-                lineHeight: 1.7,
+                lineHeight: 1.6,
                 letterSpacing: "0.02em",
-                maxWidth: 480,
-                marginBottom: 32,
+                margin: 0,
               }}
             >
               Not experiments. Real architectures built to scale, adapt, and
               perform.
             </p>
-
-            {/* Metrics strip */}
-            <div
-              style={{
-                display: "flex",
-                gap: 32,
-                paddingTop: 24,
-                borderTop: `1px solid ${c.divider}`,
-                marginBottom: 0,
-              }}
-            >
-              {[
-                { val: "10+", label: "End-to-End Builds" },
-                { val: "6", label: "AI Systems" },
-                { val: "200+", label: "Problems Solved" },
-              ].map((m) => (
-                <div key={m.label}>
-                  <span
-                    style={{
-                      fontFamily: "'Instrument Serif', Georgia, serif",
-                      fontSize: 26,
-                      color: c.heading,
-                      display: "block",
-                      lineHeight: 1,
-                      marginBottom: 4,
-                      letterSpacing: "-0.02em",
-                    }}
-                  >
-                    {m.val}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: "'DM Mono', monospace",
-                      fontSize: 10,
-                      color: dark ? "#555" : "#aaa",
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {m.label}
-                  </span>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* ── Controls row ── */}
@@ -1197,20 +1086,49 @@ export default function Projects() {
             </div>
           </div>
 
-          {/* ── Project list ── */}
+          {/* ── Project list — 2-column grid, expansion breaks full width below its row ── */}
           <div className="proj-a4">
-            {filtered.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                dark={dark}
-                c={c}
-                mode={mode}
-                isExpanded={expandedId === project.id}
-                onToggle={() => handleToggle(project.id)}
-              />
-            ))}
-            <div style={{ height: 1, background: c.divider }} />
+            {(() => {
+              const rows = [];
+              for (let i = 0; i < filtered.length; i += 2) {
+                const pair = filtered.slice(i, i + 2);
+                const expandedInRow = pair.find((p) => p.id === expandedId);
+                rows.push(
+                  <div key={i}>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: 12,
+                        marginBottom: expandedInRow ? 0 : 12,
+                      }}
+                    >
+                      {pair.map((project, j) => (
+                        <ProjectCard
+                          key={project.id}
+                          project={project}
+                          dark={dark}
+                          c={c}
+                          mode={mode}
+                          index={i + j}
+                          isExpanded={expandedId === project.id}
+                          onToggle={() => handleToggle(project.id)}
+                        />
+                      ))}
+                    </div>
+                    {expandedInRow && (
+                      <ProjectExpanded
+                        key={expandedInRow.id + "-expanded"}
+                        project={expandedInRow}
+                        dark={dark}
+                        c={c}
+                      />
+                    )}
+                  </div>,
+                );
+              }
+              return rows;
+            })()}
           </div>
 
           {/* ── Engineering Decisions ── */}
