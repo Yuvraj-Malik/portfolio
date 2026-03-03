@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 
+// ─── Dark mode hook ───────────────────────────────────────────────────────────
 function useDarkMode() {
   const [dark, setDark] = useState(() =>
     document.documentElement.classList.contains("dark"),
   );
   useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setDark(document.documentElement.classList.contains("dark"));
-    });
+    const observer = new MutationObserver(() =>
+      setDark(document.documentElement.classList.contains("dark")),
+    );
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["class"],
@@ -17,6 +18,103 @@ function useDarkMode() {
   return dark;
 }
 
+// ─── Project data (single source of truth) ───────────────────────────────────
+const PROJECTS = [
+  {
+    id: "spatial-console",
+    title: "Spatial Console",
+    shortDescription: "Gesture-controlled 3D structural simulation interface.",
+    highlights: [
+      "3D cube placement engine using React Three Fiber",
+      "BFS-based structural stability validation",
+      "Draft/Confirm reducer-based state architecture",
+      "Gesture-driven pointer emulation via MediaPipe",
+    ],
+    tech: ["React", "Three.js", "MediaPipe", "Reducer Architecture"],
+    type: "ai",
+    featured: true,
+    status: "active",
+  },
+  {
+    id: "stark-paper-analyzer",
+    title: "Stark Paper Analyzer",
+    shortDescription:
+      "Structured LLM research analysis pipeline for academic PDFs.",
+    highlights: [
+      "Token-aware chunking strategy for LLM efficiency",
+      "Structured JSON-enforced output pipeline",
+      "Async backend processing with caching",
+      "Foundation for 3D knowledge graph visualization",
+    ],
+    tech: ["FastAPI", "Gemini 2.5", "React", "Three.js"],
+    type: "ai",
+    featured: true,
+    status: "active",
+  },
+  {
+    id: "jarvis",
+    title: "Jarvis",
+    shortDescription: "Modular voice AI assistant for desktop automation.",
+    highlights: [
+      "Modular brain/router/tool architecture",
+      "Multi-LLM fallback system (Groq, Gemini, Mistral)",
+      "Hybrid voice + typed interaction loop",
+      "Persistent session memory and automation tools",
+    ],
+    tech: ["Python", "LLM APIs", "SpeechRecognition", "Edge-TTS"],
+    type: "ai",
+    featured: true,
+    status: "shipped",
+  },
+  {
+    id: "code-vault",
+    title: "Code Vault",
+    shortDescription: "Real-time team-based coding competition platform.",
+    highlights: [
+      "Drag-and-drop snippet challenge engine",
+      "Live leaderboard polling system",
+      "Admin moderation panel",
+      "Scalable full-stack architecture",
+    ],
+    tech: ["React", "Node.js", "MongoDB"],
+    type: "fullstack",
+    featured: true,
+    status: "shipped",
+  },
+  {
+    id: "anime-clash",
+    title: "Anime Clash",
+    shortDescription:
+      "Full-stack popularity-based web game with daily challenges.",
+    highlights: [
+      "Deterministic daily pair generation logic",
+      "Serverless score persistence",
+      "Multiple gameplay modes",
+      "Mobile-optimized UI with animations",
+    ],
+    tech: ["Vanilla JS", "Netlify Functions", "Node.js"],
+    type: "fullstack",
+    featured: true,
+    status: "shipped",
+  },
+  {
+    id: "air-canvas",
+    title: "Air Canvas",
+    shortDescription: "Real-time gesture-controlled drawing application.",
+    highlights: [
+      "MediaPipe hand landmark tracking",
+      "Gesture-based drawing and tool selection",
+      "5000x5000 scrollable canvas engine",
+      "Stroke smoothing for low-latency rendering",
+    ],
+    tech: ["Python", "OpenCV", "MediaPipe", "NumPy"],
+    type: "ai",
+    featured: true,
+    status: "shipped",
+  },
+];
+
+// ─── Skill data ───────────────────────────────────────────────────────────────
 const skillGroups = [
   {
     id: "core",
@@ -58,9 +156,10 @@ const skillGroups = [
   },
 ];
 
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
 function SkillRow({ skill, dark, index }) {
   const [hovered, setHovered] = useState(false);
-
   return (
     <div
       onMouseEnter={() => setHovered(true)}
@@ -70,7 +169,15 @@ function SkillRow({ skill, dark, index }) {
         alignItems: "center",
         justifyContent: "space-between",
         padding: "9px 0",
-        borderBottom: `1px solid ${dark ? (hovered ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.05)") : hovered ? "rgba(0,0,0,0.12)" : "rgba(0,0,0,0.06)"}`,
+        borderBottom: `1px solid ${
+          dark
+            ? hovered
+              ? "rgba(255,255,255,0.1)"
+              : "rgba(255,255,255,0.05)"
+            : hovered
+              ? "rgba(0,0,0,0.12)"
+              : "rgba(0,0,0,0.06)"
+        }`,
         transition: "all 0.15s ease",
         cursor: "default",
         animation: `about-fade-up 0.4s cubic-bezier(0.16,1,0.3,1) ${index * 40}ms both`,
@@ -115,10 +222,317 @@ function SkillRow({ skill, dark, index }) {
   );
 }
 
+function DevelopmentBadge({ dark }) {
+  return (
+    <span
+      style={{
+        fontFamily: "'DM Mono', monospace",
+        fontSize: 9,
+        letterSpacing: "0.08em",
+        textTransform: "uppercase",
+        color: dark ? "#666" : "#999",
+        border: `1px solid ${dark ? "#333" : "#e0e0e0"}`,
+        borderRadius: 4,
+        padding: "2px 6px",
+        whiteSpace: "nowrap",
+        flexShrink: 0,
+      }}
+    >
+      In Active Development
+    </span>
+  );
+}
+
+function ProjectsList({ projects, dark, c, onSelect }) {
+  return (
+    <div>
+      {projects.map((p, i) => (
+        <div
+          key={p.id}
+          onClick={() => onSelect(p)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+            padding: "10px 0",
+            borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)"}`,
+            cursor: "pointer",
+            transition: "all 0.15s ease",
+            animation: `about-fade-up 0.3s cubic-bezier(0.16,1,0.3,1) ${i * 40}ms both`,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.querySelector(".proj-title").style.color = dark
+              ? "#ffffff"
+              : "#000000";
+            e.currentTarget.querySelector(".proj-arrow").style.opacity = "1";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.querySelector(".proj-title").style.color = dark
+              ? "#c0c0c0"
+              : "#333";
+            e.currentTarget.querySelector(".proj-arrow").style.opacity = "0";
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              minWidth: 0,
+            }}
+          >
+            <span
+              className="proj-title"
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 13,
+                color: dark ? "#c0c0c0" : "#333",
+                letterSpacing: "0.02em",
+                transition: "color 0.15s ease",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {p.title}
+            </span>
+            {p.status === "active" && <DevelopmentBadge dark={dark} />}
+          </div>
+          <span
+            className="proj-arrow"
+            style={{
+              fontFamily: "'DM Mono', monospace",
+              fontSize: 11,
+              color: dark ? "#c0c0c0" : "#333",
+              opacity: 0,
+              transition: "opacity 0.15s ease",
+              flexShrink: 0,
+            }}
+          >
+            →
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ProjectDetail({ project, dark, c, onBack }) {
+  return (
+    <div>
+      <button
+        onClick={onBack}
+        style={{
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          fontFamily: "'DM Mono', monospace",
+          fontSize: 11,
+          color: c.tabInactive,
+          letterSpacing: "0.08em",
+          padding: "0 0 16px 0",
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          transition: "color 0.15s ease",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = c.heading)}
+        onMouseLeave={(e) => (e.currentTarget.style.color = c.tabInactive)}
+      >
+        Back
+      </button>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          marginBottom: 8,
+        }}
+      >
+        <p
+          style={{
+            margin: 0,
+            fontFamily: "'Instrument Serif', Georgia, serif",
+            fontSize: 20,
+            fontWeight: 400,
+            color: c.heading,
+            letterSpacing: "-0.01em",
+            lineHeight: 1.2,
+          }}
+        >
+          {project.title}
+        </p>
+        {project.status === "active" && <DevelopmentBadge dark={dark} />}
+      </div>
+
+      <p
+        style={{
+          margin: "0 0 16px 0",
+          fontFamily: "'DM Mono', monospace",
+          fontSize: 12,
+          color: c.subtext,
+          lineHeight: 1.65,
+          letterSpacing: "0.02em",
+        }}
+      >
+        {project.shortDescription}
+      </p>
+
+      <div style={{ marginBottom: 16 }}>
+        {project.highlights.map((h, i) => (
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              gap: 10,
+              padding: "6px 0",
+              borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.05)"}`,
+              animation: `about-fade-up 0.25s ease ${i * 40}ms both`,
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 11,
+                color: dark ? "#555" : "#bbb",
+                flexShrink: 0,
+                marginTop: 1,
+              }}
+            >
+              —
+            </span>
+            <span
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 11.5,
+                color: c.subtext,
+                lineHeight: 1.6,
+                letterSpacing: "0.02em",
+              }}
+            >
+              {h}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div
+        style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 20 }}
+      >
+        {project.tech.map((t) => (
+          <span
+            key={t}
+            style={{
+              fontFamily: "'DM Mono', monospace",
+              fontSize: 10,
+              color: c.subtext,
+              border: `1px solid ${c.divider}`,
+              borderRadius: 4,
+              padding: "3px 8px",
+              letterSpacing: "0.04em",
+            }}
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+
+      <a
+        href={`/projects/${project.id}`}
+        style={{
+          fontFamily: "'DM Mono', monospace",
+          fontSize: 11.5,
+          color: c.heading,
+          textDecoration: "none",
+          letterSpacing: "0.06em",
+          borderBottom: `1px solid ${dark ? "#555" : "#ccc"}`,
+          paddingBottom: 2,
+          transition: "border-color 0.15s ease",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.borderColor = c.heading)}
+        onMouseLeave={(e) =>
+          (e.currentTarget.style.borderColor = dark ? "#555" : "#ccc")
+        }
+      >
+        View Full Case Study →
+      </a>
+    </div>
+  );
+}
+
+function ProblemsView({ dark, c }) {
+  const stats = [
+    { label: "Total Solved", value: "200+", context: "across all platforms" },
+    { label: "Easy", value: "80+", context: "foundation & patterns" },
+    { label: "Medium", value: "100+", context: "core problem solving" },
+    { label: "Hard", value: "20+", context: "advanced techniques" },
+  ];
+  return (
+    <div>
+      {stats.map((s, i) => (
+        <div
+          key={s.label}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "11px 0",
+            borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)"}`,
+            animation: `about-fade-up 0.3s cubic-bezier(0.16,1,0.3,1) ${i * 50}ms both`,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+            <span
+              style={{
+                fontFamily: "'Instrument Serif', Georgia, serif",
+                fontSize: i === 0 ? 26 : 20,
+                color: c.heading,
+                letterSpacing: "-0.02em",
+                lineHeight: 1,
+              }}
+            >
+              {s.value}
+            </span>
+            <span
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 12,
+                color: dark ? "#c0c0c0" : "#333",
+                letterSpacing: "0.02em",
+              }}
+            >
+              {s.label}
+            </span>
+          </div>
+          <span
+            style={{
+              fontFamily: "'DM Mono', monospace",
+              fontSize: 10,
+              color: dark ? "#555" : "#aaa",
+              letterSpacing: "0.04em",
+              textAlign: "right",
+            }}
+          >
+            {s.context}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
 export default function About() {
   const dark = useDarkMode();
   const [tab, setTab] = useState("core");
+  const [activeView, setActiveView] = useState("skills");
+  const [filterType, setFilterType] = useState("all");
+  const [selectedProject, setSelectedProject] = useState(null);
+
   const group = skillGroups.find((g) => g.id === tab);
+  const filteredProjects = PROJECTS.filter(
+    (p) => p.featured && (filterType === "all" || p.type === filterType),
+  );
 
   const c = {
     heading: dark ? "#ffffff" : "#050505",
@@ -131,7 +545,7 @@ export default function About() {
     tabBorder: dark ? "#ffffff" : "#050505",
     cardBorder: dark ? "#2a2a2a" : "#e8e8e8",
     cardBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.015)",
-    cardHover: dark ? "#444" : "#ccc",
+    cardActive: dark ? "#ffffff" : "#000000",
     stripBorder: dark ? "#2a2a2a" : "#e8e8e8",
     stripBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.015)",
     stripText: dark ? "#b0b0b0" : "#555",
@@ -139,6 +553,35 @@ export default function About() {
     photoBorder: dark ? "#2a2a2a" : "#e0e0e0",
     photoIcon: dark ? "#444" : "#ccc",
   };
+
+  const statCards = [
+    {
+      label: "End-to-End Projects",
+      value: "10+",
+      view: "projects",
+      filter: "all",
+    },
+    {
+      label: "Algorithmic Problems",
+      value: "200+",
+      view: "problems",
+      filter: null,
+    },
+    { label: "AI-Driven Systems", value: "6", view: "projects", filter: "ai" },
+  ];
+
+  function handleStatClick(card) {
+    if (card.filter !== null) setFilterType(card.filter);
+    setSelectedProject(null);
+    setActiveView(card.view);
+  }
+
+  const panelLabel = {
+    skills: "Skills & Expertise",
+    projects: filterType === "ai" ? "AI-Driven Systems" : "Featured Projects",
+    detail: "Project Detail",
+    problems: "Algorithmic Problems",
+  }[activeView];
 
   return (
     <>
@@ -159,12 +602,10 @@ export default function About() {
           transition: color 0.2s, border-color 0.2s;
         }
         .about-stab:first-child { padding-left: 0; }
-        .photo-card {
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .photo-card:hover {
-          transform: rotate(0deg) translateY(-4px) !important;
-        }
+        .photo-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .photo-card:hover { transform: rotate(0deg) translateY(-4px) !important; }
+        .stat-card { transition: border-color 0.2s, background 0.2s; cursor: pointer; user-select: none; }
+        .panel-fade { animation: about-fade-up 0.18s ease both; }
       `}</style>
 
       <section
@@ -282,11 +723,11 @@ export default function About() {
                   <span style={{ color: c.emphasis, fontWeight: 500 }}>
                     push me slightly beyond what I already know
                   </span>{" "}
-                  — the kind that push me to figure things out rather than
+                  — the kind that force me to figure things out rather than
                   follow instructions.
                 </p>
                 <p style={{ margin: 0 }}>
-                  So far, I've focused on developing{" "}
+                  So far, I've focused on building{" "}
                   <span style={{ color: c.emphasis, fontWeight: 500 }}>
                     interactive systems and AI-driven applications
                   </span>{" "}
@@ -309,7 +750,7 @@ export default function About() {
                 </p>
               </div>
 
-              {/* ── Photo Card (Option 3) ── */}
+              {/* Photo Card */}
               <div
                 style={{
                   paddingTop: 28,
@@ -319,7 +760,6 @@ export default function About() {
                   gap: 20,
                 }}
               >
-                {/* Tilted rectangular photo card */}
                 <div
                   className="photo-card"
                   style={{
@@ -340,7 +780,6 @@ export default function About() {
                     cursor: "default",
                   }}
                 >
-                  {/* Placeholder avatar */}
                   <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
                     <circle cx="20" cy="15" r="8" fill={c.photoIcon} />
                     <ellipse
@@ -352,8 +791,6 @@ export default function About() {
                     />
                   </svg>
                 </div>
-
-                {/* Info beside card */}
                 <div
                   style={{ display: "flex", flexDirection: "column", gap: 8 }}
                 >
@@ -368,7 +805,6 @@ export default function About() {
                   >
                     Yuvraj Malik
                   </p>
-                  {/* Fact pills */}
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                     {["2nd Year CSE", "TIET Patiala", "AI/ML · Full Stack"].map(
                       (pill) => (
@@ -396,56 +832,125 @@ export default function About() {
 
             {/* ── RIGHT ── */}
             <div className="about-a3">
-              <p
-                style={{
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: 11,
-                  color: c.label,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  marginBottom: 16,
-                }}
-              >
-                Skills & Expertise
-              </p>
-
-              {/* Tabs */}
+              {/* Panel header */}
               <div
                 style={{
                   display: "flex",
-                  borderBottom: `1px solid ${c.divider}`,
-                  marginBottom: 4,
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: 16,
                 }}
               >
-                {skillGroups.map((g) => (
+                <p
+                  style={{
+                    fontFamily: "'DM Mono', monospace",
+                    fontSize: 11,
+                    color: c.label,
+                    letterSpacing: "0.18em",
+                    textTransform: "uppercase",
+                    margin: 0,
+                  }}
+                >
+                  {panelLabel}
+                </p>
+                {activeView !== "skills" && (
                   <button
-                    key={g.id}
-                    className="about-stab"
-                    onClick={() => setTab(g.id)}
+                    onClick={() => setActiveView("skills")}
                     style={{
-                      color: tab === g.id ? c.tabActive : c.tabInactive,
-                      borderBottomColor:
-                        tab === g.id ? c.tabBorder : "transparent",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      fontFamily: "'DM Mono', monospace",
+                      fontSize: 10,
+                      color: c.tabInactive,
+                      letterSpacing: "0.08em",
+                      transition: "color 0.15s ease",
+                      padding: 0,
                     }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.color = c.heading)
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.color = c.tabInactive)
+                    }
                   >
-                    {g.label}
+                    ← Skills
                   </button>
-                ))}
+                )}
               </div>
 
-              {/* Skill rows */}
-              <div>
-                {group?.skills.map((skill, i) => (
-                  <SkillRow
-                    key={`${tab}-${skill.name}`}
-                    skill={skill}
+              {/* Panel content */}
+              <div
+                className="panel-fade"
+                key={activeView + filterType + (selectedProject?.id || "")}
+              >
+                {activeView === "skills" && (
+                  <>
+                    <div
+                      style={{
+                        display: "flex",
+                        borderBottom: `1px solid ${c.divider}`,
+                        marginBottom: 4,
+                      }}
+                    >
+                      {skillGroups.map((g) => (
+                        <button
+                          key={g.id}
+                          className="about-stab"
+                          onClick={() => setTab(g.id)}
+                          style={{
+                            color: tab === g.id ? c.tabActive : c.tabInactive,
+                            borderBottomColor:
+                              tab === g.id ? c.tabBorder : "transparent",
+                          }}
+                        >
+                          {g.label}
+                        </button>
+                      ))}
+                    </div>
+                    <div>
+                      {group?.skills.map((skill, i) => (
+                        <SkillRow
+                          key={`${tab}-${skill.name}`}
+                          skill={skill}
+                          dark={dark}
+                          index={i}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                {activeView === "projects" && (
+                  <ProjectsList
+                    projects={filteredProjects}
                     dark={dark}
-                    index={i}
+                    c={c}
+                    onSelect={(p) => {
+                      setSelectedProject(p);
+                      setActiveView("detail");
+                    }}
                   />
-                ))}
+                )}
+
+                {activeView === "detail" && selectedProject && (
+                  <ProjectDetail
+                    project={selectedProject}
+                    dark={dark}
+                    c={c}
+                    onBack={() => {
+                      setSelectedProject(null);
+                      setActiveView("projects");
+                    }}
+                  />
+                )}
+
+                {activeView === "problems" && (
+                  <ProblemsView dark={dark} c={c} />
+                )}
               </div>
 
-              {/* Stat cards — monochrome, real numbers */}
+              {/* Stat cards — below panel */}
               <div
                 style={{
                   display: "grid",
@@ -454,58 +959,65 @@ export default function About() {
                   marginTop: 24,
                 }}
               >
-                {[
-                  { label: "Projects", value: "10+" },
-                  { label: "Algorithmic Problems", value: "200+" },
-                  { label: "AI Systems", value: "6" },
-                ].map((s) => (
-                  <div
-                    key={s.label}
-                    style={{
-                      border: `1px solid ${c.cardBorder}`,
-                      borderRadius: 10,
-                      padding: "14px 8px",
-                      textAlign: "center",
-                      background: c.cardBg,
-                      transition: "border-color 0.2s",
-                      cursor: "default",
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.borderColor = dark
-                        ? "#555"
-                        : "#aaa")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.borderColor = c.cardBorder)
-                    }
-                  >
+                {statCards.map((s) => {
+                  const isActive =
+                    activeView === s.view &&
+                    (s.filter === null || filterType === s.filter);
+                  return (
                     <div
+                      key={s.label}
+                      className="stat-card"
+                      onClick={() => handleStatClick(s)}
                       style={{
-                        fontFamily: "'Instrument Serif', Georgia, serif",
-                        fontSize: 26,
-                        color: c.heading,
-                        marginBottom: 4,
-                        letterSpacing: "-0.02em",
+                        border: `1px solid ${isActive ? c.cardActive : c.cardBorder}`,
+                        borderRadius: 10,
+                        padding: "14px 8px",
+                        textAlign: "center",
+                        background: isActive
+                          ? dark
+                            ? "rgba(255,255,255,0.05)"
+                            : "rgba(0,0,0,0.03)"
+                          : c.cardBg,
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isActive)
+                          e.currentTarget.style.borderColor = dark
+                            ? "#555"
+                            : "#aaa";
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isActive)
+                          e.currentTarget.style.borderColor = c.cardBorder;
                       }}
                     >
-                      {s.value}
+                      <div
+                        style={{
+                          fontFamily: "'Instrument Serif', Georgia, serif",
+                          fontSize: 26,
+                          color: c.heading,
+                          marginBottom: 4,
+                          letterSpacing: "-0.02em",
+                        }}
+                      >
+                        {s.value}
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: "'DM Mono', monospace",
+                          fontSize: 10,
+                          color: isActive ? c.heading : c.subtext,
+                          letterSpacing: "0.12em",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {s.label}
+                      </div>
                     </div>
-                    <div
-                      style={{
-                        fontFamily: "'DM Mono', monospace",
-                        fontSize: 10,
-                        color: c.subtext,
-                        letterSpacing: "0.12em",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      {s.label}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
-              {/* Statement */}
+              {/* Statement — always visible */}
               <div
                 style={{
                   marginTop: 10,
