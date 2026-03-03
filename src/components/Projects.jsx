@@ -23,11 +23,19 @@ const PROJECTS = [
   {
     id: "spatial-console",
     title: "Spatial Console",
-    thesis: "A 3D world you control with your hands — no mouse, no keyboard.",
+    thesis:
+      "A browser-based 3D spatial engine that validates structural stability in real-time and supports gesture-driven interaction.",
     category: "AI System",
     status: "active",
     type: "ai",
     tech: ["React", "Three.js", "MediaPipe", "Reducer Architecture"],
+    highlights: [
+      "Real-time structural validation using adjacency graph + BFS support detection",
+      "Controlled collapse simulation of unstable clusters",
+      "Full gesture-based 3D interaction via virtual pointer emulation",
+    ],
+    authoritySignal:
+      "Input-agnostic engine (mouse + gesture without rewriting logic)",
     overview: {
       problem:
         "Traditional 3D design tools require expensive hardware and steep learning curves, making spatial prototyping inaccessible.",
@@ -67,60 +75,24 @@ const PROJECTS = [
         context: "Chrome desktop",
       },
     ],
-    github: "https://github.com/yuvrajmalik/spatial-console",
-    live: null,
-  },
-  {
-    id: "stark-paper-analyzer",
-    title: "Stark Paper Analyzer",
-    thesis:
-      "Turn any academic PDF into structured, queryable knowledge — instantly.",
-    category: "AI System",
-    status: "active",
-    type: "ai",
-    tech: ["FastAPI", "Gemini 2.5", "React", "Three.js"],
-    overview: {
-      problem:
-        "Academic papers are dense, unstructured, and time-consuming to extract insight from — especially at scale.",
-      approach:
-        "Built a token-aware chunking pipeline that feeds structured prompts to Gemini 2.5, enforcing JSON output schemas to ensure consistent, parseable responses.",
-      outcome:
-        "A research analysis tool that processes academic PDFs into structured summaries, key claims, and methodology breakdowns in seconds.",
-    },
-    architecture: {
-      description:
-        "Async FastAPI backend handles PDF ingestion and chunking. Gemini 2.5 processes chunks with enforced JSON output. React frontend renders structured output with a foundation for 3D knowledge graph visualization.",
-      decisions: [
-        "Token-aware chunking prevents context window overflow while maintaining semantic coherence",
-        "JSON-enforced output schema eliminates post-processing ambiguity",
-        "Async processing with Redis caching handles concurrent requests without blocking",
-      ],
-    },
-    challenges: [
-      "PDF parsing inconsistency across formats — built a preprocessing normalizer for layout extraction",
-      "LLM hallucination on citations — added a grounding verification layer against source text",
-      "Token budget management across variable-length papers — dynamic chunking strategy based on paper density",
-    ],
-    metrics: [
-      { label: "Average Processing Time", value: "<8s", context: "per paper" },
-      {
-        label: "Output Schema Compliance",
-        value: "~97%",
-        context: "JSON validity",
-      },
-      { label: "Cache Hit Rate", value: "~73%", context: "repeat queries" },
-    ],
-    github: "https://github.com/yuvrajmalik/stark-paper-analyzer",
+    github: "https://github.com/Yuvraj-Malik/spatial-console",
     live: null,
   },
   {
     id: "jarvis",
     title: "Jarvis",
-    thesis: "A voice AI that doesn't just answer — it acts.",
+    thesis:
+      "A resilient, multi-provider voice assistant engineered for real desktop automation and fault tolerance.",
     category: "AI System",
     status: "shipped",
     type: "ai",
-    tech: ["Python", "LLM APIs", "SpeechRecognition", "Edge-TTS"],
+    tech: ["Python", "LLM APIs", "Threading", "Edge-TTS"],
+    highlights: [
+      "Modular brain/router/tool architecture",
+      "Multi-LLM fallback (Groq, Gemini, Mistral)",
+      "Persistent session memory + system-level automation",
+    ],
+    authoritySignal: "Fault-tolerant multi-provider architecture",
     overview: {
       problem:
         "Existing voice assistants are reactive and siloed — they answer questions but can't execute multi-step desktop workflows.",
@@ -152,17 +124,73 @@ const PROJECTS = [
       },
       { label: "LLM Fallback Success", value: "99%+", context: "uptime" },
     ],
-    github: "https://github.com/yuvrajmalik/jarvis",
+    github: "https://github.com/Yuvraj-Malik/Jarvis",
+    live: null,
+  },
+  {
+    id: "stark-paper-analyzer",
+    title: "Stark Paper Analyzer",
+    thesis:
+      "Transforms unstructured research PDFs into structured, intelligence-ready outputs.",
+    category: "AI System",
+    status: "active",
+    type: "ai",
+    tech: ["FastAPI", "Gemini 2.5", "React", "Three.js"],
+    highlights: [
+      "JSON-first LLM summarization pipeline",
+      "Async processing + quota-aware fallback",
+      "Foundation for 3D knowledge graph visualization",
+    ],
+    authoritySignal: "Token-aware structured output enforcement",
+    overview: {
+      problem:
+        "Academic papers are dense, unstructured, and time-consuming to extract insight from — especially at scale.",
+      approach:
+        "Built a token-aware chunking pipeline that feeds structured prompts to Gemini 2.5, enforcing JSON output schemas to ensure consistent, parseable responses.",
+      outcome:
+        "A research analysis tool that processes academic PDFs into structured summaries, key claims, and methodology breakdowns in seconds.",
+    },
+    architecture: {
+      description:
+        "Async FastAPI backend handles PDF ingestion and chunking. Gemini 2.5 processes chunks with enforced JSON output. React frontend renders structured output with a foundation for 3D knowledge graph visualization.",
+      decisions: [
+        "Token-aware chunking prevents context window overflow while maintaining semantic coherence",
+        "JSON-enforced output schema eliminates post-processing ambiguity",
+        "Async processing with quota-aware fallback handles rate limits gracefully",
+      ],
+    },
+    challenges: [
+      "PDF parsing inconsistency across formats — built a preprocessing normalizer for layout extraction",
+      "LLM hallucination on citations — added a grounding verification layer against source text",
+      "Token budget management across variable-length papers — dynamic chunking strategy based on paper density",
+    ],
+    metrics: [
+      { label: "Average Processing Time", value: "<8s", context: "per paper" },
+      {
+        label: "Output Schema Compliance",
+        value: "~97%",
+        context: "JSON validity",
+      },
+      { label: "Cache Hit Rate", value: "~73%", context: "repeat queries" },
+    ],
+    github: "https://github.com/Yuvraj-Malik/Stark-System",
     live: null,
   },
   {
     id: "code-vault",
     title: "Code Vault",
-    thesis: "A competitive coding platform built for teams, not individuals.",
+    thesis:
+      "A full-stack, team-based coding arena built for high-energy campus competitions.",
     category: "Full Stack",
     status: "shipped",
     type: "fullstack",
-    tech: ["React", "Node.js", "MongoDB"],
+    tech: ["React 19", "Node.js", "MongoDB", "REST APIs"],
+    highlights: [
+      "Drag-and-drop snippet engine",
+      "Live leaderboard system",
+      "Anti-cheat strike + admin moderation panel",
+    ],
+    authoritySignal: "Production-ready campus event infrastructure",
     overview: {
       problem:
         "Most competitive coding platforms are individual-focused — there's no good tooling for team-based live coding competitions.",
@@ -190,18 +218,120 @@ const PROJECTS = [
       { label: "Submission Latency", value: "<200ms", context: "p95" },
       { label: "Event Uptime", value: "100%", context: "zero downtime" },
     ],
-    github: "https://github.com/yuvrajmalik/code-vault",
+    github: "https://github.com/Yuvraj-Malik/Code-Vault",
+    live: "https://lead.pratham.codes",
+  },
+  {
+    id: "air-canvas",
+    title: "Air Canvas",
+    thesis:
+      "A computer vision-based touchless drawing interface with real-time gesture UX.",
+    category: "AI System",
+    status: "shipped",
+    type: "ai",
+    tech: ["Python", "OpenCV", "MediaPipe"],
+    highlights: [
+      "5000×5000 scrollable canvas with minimap",
+      "Gesture-based drawing, color selection, erasing, panning",
+      "Shape detection from freehand strokes",
+    ],
+    authoritySignal: "Low-latency real-time landmark processing pipeline",
+    overview: {
+      problem:
+        "Wanted to push gesture-based interfaces to a creative application — drawing in the air with real-time rendering and minimal latency.",
+      approach:
+        "MediaPipe tracks hand landmarks at 30fps. A gesture classifier distinguishes draw vs select vs erase modes. Stroke smoothing via Bezier interpolation reduces jitter.",
+      outcome:
+        "A real-time air drawing application with a massive scrollable canvas, gesture-based tool switching, and smooth stroke rendering.",
+    },
+    architecture: {
+      description:
+        "OpenCV handles frame capture and rendering. MediaPipe processes landmarks in a separate thread. NumPy manages the canvas buffer for efficient stroke operations.",
+      decisions: [
+        "Separate MediaPipe thread prevents frame drops during heavy landmark processing",
+        "NumPy canvas buffer chosen over PIL for vectorized stroke operations",
+        "Bezier interpolation for stroke smoothing — cubic curves between sampled points",
+      ],
+    },
+    challenges: [
+      "Landmark jitter at canvas edges — applied Kalman filter for stable tracking near frame boundaries",
+      "Canvas scroll performance at 5000×5000 — viewport-based rendering only draws visible region",
+      "Gesture mode switching false positives — added 200ms debounce with confirmation threshold",
+    ],
+    metrics: [
+      { label: "Render Frame Rate", value: "30 FPS", context: "real-time" },
+      { label: "Canvas Size", value: "5000×5000", context: "pixels" },
+      { label: "Stroke Latency", value: "<33ms", context: "per frame" },
+    ],
+    github: "https://github.com/Yuvraj-Malik/Air-Canvas",
+    live: null,
+  },
+  {
+    id: "pose-detection",
+    title: "AI Pose Detection Systems",
+    thesis:
+      "Two real-time exercise trackers built on biomechanical logic — high knees form scoring and squat depth analysis.",
+    category: "AI System",
+    status: "shipped",
+    type: "ai",
+    tech: ["Python", "TensorFlow Lite", "MoveNet", "OpenCV"],
+    highlights: [
+      "High Knees: per-leg rep detection with tiered scoring (60 / 80 / 100)",
+      "Squat: knee-angle depth detection with continuous quality score (50–100)",
+      "Both use biomechanical state machines — no hardcoded thresholds",
+    ],
+    authoritySignal:
+      "Two distinct biomechanical models from one shared pose pipeline",
+    overview: {
+      problem:
+        "Most fitness apps count reps blindly or require expensive equipment — neither evaluates form in real-time.",
+      approach:
+        "Built two independent trackers on the same pose pipeline. High Knees uses TensorFlow Lite with per-leg state machines. Squat Analyzer uses MoveNet with hysteresis-based depth detection.",
+      outcome:
+        "Two fully functional exercise form trackers running on a standard webcam, scoring quality in real-time.",
+    },
+    architecture: {
+      description:
+        "Shared OpenCV capture pipeline feeds into two separate inference modules. Each module has its own state machine for rep/phase tracking. Scoring logic is fully decoupled from pose inference.",
+      decisions: [
+        "TF Lite for High Knees (speed), MoveNet Lightning for Squat (lower-body accuracy)",
+        "Separate state machines per exercise prevent logic bleeding between modules",
+        "Exponential moving average smoothing on keypoints reduces jitter without adding latency",
+      ],
+    },
+    challenges: [
+      "Keypoint jitter on fast movements — smoothed with exponential moving average per joint",
+      "Camera angle dependency for squats — added placement guidance overlay",
+      "Asymmetric leg detection in high knees — separate state machines per leg resolved false counts",
+    ],
+    metrics: [
+      {
+        label: "High Knees Inference",
+        value: "<30ms",
+        context: "per frame on CPU",
+      },
+      { label: "Squat Depth Accuracy", value: "~89%", context: "on test set" },
+      { label: "Exercises Covered", value: "2", context: "High Knees · Squat" },
+    ],
+    github: "https://github.com/Yuvraj-Malik/Pose-Detection",
     live: null,
   },
   {
     id: "anime-clash",
     title: "Anime Clash",
     thesis:
-      "The anime higher-lower game — built properly, with daily challenges.",
+      "A replay-driven anime popularity game built with deterministic daily logic.",
     category: "Full Stack",
     status: "shipped",
     type: "fullstack",
-    tech: ["Vanilla JS", "Netlify Functions", "Node.js"],
+    tech: ["Vanilla JS", "Netlify Functions", "JSON Dataset"],
+    highlights: [
+      "Deterministic daily challenge generation",
+      "Serverless backend persistence",
+      "Multiple modes (Classic, Endless, Time Attack)",
+    ],
+    authoritySignal:
+      "Seeded PRNG eliminates need for a challenge server entirely",
     overview: {
       problem:
         "Wanted to build a fun project that challenged me technically — deterministic daily challenges with serverless persistence, no backend server.",
@@ -235,48 +365,62 @@ const PROJECTS = [
         value: "94+",
         context: "performance",
       },
-      { label: "Gameplay Modes", value: "3", context: "distinct modes" },
+      {
+        label: "Gameplay Modes",
+        value: "3",
+        context: "Classic · Endless · Time Attack",
+      },
     ],
-    github: "https://github.com/yuvrajmalik/anime-clash",
-    live: null,
+    github: "https://github.com/Yuvraj-Malik/Anime-Higher-Lower",
+    live: "https://anime-clash.netlify.app",
   },
   {
-    id: "air-canvas",
-    title: "Air Canvas",
+    id: "bomb-difuse",
+    title: "Bomb Difuse",
     thesis:
-      "Draw with your finger in the air — rendered on a 5000×5000 canvas.",
-    category: "AI System",
+      "A physical reaction game built using microcontroller logic and real-time hardware feedback.",
+    category: "Embedded",
     status: "shipped",
-    type: "ai",
-    tech: ["Python", "OpenCV", "MediaPipe", "NumPy"],
+    type: "hardware",
+    tech: ["Arduino C++", "Embedded I/O"],
+    highlights: [
+      "Randomized LED pattern engine",
+      "Timeout-based pressure simulation",
+      "Hardware-level input polling + buzzer feedback",
+    ],
+    authoritySignal: "Pure hardware logic — no OS, no runtime, no abstractions",
     overview: {
       problem:
-        "Wanted to push gesture-based interfaces to a creative application — drawing in the air with real-time rendering and minimal latency.",
+        "Wanted to build something that required thinking in real hardware constraints — no OS, no runtime, direct register-level control.",
       approach:
-        "MediaPipe tracks hand landmarks at 30fps. A gesture classifier distinguishes draw vs select vs erase modes. Stroke smoothing via Bezier interpolation reduces jitter.",
+        "Designed a randomized LED challenge game on Arduino with hardware interrupt-based input polling and a buzzer feedback system for correct/incorrect patterns.",
       outcome:
-        "A real-time air drawing application with a massive scrollable canvas, gesture-based tool switching, and smooth stroke rendering.",
+        "A physical reaction game that runs entirely on microcontroller logic with millisecond-accurate timing.",
     },
     architecture: {
       description:
-        "OpenCV handles frame capture and rendering. MediaPipe processes landmarks in a separate thread. NumPy manages the canvas buffer for efficient stroke operations.",
+        "Arduino C++ with direct I/O register manipulation. Randomized pattern generation via hardware entropy seeding. Buzzer and LED feedback driven by PWM output.",
       decisions: [
-        "Separate MediaPipe thread prevents frame drops during heavy landmark processing",
-        "NumPy canvas buffer chosen over PIL for vectorized stroke operations",
-        "Bezier interpolation for stroke smoothing — cubic curves between sampled points",
+        "Hardware interrupts over polling for input — ensures zero missed presses under load",
+        "PWM buzzer tones encode feedback (correct/incorrect/timeout) without a sound library",
+        "Entropy seeding from analog noise for true randomization on constrained hardware",
       ],
     },
     challenges: [
-      "Landmark jitter at canvas edges — applied Kalman filter for stable tracking near frame boundaries",
-      "Canvas scroll performance at 5000×5000 — viewport-based rendering only draws visible region",
-      "Gesture mode switching false positives — added 200ms debounce with confirmation threshold",
+      "Button debounce on physical hardware — implemented software debounce with 20ms threshold",
+      "Timing accuracy without OS scheduler — used hardware timer registers directly",
+      "LED pattern visibility under different lighting — calibrated resistor values for consistent brightness",
     ],
     metrics: [
-      { label: "Render Frame Rate", value: "30 FPS", context: "real-time" },
-      { label: "Canvas Size", value: "5000×5000", context: "pixels" },
-      { label: "Stroke Latency", value: "<33ms", context: "per frame" },
+      { label: "Input Response", value: "<5ms", context: "hardware interrupt" },
+      {
+        label: "Pattern Randomness",
+        value: "True",
+        context: "analog entropy seed",
+      },
+      { label: "Hardware Platform", value: "Arduino", context: "bare metal" },
     ],
-    github: "https://github.com/yuvrajmalik/air-canvas",
+    github: "https://github.com/Yuvraj-Malik/Bomb-Difuse",
     live: null,
   },
 ];
@@ -361,7 +505,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
                 fontSize: 10,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
-                color: dark ? "#555" : "#aaa",
+                color: dark ? "#a1a1a1" : "#aaa",
               }}
             >
               {item.label}
@@ -391,7 +535,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
           style={{
             margin: 0,
             fontSize: 14,
-            color: dark ? "#b0b0b0" : "#444",
+            color: dark ? "#c8c8c8" : "#333",
             lineHeight: 1.75,
             fontFamily: "'DM Mono', monospace",
             letterSpacing: "0.02em",
@@ -407,7 +551,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
               fontSize: 10,
               letterSpacing: "0.15em",
               textTransform: "uppercase",
-              color: dark ? "#555" : "#aaa",
+              color: dark ? "#7c7c7c" : "#aaa",
             }}
           >
             Key Decisions
@@ -426,7 +570,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
                 style={{
                   fontFamily: "'DM Mono', monospace",
                   fontSize: 11,
-                  color: dark ? "#444" : "#ccc",
+                  color: dark ? "#a8a8a8" : "#383838",
                   flexShrink: 0,
                   marginTop: 2,
                 }}
@@ -468,7 +612,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
               style={{
                 fontFamily: "'DM Mono', monospace",
                 fontSize: 11,
-                color: dark ? "#444" : "#ccc",
+                color: dark ? "#666" : "#bbb",
                 flexShrink: 0,
                 marginTop: 2,
               }}
@@ -511,7 +655,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
                 style={{
                   fontFamily: "'DM Mono', monospace",
                   fontSize: 12,
-                  color: dark ? "#888" : "#888",
+                  color: dark ? "#bbb" : "#555",
                   letterSpacing: "0.02em",
                 }}
               >
@@ -521,7 +665,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
                 style={{
                   fontFamily: "'DM Mono', monospace",
                   fontSize: 10,
-                  color: dark ? "#555" : "#bbb",
+                  color: dark ? "#888" : "#999",
                   marginLeft: 8,
                   letterSpacing: "0.04em",
                 }}
@@ -631,7 +775,7 @@ function ProjectCard({ project, dark, c, mode, isExpanded, onToggle, index }) {
           style={{
             fontFamily: "'DM Mono', monospace",
             fontSize: 14,
-            color: dark ? "#555" : "#bbb",
+            color: dark ? "#afafaf" : "#494949",
             transform: isExpanded ? "rotate(45deg)" : "rotate(0deg)",
             transition: "transform 0.2s ease",
             display: "inline-block",
@@ -649,7 +793,7 @@ function ProjectCard({ project, dark, c, mode, isExpanded, onToggle, index }) {
             margin: "0 0 12px 0",
             fontFamily: "'DM Mono', monospace",
             fontSize: 11,
-            color: dark ? "#666" : "#999",
+            color: dark ? "#aaa" : "#555",
             letterSpacing: "0.02em",
             lineHeight: 1.5,
           }}
@@ -715,7 +859,7 @@ function ProjectExpanded({ project, dark, c }) {
               style={{
                 fontFamily: "'DM Mono', monospace",
                 fontSize: 9,
-                color: dark ? "#2e2e2e" : "#d0d0d0",
+                color: dark ? "#3a3a3a" : "#c8c8c8",
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
               }}
@@ -739,6 +883,10 @@ function ProjectExpanded({ project, dark, c }) {
                   padding: "7px 14px",
                   letterSpacing: "0.06em",
                   transition: "all 0.15s ease",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  whiteSpace: "nowrap",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = dark ? "#888" : "#888";
@@ -749,6 +897,15 @@ function ProjectExpanded({ project, dark, c }) {
                   e.currentTarget.style.color = dark ? "#ccc" : "#444";
                 }}
               >
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  style={{ flexShrink: 0 }}
+                >
+                  <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
+                </svg>
                 GitHub →
               </a>
             )}
@@ -809,8 +966,8 @@ function ProjectExpanded({ project, dark, c }) {
                         ? "#f0f0f0"
                         : "#111"
                       : dark
-                        ? "#555"
-                        : "#aaa",
+                        ? "#a7a7a7"
+                        : "#717171",
                   transition: "color 0.15s ease, border-color 0.15s ease",
                 }}
               >
@@ -966,7 +1123,7 @@ export default function Projects() {
               style={{
                 fontFamily: "'DM Mono', monospace",
                 fontSize: 12,
-                color: dark ? "#666" : "#999",
+                color: dark ? "#aaa" : "#666",
                 lineHeight: 1.6,
                 letterSpacing: "0.02em",
                 margin: 0,
@@ -995,6 +1152,7 @@ export default function Projects() {
                 { id: "all", label: "All" },
                 { id: "ai", label: "AI Systems" },
                 { id: "fullstack", label: "Full Stack" },
+                { id: "hardware", label: "Embedded" },
               ].map((f) => (
                 <button
                   key={f.id}
@@ -1030,8 +1188,8 @@ export default function Projects() {
                           ? "#e0e0e0"
                           : "#111"
                         : dark
-                          ? "#555"
-                          : "#aaa",
+                          ? "#9c9c9c"
+                          : "#606060",
                     transition: "all 0.15s ease",
                   }}
                 >
@@ -1075,7 +1233,7 @@ export default function Projects() {
                           ? "#e0e0e0"
                           : "#111"
                         : dark
-                          ? "#555"
+                          ? "#8a8a8a"
                           : "#aaa",
                     transition: "all 0.15s ease",
                   }}
