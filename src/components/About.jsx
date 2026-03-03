@@ -230,8 +230,8 @@ function DevelopmentBadge({ dark }) {
         fontSize: 9,
         letterSpacing: "0.08em",
         textTransform: "uppercase",
-        color: dark ? "#666" : "#999",
-        border: `1px solid ${dark ? "#333" : "#e0e0e0"}`,
+        color: dark ? "#888" : "#777",
+        border: `1px solid ${dark ? "#444" : "#ccc"}`,
         borderRadius: 4,
         padding: "2px 6px",
         whiteSpace: "nowrap",
@@ -318,7 +318,7 @@ function ProjectsList({ projects, dark, c, onSelect }) {
 
 function ProjectDetail({ project, dark, c, onBack }) {
   return (
-    <div>
+    <div style={{ height: "320px", overflowY: "auto", scrollbarWidth: "none" }}>
       <button
         onClick={onBack}
         style={{
@@ -327,7 +327,7 @@ function ProjectDetail({ project, dark, c, onBack }) {
           cursor: "pointer",
           fontFamily: "'DM Mono', monospace",
           fontSize: 11,
-          color: c.tabInactive,
+          color: dark ? "#999" : "#666",
           letterSpacing: "0.08em",
           padding: "0 0 16px 0",
           display: "flex",
@@ -336,9 +336,11 @@ function ProjectDetail({ project, dark, c, onBack }) {
           transition: "color 0.15s ease",
         }}
         onMouseEnter={(e) => (e.currentTarget.style.color = c.heading)}
-        onMouseLeave={(e) => (e.currentTarget.style.color = c.tabInactive)}
+        onMouseLeave={(e) =>
+          (e.currentTarget.style.color = dark ? "#999" : "#666")
+        }
       >
-        Back
+        ← Back
       </button>
 
       <div
@@ -370,7 +372,7 @@ function ProjectDetail({ project, dark, c, onBack }) {
           margin: "0 0 16px 0",
           fontFamily: "'DM Mono', monospace",
           fontSize: 12,
-          color: c.subtext,
+          color: dark ? "#aaa" : "#444",
           lineHeight: 1.65,
           letterSpacing: "0.02em",
         }}
@@ -405,7 +407,7 @@ function ProjectDetail({ project, dark, c, onBack }) {
               style={{
                 fontFamily: "'DM Mono', monospace",
                 fontSize: 11.5,
-                color: c.subtext,
+                color: dark ? "#b0b0b0" : "#444",
                 lineHeight: 1.6,
                 letterSpacing: "0.02em",
               }}
@@ -424,12 +426,13 @@ function ProjectDetail({ project, dark, c, onBack }) {
             key={t}
             style={{
               fontFamily: "'DM Mono', monospace",
-              fontSize: 10,
-              color: c.subtext,
-              border: `1px solid ${c.divider}`,
+              fontSize: 10.5,
+              color: dark ? "#e0e0e0" : "#111",
+              border: `1px solid ${dark ? "#555" : "#aaa"}`,
               borderRadius: 4,
-              padding: "3px 8px",
+              padding: "3px 10px",
               letterSpacing: "0.04em",
+              fontWeight: 500,
             }}
           >
             {t}
@@ -545,7 +548,7 @@ export default function About() {
     tabBorder: dark ? "#ffffff" : "#050505",
     cardBorder: dark ? "#2a2a2a" : "#e8e8e8",
     cardBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.015)",
-    cardActive: dark ? "#ffffff" : "#000000",
+    cardActive: dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.4)",
     stripBorder: dark ? "#2a2a2a" : "#e8e8e8",
     stripBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.015)",
     stripText: dark ? "#b0b0b0" : "#555",
@@ -845,7 +848,7 @@ export default function About() {
                   style={{
                     fontFamily: "'DM Mono', monospace",
                     fontSize: 11,
-                    color: c.label,
+                    color: dark ? "#aaa" : "#555",
                     letterSpacing: "0.18em",
                     textTransform: "uppercase",
                     margin: 0,
@@ -862,7 +865,7 @@ export default function About() {
                       cursor: "pointer",
                       fontFamily: "'DM Mono', monospace",
                       fontSize: 10,
-                      color: c.tabInactive,
+                      color: dark ? "#999" : "#666",
                       letterSpacing: "0.08em",
                       transition: "color 0.15s ease",
                       padding: 0,
@@ -871,7 +874,7 @@ export default function About() {
                       (e.currentTarget.style.color = c.heading)
                     }
                     onMouseLeave={(e) =>
-                      (e.currentTarget.style.color = c.tabInactive)
+                      (e.currentTarget.style.color = dark ? "#999" : "#666")
                     }
                   >
                     ← Skills
@@ -879,10 +882,11 @@ export default function About() {
                 )}
               </div>
 
-              {/* Panel content */}
+              {/* Panel content — fixed height to prevent layout shifts */}
               <div
                 className="panel-fade"
                 key={activeView + filterType + (selectedProject?.id || "")}
+                style={{ minHeight: "320px" }}
               >
                 {activeView === "skills" && (
                   <>
@@ -1005,7 +1009,7 @@ export default function About() {
                         style={{
                           fontFamily: "'DM Mono', monospace",
                           fontSize: 10,
-                          color: isActive ? c.heading : c.subtext,
+                          color: c.subtext,
                           letterSpacing: "0.12em",
                           textTransform: "uppercase",
                         }}
