@@ -97,7 +97,13 @@ function SkillRow({ skill, dark, index }) {
         style={{
           fontFamily: "'DM Mono', monospace",
           fontSize: 11,
-          color: hovered ? (dark ? "#c3c3c3" : "#060606") : dark ? "#6f6f6f" : "#606060",
+          color: hovered
+            ? dark
+              ? "#c3c3c3"
+              : "#060606"
+            : dark
+              ? "#6f6f6f"
+              : "#606060",
           letterSpacing: "0.04em",
           transition: "color 0.15s ease",
           textAlign: "right",
@@ -123,14 +129,14 @@ export default function About() {
     tabActive: dark ? "#f8f2f2" : "#000000",
     tabInactive: dark ? "#555" : "#aaa",
     tabBorder: dark ? "#ffffff" : "#050505",
-    cardBorder: dark ? "#afafaf" : "#383838",
-    cardBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.02)",
-    cardHover: dark ? "#555" : "#ccc",
-    stripBorder: dark ? "#afafaf" : "#383838",
-    stripBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.02)",
+    cardBorder: dark ? "#2a2a2a" : "#e8e8e8",
+    cardBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.015)",
+    cardHover: dark ? "#444" : "#ccc",
+    stripBorder: dark ? "#2a2a2a" : "#e8e8e8",
+    stripBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.015)",
     stripText: dark ? "#b0b0b0" : "#555",
     photoBg: dark ? "#1a1a1a" : "#f0f0f0",
-    photoBorder: dark ? "#333" : "#e0e0e0",
+    photoBorder: dark ? "#2a2a2a" : "#e0e0e0",
     photoIcon: dark ? "#444" : "#ccc",
   };
 
@@ -153,6 +159,12 @@ export default function About() {
           transition: color 0.2s, border-color 0.2s;
         }
         .about-stab:first-child { padding-left: 0; }
+        .photo-card {
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .photo-card:hover {
+          transform: rotate(0deg) translateY(-4px) !important;
+        }
       `}</style>
 
       <section
@@ -261,56 +273,75 @@ export default function About() {
                   display: "flex",
                   flexDirection: "column",
                   gap: 14,
+                  marginBottom: 32,
                 }}
               >
                 <p style={{ margin: 0 }}>
-                  I'm Yuvraj, a Computer Engineering student at TIET Patiala. I
-                  enjoy building things that push me to learn beyond the
-                  classroom — especially projects that feel slightly outside my
-                  comfort zone.
-                </p>
-                <p style={{ margin: 0 }}>
-                  My work has focused on interactive systems and AI-driven
-                  applications — from gesture-based controls and computer vision
-                  to full-stack platforms. I break down complex ideas into
-                  structured components and refine them until they perform
-                  reliably.
-                </p>
-                <p style={{ margin: 0 }}>
-                  Right now I'm deepening my DSA fundamentals alongside building
-                  projects — because writing ambitious systems matters, but{" "}
+                  I'm Yuvraj, a Computer Engineering student at TIET Patiala.
+                  I'm drawn to projects that{" "}
                   <span style={{ color: c.emphasis, fontWeight: 500 }}>
-                    understanding what's under the hood matters just as much.
-                  </span>
+                    push me slightly beyond what I already know
+                  </span>{" "}
+                  — the kind that push me to figure things out rather than
+                  follow instructions.
+                </p>
+                <p style={{ margin: 0 }}>
+                  So far, I've focused on developing{" "}
+                  <span style={{ color: c.emphasis, fontWeight: 500 }}>
+                    interactive systems and AI-driven applications
+                  </span>{" "}
+                  — from gesture-based controls and computer vision experiments
+                  to full-stack platforms. I enjoy taking complex ideas,
+                  structuring them clearly, and refining them until they perform
+                  reliably in real-world scenarios.
+                </p>
+                <p style={{ margin: 0 }}>
+                  Right now, I'm strengthening my fundamentals in{" "}
+                  <span style={{ color: c.emphasis, fontWeight: 500 }}>
+                    data structures and algorithms
+                  </span>{" "}
+                  alongside building projects — because writing ambitious
+                  systems is important, but{" "}
+                  <span style={{ color: c.emphasis, fontWeight: 500 }}>
+                    understanding how they work under the hood
+                  </span>{" "}
+                  matters just as much.
                 </p>
               </div>
 
-              {/* Photo */}
+              {/* ── Photo Card (Option 3) ── */}
               <div
                 style={{
-                  marginTop: 28,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 16,
                   paddingTop: 28,
                   borderTop: `1px solid ${c.divider}`,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 20,
                 }}
               >
+                {/* Tilted rectangular photo card */}
                 <div
+                  className="photo-card"
                   style={{
-                    width: 64,
-                    height: 64,
-                    borderRadius: "50%",
+                    width: 72,
+                    height: 88,
+                    borderRadius: 10,
                     background: c.photoBg,
                     border: `1px solid ${c.photoBorder}`,
+                    flexShrink: 0,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    flexShrink: 0,
+                    transform: "rotate(-2.5deg)",
+                    boxShadow: dark
+                      ? "4px 4px 16px rgba(0,0,0,0.4)"
+                      : "4px 4px 16px rgba(0,0,0,0.08)",
                     overflow: "hidden",
+                    cursor: "default",
                   }}
                 >
-                  <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+                  {/* Placeholder avatar */}
+                  <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
                     <circle cx="20" cy="15" r="8" fill={c.photoIcon} />
                     <ellipse
                       cx="20"
@@ -321,7 +352,11 @@ export default function About() {
                     />
                   </svg>
                 </div>
-                <div>
+
+                {/* Info beside card */}
+                <div
+                  style={{ display: "flex", flexDirection: "column", gap: 8 }}
+                >
                   <p
                     style={{
                       margin: 0,
@@ -333,17 +368,28 @@ export default function About() {
                   >
                     Yuvraj Malik
                   </p>
-                  <p
-                    style={{
-                      margin: "3px 0 0",
-                      fontFamily: "'DM Mono', monospace",
-                      fontSize: 11,
-                      color: c.label,
-                      letterSpacing: "0.06em",
-                    }}
-                  >
-                    CS Eng · TIET Patiala
-                  </p>
+                  {/* Fact pills */}
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                    {["2nd Year CSE", "TIET Patiala", "AI/ML · Full Stack"].map(
+                      (pill) => (
+                        <span
+                          key={pill}
+                          style={{
+                            fontFamily: "'DM Mono', monospace",
+                            fontSize: 10,
+                            letterSpacing: "0.06em",
+                            color: c.subtext,
+                            border: `1px solid ${c.divider}`,
+                            borderRadius: 100,
+                            padding: "3px 10px",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {pill}
+                        </span>
+                      ),
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -387,7 +433,7 @@ export default function About() {
                 ))}
               </div>
 
-              {/* Skill rows — name left, context right, hover brightens */}
+              {/* Skill rows */}
               <div>
                 {group?.skills.map((skill, i) => (
                   <SkillRow
@@ -399,7 +445,7 @@ export default function About() {
                 ))}
               </div>
 
-              {/* Stat cards */}
+              {/* Stat cards — monochrome, real numbers */}
               <div
                 style={{
                   display: "grid",
@@ -409,21 +455,9 @@ export default function About() {
                 }}
               >
                 {[
-                  {
-                    label: "Projects",
-                    value: "10+",
-                    color: dark ? "#4ade80" : "#16a34a",
-                  },
-                  {
-                    label: "AI Systems",
-                    value: "4",
-                    color: dark ? "#22d3ee" : "#0891b2",
-                  },
-                  {
-                    label: "Focus Now",
-                    value: "DSA",
-                    color: dark ? "#f472b6" : "#db2777",
-                  },
+                  { label: "Projects", value: "10+" },
+                  { label: "LC Rating", value: "1800+" },
+                  { label: "AI Systems", value: "4" },
                 ].map((s) => (
                   <div
                     key={s.label}
@@ -437,7 +471,9 @@ export default function About() {
                       cursor: "default",
                     }}
                     onMouseEnter={(e) =>
-                      (e.currentTarget.style.borderColor = c.cardHover)
+                      (e.currentTarget.style.borderColor = dark
+                        ? "#555"
+                        : "#aaa")
                     }
                     onMouseLeave={(e) =>
                       (e.currentTarget.style.borderColor = c.cardBorder)
@@ -447,7 +483,7 @@ export default function About() {
                       style={{
                         fontFamily: "'Instrument Serif', Georgia, serif",
                         fontSize: 26,
-                        color: s.color,
+                        color: c.heading,
                         marginBottom: 4,
                         letterSpacing: "-0.02em",
                       }}
@@ -458,7 +494,7 @@ export default function About() {
                       style={{
                         fontFamily: "'DM Mono', monospace",
                         fontSize: 10,
-                        color: c.label,
+                        color: c.subtext,
                         letterSpacing: "0.12em",
                         textTransform: "uppercase",
                       }}
@@ -469,29 +505,29 @@ export default function About() {
                 ))}
               </div>
 
-              {/* Philosophy */}
+              {/* Statement */}
               <div
                 style={{
                   marginTop: 10,
                   border: `1px solid ${c.stripBorder}`,
                   borderRadius: 10,
-                  padding: "12px 16px",
+                  padding: "20px 20px",
                   background: c.stripBg,
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: 10,
                 }}
               >
-                <span
+                <p
                   style={{
-                    fontFamily: "'DM Mono', monospace",
-                    fontSize: 13,
-                    color: c.label,
-                    flexShrink: 0,
+                    margin: "0 0 6px 0",
+                    fontFamily: "'Instrument Serif', Georgia, serif",
+                    fontSize: 18,
+                    fontWeight: 400,
+                    letterSpacing: "-0.01em",
+                    color: c.heading,
+                    lineHeight: 1.2,
                   }}
                 >
-                  //
-                </span>
+                  Drawn to Complexity
+                </p>
                 <p
                   style={{
                     margin: 0,
@@ -502,8 +538,7 @@ export default function About() {
                     letterSpacing: "0.02em",
                   }}
                 >
-                  build ambitious things · understand them deeply · make them
-                  actually work
+                  Motivated by problems that demand more than a quick fix.
                 </p>
               </div>
             </div>
