@@ -456,8 +456,8 @@ export default function About() {
               >
                 {[
                   { label: "Projects", value: "10+" },
-                  { label: "LC Rating", value: "1800+" },
-                  { label: "AI Systems", value: "4" },
+                  { label: "Algorithmic Problems", value: "200+" },
+                  { label: "AI Systems", value: "6" },
                 ].map((s) => (
                   <div
                     key={s.label}
