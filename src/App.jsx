@@ -37,7 +37,6 @@ export default function App() {
         <About />
         <Projects />
         <Journey />
-        <Skills />
         <Contact />
       </main>
     </div>
