@@ -18,62 +18,22 @@ function useDarkMode() {
 }
 
 const TIMELINE = [
-  {
-    year: "2026",
-    items: [
-      {
-        title: "Spatial Console",
-        type: "project",
-        description:
-          "Gesture-controlled 3D structural simulation. BFS stability validation, MediaPipe pointer emulation, React + Three.js.",
-      },
-      {
-        title: "Stark Paper Analyzer",
-        type: "project",
-        description:
-          "Research PDF to structured intelligence. Token-aware chunking, JSON-enforced LLM output, async FastAPI backend.",
-      },
-    ],
-  },
-  {
-    year: "2025",
-    items: [
-      {
-        title: "Code Vault",
-        type: "project",
-        description:
-          "Full-stack coding competition platform. Drag-and-drop engine, live leaderboard, anti-cheat panel. Hosted 30 teams.",
-      },
-      {
-        title: "Anime Clash",
-        type: "project",
-        description:
-          "Popularity game with deterministic daily challenges via seeded PRNG. Three gameplay modes, serverless backend.",
-      },
-      {
-        title: "Air Canvas",
-        type: "project",
-        description:
-          "Touchless drawing via computer vision. 5000x5000 canvas, gesture tool switching, shape detection from freehand strokes.",
-      },
-    ],
-  },
+  { year: "2026", title: "Spatial Console", type: "project" },
+  { year: "2026", title: "Stark Paper Analyzer", type: "project" },
+  { year: "2026", title: "Anime Clash", type: "project" },
+  { year: "2026", title: "Air Canvas", type: "project" },
+  { year: "2026", title: "Web Dev Intern — SkillCraft", type: "internship" },
+  { year: "2025", title: "Code Vault", type: "project" },
+  { year: "2025", title: "Bomb Difuse", type: "project" },
+  { year: "2025", title: "Core Member — LEAD", type: "leadership" },
+  { year: "2025", title: "AI Pose Systems", type: "project" },
+  { year: "2025", title: "AI/ML Intern — Auraflo", type: "internship" },
+  { year: "2024", title: "Executive Member — LEAD", type: "leadership" },
+  { year: "2024", title: "Member — OWASP TIET", type: "leadership" },
   {
     year: "2024",
-    items: [
-      {
-        title: "Bomb Difuse",
-        type: "project",
-        description:
-          "Arduino reaction game. Hardware interrupt input polling, randomized LED engine, PWM buzzer feedback.",
-      },
-      {
-        title: "AI Pose Systems",
-        type: "project",
-        description:
-          "Two biomechanical trackers — high knees form scoring and squat depth analysis — on one shared pose pipeline.",
-      },
-    ],
+    title: "B.E. Computer Engineering — TIET",
+    type: "education",
   },
 ];
 
@@ -90,10 +50,21 @@ const ROLES = [
     ],
   },
   {
+    role: "Web Development Intern",
+    org: "SkillCraft Technology",
+    duration: "Jan 2026 — Jan 2026",
+    type: "Internship",
+    bullets: [
+      "Built web interfaces using React.js and HTML5",
+      "Worked remotely on frontend development tasks",
+      "Applied component-based architecture in real projects",
+    ],
+  },
+  {
     role: "AI/ML Intern",
     org: "Auraflo",
     duration: "Mar 2025 — Sep 2025",
-    type: "Industry",
+    type: "Internship",
     bullets: [
       "Built CV pipelines using TensorFlow Lite, OpenCV, PyTorch",
       "Developed real-time pose detection and motion classification",
@@ -103,7 +74,7 @@ const ROLES = [
   {
     role: "B.E. Computer Engineering",
     org: "Thapar Institute of Engineering & Technology",
-    duration: "2023 — 2027",
+    duration: "2024 — 2027",
     type: "Education",
     bullets: [
       "Core focus: systems, algorithms, data structures, AI",
@@ -113,51 +84,46 @@ const ROLES = [
   },
 ];
 
-const TYPE_CONFIG = {
-  project: { label: "Project", bg: "#a0c4ff", text: "#1a56db" },
-  role: { label: "Role", bg: "#a8f0c6", text: "#1a7a4a" },
-  education: { label: "Education", bg: "#ffd6a5", text: "#92400e" },
+// Dot color per type — subtle tint, not loud
+const TYPE_DOT = {
+  project: { dark: "#4a7fa5", light: "#2563a8" },
+  leadership: { dark: "#4a9e6e", light: "#1a6e45" },
+  internship: { dark: "#9e7a4a", light: "#7a4e1a" },
+  education: { dark: "#8b6faa", light: "#5e3d8a" },
 };
 
-function TypeTag({ type, dark: isDark }) {
-  const cfg = TYPE_CONFIG[type];
-  return (
-    <span
-      style={{
-        fontFamily: "'DM Mono', monospace",
-        fontSize: 9,
-        letterSpacing: "0.12em",
-        textTransform: "uppercase",
-        color: isDark ? cfg.bg : cfg.text,
-        border: `1px solid ${isDark ? cfg.bg + "55" : cfg.text + "55"}`,
-        background: isDark ? cfg.bg + "11" : cfg.text + "0d",
-        borderRadius: 4,
-        padding: "2px 7px",
-        whiteSpace: "nowrap",
-      }}
-    >
-      {cfg.label}
-    </span>
-  );
-}
+const TYPE_BADGE = {
+  Leadership: { dark: "#4a9e6e", light: "#1a6e45" },
+  Internship: { dark: "#9e7a4a", light: "#7a4e1a" },
+  Education: { dark: "#8b6faa", light: "#5e3d8a" },
+};
 
 export default function Journey() {
   const dark = useDarkMode();
 
   const c = {
-    heading: dark ? "#ffffff" : "#050505",
-    subtext: dark ? "#aaaaaa" : "#666666",
+    heading: dark ? "#ffffff" : "#080808",
+    subtext: dark ? "#cccccc" : "#444444",
+    body: dark ? "#b8b8b8" : "#333333",
     label: dark ? "#cfcfcf" : "#1d1d1d",
     divider: dark ? "#222222" : "#e8e8e8",
-    line: dark ? "#282828" : "#e4e4e4",
+    line: dark ? "#2a2a2a" : "#dedede",
     cardBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.015)",
-    cardBorder: dark ? "#1e1e1e" : "#ececec",
-    cardHover: dark ? "#2e2e2e" : "#d4d4d4",
-    yearColor: dark ? "#444444" : "#c0c0c0",
-    bullet: dark ? "#484848" : "#cccccc",
-    bulletText: dark ? "#999999" : "#666666",
-    sectionLabel: dark ? "#555555" : "#bbbbbb",
+    cardBorder: dark ? "#1e1e1e" : "#e0e0e0",
+    cardHover: dark ? "#303030" : "#c8c8c8",
+    yearColor: dark ? "#666666" : "#999999",
+    bullet: dark ? "#555555" : "#aaaaaa",
+    bulletText: dark ? "#aaaaaa" : "#444444",
+    roleTitle: dark ? "#ffffff" : "#111111",
+    roleOrg: dark ? "#bbbbbb" : "#555555",
+    roleDur: dark ? "#555555" : "#aaaaaa",
+    badgeBorder: dark ? "#333333" : "#cccccc",
+    badgeText: dark ? "#888888" : "#777777",
+    titleDot: dark ? "#888888" : "#777777",
   };
+
+  // Group timeline by year
+  const years = [...new Set(TIMELINE.map((t) => t.year))];
 
   return (
     <>
@@ -173,7 +139,7 @@ export default function Journey() {
       <section
         id="journey"
         style={{
-          padding: "7.5rem 3rem 6rem 3rem",
+          padding: "7.5rem 3rem 3rem 3rem",
           boxSizing: "border-box",
           position: "relative",
         }}
@@ -267,7 +233,7 @@ export default function Journey() {
             </p>
           </div>
 
-          {/* Two-column layout */}
+          {/* Two-column */}
           <div
             className="jx-a3"
             style={{
@@ -277,144 +243,176 @@ export default function Journey() {
               alignItems: "start",
             }}
           >
-            {/* LEFT: project timeline */}
+            {/* LEFT: compact timeline — title + type dot only */}
             <div>
               <p
                 style={{
                   fontFamily: "'DM Mono', monospace",
                   fontSize: 10,
-                  color: c.sectionLabel,
+                  color: c.yearColor,
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
                   marginBottom: 20,
                 }}
               >
-                Projects
+                Timeline
               </p>
 
-              {TIMELINE.map((group, gi) => (
+              <div style={{ position: "relative" }}>
+                {/* Continuous vertical line */}
                 <div
-                  key={group.year}
-                  style={{ display: "grid", gridTemplateColumns: "36px 1fr" }}
-                >
-                  {/* Year + vertical line */}
-                  <div style={{ position: "relative" }}>
-                    <span
-                      style={{
-                        fontFamily: "'Instrument Serif', Georgia, serif",
-                        fontSize: 13,
-                        fontStyle: "italic",
-                        color: c.yearColor,
-                        display: "block",
-                        lineHeight: 1,
-                        marginBottom: 16,
-                        marginTop: 2,
-                      }}
-                    >
-                      {group.year}
-                    </span>
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: 20,
-                        left: 3,
-                        bottom: gi < TIMELINE.length - 1 ? -12 : 0,
-                        width: 1,
-                        background: c.line,
-                      }}
-                    />
-                  </div>
+                  style={{
+                    position: "absolute",
+                    top: 8,
+                    left: 5,
+                    bottom: 8,
+                    width: 1,
+                    background: c.line,
+                  }}
+                />
 
-                  {/* Cards */}
-                  <div
-                    style={{ paddingBottom: gi < TIMELINE.length - 1 ? 12 : 0 }}
-                  >
-                    {group.items.map((item, ii) => (
+                {years.map((year, yi) => {
+                  const items = TIMELINE.filter((t) => t.year === year);
+                  return (
+                    <div
+                      key={year}
+                      style={{ marginBottom: yi < years.length - 1 ? 20 : 0 }}
+                    >
+                      {/* Year marker */}
                       <div
-                        key={ii}
                         style={{
-                          position: "relative",
-                          marginBottom: ii < group.items.length - 1 ? 7 : 0,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 14,
+                          marginBottom: 8,
                         }}
                       >
                         <div
                           style={{
-                            position: "absolute",
-                            left: -22,
-                            top: 13,
-                            width: 6,
-                            height: 6,
+                            width: 11,
+                            height: 11,
                             borderRadius: "50%",
-                            background: dark ? "#2e2e2e" : "#e0e0e0",
-                            border: `1px solid ${dark ? "#3e3e3e" : "#ccc"}`,
+                            flexShrink: 0,
+                            background: dark ? "#222" : "#eee",
+                            border: `1px solid ${dark ? "#444" : "#bbb"}`,
                             zIndex: 2,
+                            position: "relative",
                           }}
                         />
-                        <div
-                          className="jx-card"
+                        <span
                           style={{
-                            border: `1px solid ${c.cardBorder}`,
-                            borderRadius: 8,
-                            padding: "11px 14px",
-                            background: c.cardBg,
+                            fontFamily: "'Instrument Serif', Georgia, serif",
+                            fontSize: 14,
+                            fontStyle: "italic",
+                            color: c.yearColor,
+                            letterSpacing: "0.01em",
                           }}
-                          onMouseEnter={(e) =>
-                            (e.currentTarget.style.borderColor = c.cardHover)
-                          }
-                          onMouseLeave={(e) =>
-                            (e.currentTarget.style.borderColor = c.cardBorder)
-                          }
                         >
+                          {year}
+                        </span>
+                      </div>
+
+                      {/* Items */}
+                      {items.map((item, ii) => {
+                        const dotColor = TYPE_DOT[item.type];
+                        return (
                           <div
+                            key={ii}
                             style={{
                               display: "flex",
                               alignItems: "center",
-                              gap: 8,
-                              marginBottom: 5,
-                              flexWrap: "wrap",
+                              gap: 14,
+                              paddingLeft: 0,
+                              marginBottom: ii < items.length - 1 ? 6 : 0,
                             }}
                           >
+                            {/* Colored dot */}
+                            <div
+                              style={{
+                                width: 7,
+                                height: 7,
+                                borderRadius: "50%",
+                                flexShrink: 0,
+                                marginLeft: 2,
+                                background: dark
+                                  ? dotColor.dark
+                                  : dotColor.light,
+                                zIndex: 2,
+                                position: "relative",
+                              }}
+                            />
                             <span
                               style={{
                                 fontFamily:
-                                  "'Instrument Serif', Georgia, serif",
-                                fontSize: 15,
-                                fontWeight: 400,
-                                color: c.heading,
-                                letterSpacing: "-0.01em",
+                                  item.type === "project"
+                                    ? "'Instrument Serif', Georgia, serif"
+                                    : "'DM Mono', monospace",
+                                fontSize: item.type === "project" ? 14 : 11.5,
+                                color: c.body,
+                                letterSpacing:
+                                  item.type === "project"
+                                    ? "-0.01em"
+                                    : "0.02em",
+                                lineHeight: 1.3,
                               }}
                             >
                               {item.title}
                             </span>
-                            <TypeTag type={item.type} dark={dark} />
                           </div>
-                          <p
-                            style={{
-                              margin: 0,
-                              fontFamily: "'DM Mono', monospace",
-                              fontSize: 11,
-                              color: dark ? "#777" : "#999",
-                              lineHeight: 1.6,
-                              letterSpacing: "0.02em",
-                            }}
-                          >
-                            {item.description}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Legend */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 16,
+                  marginTop: 24,
+                  paddingTop: 16,
+                  borderTop: `1px solid ${c.divider}`,
+                  flexWrap: "wrap",
+                }}
+              >
+                {Object.entries(TYPE_DOT).map(([type, colors]) => (
+                  <div
+                    key={type}
+                    style={{ display: "flex", alignItems: "center", gap: 6 }}
+                  >
+                    <div
+                      style={{
+                        width: 6,
+                        height: 6,
+                        borderRadius: "50%",
+                        background: dark ? colors.dark : colors.light,
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontFamily: "'DM Mono', monospace",
+                        fontSize: 9,
+                        color: dark ? "#555" : "#aaa",
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {type}
+                    </span>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
-            {/* RIGHT: roles + education */}
+            {/* RIGHT: role + education cards */}
             <div>
               <p
                 style={{
                   fontFamily: "'DM Mono', monospace",
                   fontSize: 10,
-                  color: c.sectionLabel,
+                  color: c.yearColor,
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
                   marginBottom: 20,
@@ -424,42 +422,69 @@ export default function Journey() {
               </p>
 
               <div
-                style={{ display: "flex", flexDirection: "column", gap: 10 }}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 10,
+                }}
               >
-                {ROLES.map((r, i) => (
-                  <div
-                    key={i}
-                    className="jx-card"
-                    style={{
-                      border: `1px solid ${c.cardBorder}`,
-                      borderRadius: 10,
-                      padding: "18px 20px",
-                      background: c.cardBg,
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.borderColor = c.cardHover)
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.borderColor = c.cardBorder)
-                    }
-                  >
+                {ROLES.map((r, i) => {
+                  const badgeColor = TYPE_BADGE[r.type];
+                  return (
                     <div
+                      key={i}
+                      className="jx-card"
                       style={{
+                        border: `1px solid ${c.cardBorder}`,
+                        borderRadius: 10,
+                        padding: "14px 16px",
+                        background: c.cardBg,
                         display: "flex",
-                        alignItems: "flex-start",
-                        justifyContent: "space-between",
-                        gap: 8,
-                        marginBottom: 3,
+                        flexDirection: "column",
                       }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.borderColor = c.cardHover)
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.borderColor = c.cardBorder)
+                      }
                     >
+                      {/* Badge */}
+                      <span
+                        style={{
+                          fontFamily: "'DM Mono', monospace",
+                          fontSize: 9,
+                          letterSpacing: "0.12em",
+                          textTransform: "uppercase",
+                          color: badgeColor
+                            ? dark
+                              ? badgeColor.dark
+                              : badgeColor.light
+                            : c.badgeText,
+                          border: `1px solid ${badgeColor ? (dark ? badgeColor.dark + "66" : badgeColor.light + "66") : c.badgeBorder}`,
+                          background: badgeColor
+                            ? dark
+                              ? badgeColor.dark + "14"
+                              : badgeColor.light + "0e"
+                            : "transparent",
+                          borderRadius: 4,
+                          padding: "2px 7px",
+                          display: "inline-block",
+                          alignSelf: "flex-start",
+                          marginBottom: 10,
+                        }}
+                      >
+                        {r.type}
+                      </span>
                       <span
                         style={{
                           fontFamily: "'Instrument Serif', Georgia, serif",
-                          fontSize: 17,
+                          fontSize: 15,
                           fontWeight: 400,
-                          color: c.heading,
+                          color: c.roleTitle,
                           letterSpacing: "-0.01em",
                           lineHeight: 1.2,
+                          marginBottom: 4,
                         }}
                       >
                         {r.role}
@@ -467,90 +492,73 @@ export default function Journey() {
                       <span
                         style={{
                           fontFamily: "'DM Mono', monospace",
-                          fontSize: 9,
-                          letterSpacing: "0.1em",
-                          textTransform: "uppercase",
-                          color: dark ? "#666" : "#aaa",
-                          border: `1px solid ${dark ? "#333" : "#ddd"}`,
-                          borderRadius: 4,
-                          padding: "2px 6px",
-                          whiteSpace: "nowrap",
-                          flexShrink: 0,
-                          marginTop: 2,
+                          fontSize: 10.5,
+                          color: c.roleOrg,
+                          display: "block",
+                          marginBottom: 2,
+                          letterSpacing: "0.02em",
                         }}
                       >
-                        {r.type}
+                        {r.org}
                       </span>
-                    </div>
-                    <span
-                      style={{
-                        fontFamily: "'DM Mono', monospace",
-                        fontSize: 11,
-                        color: dark ? "#999" : "#777",
-                        display: "block",
-                        marginBottom: 2,
-                        letterSpacing: "0.03em",
-                      }}
-                    >
-                      {r.org}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: "'DM Mono', monospace",
-                        fontSize: 10,
-                        color: dark ? "#484848" : "#c0c0c0",
-                        display: "block",
-                        marginBottom: 14,
-                        letterSpacing: "0.05em",
-                      }}
-                    >
-                      {r.duration}
-                    </span>
-                    <div
-                      style={{
-                        height: 1,
-                        background: dark ? "#1c1c1c" : "#f0f0f0",
-                        marginBottom: 12,
-                      }}
-                    />
-                    {r.bullets.map((b, bi) => (
-                      <div
-                        key={bi}
+                      <span
                         style={{
-                          display: "flex",
-                          gap: 10,
-                          padding: "5px 0",
-                          borderBottom:
-                            bi < r.bullets.length - 1
-                              ? `1px solid ${dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.04)"}`
-                              : "none",
+                          fontFamily: "'DM Mono', monospace",
+                          fontSize: 10,
+                          color: c.roleDur,
+                          display: "block",
+                          marginBottom: 12,
+                          letterSpacing: "0.04em",
                         }}
                       >
-                        <span
+                        {r.duration}
+                      </span>
+                      <div
+                        style={{
+                          height: 1,
+                          background: dark ? "#1c1c1c" : "#eeeeee",
+                          marginBottom: 10,
+                        }}
+                      />
+                      {r.bullets.map((b, bi) => (
+                        <div
+                          key={bi}
                           style={{
-                            fontFamily: "'DM Mono', monospace",
-                            fontSize: 11,
-                            color: c.bullet,
-                            flexShrink: 0,
+                            display: "flex",
+                            gap: 8,
+                            padding: "3px 0",
+                            borderBottom:
+                              bi < r.bullets.length - 1
+                                ? `1px solid ${dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.04)"}`
+                                : "none",
                           }}
                         >
-                          —
-                        </span>
-                        <span
-                          style={{
-                            fontFamily: "'DM Mono', monospace",
-                            fontSize: 11,
-                            color: c.bulletText,
-                            lineHeight: 1.6,
-                            letterSpacing: "0.02em",
-                          }}
-                        >
-                          {b}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                ))}
+                          <span
+                            style={{
+                              fontFamily: "'DM Mono', monospace",
+                              fontSize: 10,
+                              color: c.bullet,
+                              flexShrink: 0,
+                            }}
+                          >
+                            —
+                          </span>
+                          <span
+                            style={{
+                              fontFamily: "'DM Mono', monospace",
+                              fontSize: 10,
+                              color: c.bulletText,
+                              lineHeight: 1.55,
+                              letterSpacing: "0.02em",
+                            }}
+                          >
+                            {b}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

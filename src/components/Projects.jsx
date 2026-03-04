@@ -1178,8 +1178,7 @@ export default function Projects() {
       <section
         id="projects"
         style={{
-          minHeight: "100vh",
-          padding: "7.5rem 3rem 4rem 3rem",
+          padding: "7.5rem 3rem 0 3rem",
           boxSizing: "border-box",
           position: "relative",
         }}
@@ -1385,10 +1384,7 @@ export default function Projects() {
           </div>
 
           {/* ── Project list ── */}
-          <div
-            className="proj-a4"
-            style={{ position: "relative", minHeight: 400 }}
-          >
+          <div className="proj-a4" style={{ position: "relative" }}>
             {/* Grid view */}
             <div
               style={{
@@ -1436,7 +1432,7 @@ export default function Projects() {
           </div>
 
           {/* ── Engineering Decisions ── */}
-          <div style={{ marginTop: 96 }}>
+          <div style={{ marginTop: 56 }}>
             <div
               style={{
                 display: "flex",
@@ -1534,8 +1530,8 @@ export default function Projects() {
           {/* ── CTA ── */}
           <div
             style={{
-              marginTop: 80,
-              paddingTop: 48,
+              marginTop: 24,
+              paddingTop: 24,
               borderTop: `1px solid ${c.divider}`,
               display: "flex",
               alignItems: "center",
@@ -1549,10 +1545,11 @@ export default function Projects() {
                 style={{
                   margin: "0 0 6px 0",
                   fontFamily: "'Instrument Serif', Georgia, serif",
-                  fontSize: 22,
+                  fontSize: "clamp(1.4rem, 2.5vw, 2rem)",
                   fontWeight: 400,
                   color: c.heading,
-                  letterSpacing: "-0.01em",
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1.1,
                 }}
               >
                 Want to build something together?
@@ -1566,7 +1563,7 @@ export default function Projects() {
                   letterSpacing: "0.02em",
                 }}
               >
-                I'm open to serious work.
+                I'm open to internships, collaborations, and serious projects.
               </p>
             </div>
             <a
