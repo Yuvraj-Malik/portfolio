@@ -296,7 +296,7 @@ export default function Journey() {
               style={{
                 fontFamily: "'DM Mono', monospace",
                 fontSize: 11,
-                color: dark ? "#666" : "#aaa",
+                color: dark ? "#a4a4a4" : "#5d5d5d",
                 lineHeight: 1.6,
                 letterSpacing: "0.02em",
                 margin: 0,

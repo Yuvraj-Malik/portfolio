@@ -73,7 +73,7 @@ function TerminalCard({ dark }) {
   }, [lines]);
 
   const lineStyle = (cls) => {
-    if (cls === "dim") return { color: dark ? "#666" : "#bbb" };
+    if (cls === "dim") return { color: dark ? "#666" : "#494949" };
     if (cls === "green") return { color: dark ? "#4ade80" : "#16a34a" };
     if (cls === "accent")
       return { color: dark ? "#ffffff" : "#111111", fontWeight: 500 };
@@ -143,7 +143,7 @@ function TerminalCard({ dark }) {
               fontFamily: "'DM Mono', monospace",
               fontSize: "11px",
               letterSpacing: "0.06em",
-              color: dark ? "#777" : "#bbb",
+              color: dark ? "#777" : "#5d5d5d",
               marginLeft: "8px",
             }}
           >

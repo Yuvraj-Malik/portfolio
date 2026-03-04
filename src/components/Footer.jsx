@@ -371,7 +371,7 @@ export default function Footer() {
                   fontFamily: "'Instrument Serif', Georgia, serif",
                   fontSize: 17,
                   color: c.heading,
-                  letterSpacing: "-0.02em",
+                  letterSpacing: "0.01em",
                   lineHeight: 1.2,
                   margin: "0 0 8px 0",
                 }}
@@ -384,7 +384,7 @@ export default function Footer() {
                   fontSize: 11,
                   color: c.body,
                   lineHeight: 1.7,
-                  letterSpacing: "0.02em",
+                  letterSpacing: "0.01em",
                   margin: "0 0 20px 0",
                 }}
               >

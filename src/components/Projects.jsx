@@ -763,7 +763,7 @@ function ProjectCard({ project, dark, c, mode, isExpanded, onToggle, index }) {
                 : dark
                   ? "#c0c0c0"
                   : "#333",
-              letterSpacing: isShowcase ? "-0.01em" : "0.02em",
+              letterSpacing: isShowcase ? "0.01em" : "0.02em",
               transition: "color 0.15s ease",
             }}
           >
@@ -1516,7 +1516,7 @@ export default function Projects() {
                       fontSize: 16,
                       fontWeight: 400,
                       color: c.heading,
-                      letterSpacing: "-0.01em",
+                      letterSpacing: "0.02em",
                       lineHeight: 1.3,
                     }}
                   >
@@ -1537,70 +1537,6 @@ export default function Projects() {
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* ── CTA ── */}
-          <div
-            style={{
-              marginTop: 24,
-              paddingTop: 24,
-              borderTop: `1px solid ${c.divider}`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: 20,
-            }}
-          >
-            <div>
-              <p
-                style={{
-                  margin: "0 0 6px 0",
-                  fontFamily: "'Instrument Serif', Georgia, serif",
-                  fontSize: "clamp(1.4rem, 2.5vw, 2rem)",
-                  fontWeight: 400,
-                  color: c.heading,
-                  letterSpacing: "-0.02em",
-                  lineHeight: 1.1,
-                }}
-              >
-                Want to build something together?
-              </p>
-              <p
-                style={{
-                  margin: 0,
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: 12,
-                  color: dark ? "#666" : "#999",
-                  letterSpacing: "0.02em",
-                  lineHeight: 1.7,
-                  maxWidth: 460,
-                }}
-              >
-                I build systems that work under pressure — not just demos.
-                <br />
-                If you have a real problem, I want to hear it.
-              </p>
-            </div>
-            <a
-              href="#contact"
-              style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 12,
-                color: dark ? "#111" : "#fff",
-                textDecoration: "none",
-                background: dark ? "#f0f0f0" : "#111",
-                borderRadius: 100,
-                padding: "12px 24px",
-                letterSpacing: "0.06em",
-                transition: "opacity 0.15s ease",
-                whiteSpace: "nowrap",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-            >
-              Let's Talk →
-            </a>
           </div>
         </div>
       </section>

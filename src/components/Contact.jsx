@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import emailjs from "@emailjs/browser";
 
-const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
 function useDarkMode() {
   const [dark, setDark] = useState(() =>
@@ -84,8 +84,8 @@ export default function Contact() {
     inputBorder: dark ? "#282828" : "#e4e4e4",
     inputFocus: dark ? "#484848" : "#999999",
     inputText: dark ? "#eeeeee" : "#111111",
-    metaText: dark ? "#484848" : "#b8b8b8",
-    iconColor: dark ? "#484848" : "#bbbbbb",
+    metaText: dark ? "#c1c1c1" : "#494949",
+    iconColor: dark ? "#cfcfcf" : "#3f3f3f",
     infoValue: dark ? "#cccccc" : "#222222",
     btnBg: dark ? "#ffffff" : "#111111",
     btnText: dark ? "#111111" : "#ffffff",
@@ -251,7 +251,7 @@ export default function Contact() {
             >
               Let's build something{" "}
               <em
-                style={{ fontStyle: "italic", color: dark ? "#444" : "#ccc" }}
+                style={{ fontStyle: "italic", color: dark ? "#919191" : "#ccc" }}
               >
                 real.
               </em>
