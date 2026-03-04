@@ -505,7 +505,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
                 fontSize: 10,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
-                color: dark ? "#a1a1a1" : "#aaa",
+                color: dark ? "#555" : "#aaa",
               }}
             >
               {item.label}
@@ -551,7 +551,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
               fontSize: 10,
               letterSpacing: "0.15em",
               textTransform: "uppercase",
-              color: dark ? "#7c7c7c" : "#aaa",
+              color: dark ? "#555" : "#aaa",
             }}
           >
             Key Decisions
@@ -570,7 +570,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
                 style={{
                   fontFamily: "'DM Mono', monospace",
                   fontSize: 11,
-                  color: dark ? "#a8a8a8" : "#383838",
+                  color: dark ? "#444" : "#ccc",
                   flexShrink: 0,
                   marginTop: 2,
                 }}
@@ -775,7 +775,7 @@ function ProjectCard({ project, dark, c, mode, isExpanded, onToggle, index }) {
           style={{
             fontFamily: "'DM Mono', monospace",
             fontSize: 14,
-            color: dark ? "#afafaf" : "#494949",
+            color: dark ? "#555" : "#bbb",
             transform: isExpanded ? "rotate(45deg)" : "rotate(0deg)",
             transition: "transform 0.2s ease",
             display: "inline-block",
@@ -834,7 +834,8 @@ function ProjectExpanded({ project, dark, c }) {
         borderTop: `1px solid ${dark ? "#1a1a1a" : "#efefef"}`,
         borderBottom: `1px solid ${dark ? "#1a1a1a" : "#efefef"}`,
         padding: "28px 0 32px 0",
-        animation: "proj-expand 0.2s cubic-bezier(0.16,1,0.3,1) both",
+        animation: "proj-slide-down 0.3s cubic-bezier(0.16,1,0.3,1) both",
+        overflow: "hidden",
       }}
     >
       <div
@@ -966,8 +967,8 @@ function ProjectExpanded({ project, dark, c }) {
                         ? "#f0f0f0"
                         : "#111"
                       : dark
-                        ? "#a7a7a7"
-                        : "#717171",
+                        ? "#555"
+                        : "#aaa",
                   transition: "color 0.15s ease, border-color 0.15s ease",
                 }}
               >
@@ -996,9 +997,30 @@ function ProjectExpanded({ project, dark, c }) {
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function Projects() {
   const dark = useDarkMode();
-  const [mode, setMode] = useState("showcase"); // "showcase" | "engineer"
-  const [expandedId, setExpandedId] = useState(null);
-  const [filter, setFilter] = useState("all"); // "all" | "ai" | "fullstack"
+  const [mode, setMode] = useState("showcase");
+  const [filter, setFilter] = useState("all");
+
+  // URL anchor support — open project from hash on load
+  const [expandedId, setExpandedId] = useState(() => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash.replace("#", "");
+      return PROJECTS.find((p) => p.id === hash) ? hash : null;
+    }
+    return null;
+  });
+
+  // Sync URL hash when expanded project changes
+  useEffect(() => {
+    if (expandedId) {
+      history.replaceState(null, "", `#${expandedId}`);
+    } else {
+      history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search,
+      );
+    }
+  }, [expandedId]);
 
   const c = {
     heading: dark ? "#ffffff" : "#050505",
@@ -1028,6 +1050,10 @@ export default function Projects() {
         @keyframes proj-expand {
           from { opacity: 0; transform: translateY(8px); }
           to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes proj-slide-down {
+          from { opacity: 0; max-height: 0; transform: translateY(-6px); }
+          to   { opacity: 1; max-height: 1200px; transform: translateY(0); }
         }
         .proj-a1 { animation: proj-fade-up 0.6s cubic-bezier(0.16,1,0.3,1) 0.05s both; }
         .proj-a2 { animation: proj-fade-up 0.6s cubic-bezier(0.16,1,0.3,1) 0.15s both; }
@@ -1126,11 +1152,26 @@ export default function Projects() {
                 color: dark ? "#aaa" : "#666",
                 lineHeight: 1.6,
                 letterSpacing: "0.02em",
-                margin: 0,
+                margin: "0 0 10px 0",
               }}
             >
               Not experiments. Real architectures built to scale, adapt, and
               perform.
+            </p>
+            <p
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 11.5,
+                color: dark ? "#555" : "#aaa",
+                lineHeight: 1.6,
+                letterSpacing: "0.02em",
+                margin: 0,
+                maxWidth: 560,
+              }}
+            >
+              Each system explores a different aspect of real-time interaction —
+              computer vision, spatial computing, AI pipelines, and full-stack
+              infrastructure.
             </p>
           </div>
 
@@ -1188,8 +1229,8 @@ export default function Projects() {
                           ? "#e0e0e0"
                           : "#111"
                         : dark
-                          ? "#9c9c9c"
-                          : "#606060",
+                          ? "#555"
+                          : "#aaa",
                     transition: "all 0.15s ease",
                   }}
                 >
@@ -1233,7 +1274,7 @@ export default function Projects() {
                           ? "#e0e0e0"
                           : "#111"
                         : dark
-                          ? "#8a8a8a"
+                          ? "#555"
                           : "#aaa",
                     transition: "all 0.15s ease",
                   }}
