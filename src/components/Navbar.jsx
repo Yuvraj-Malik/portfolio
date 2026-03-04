@@ -74,6 +74,12 @@ export default function Navbar({ dark, setDark }) {
             >
               Projects
             </a>
+            <a
+              href="#journey"
+              className="px-4 py-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition"
+            >
+              Journey
+            </a>
 
             <a
               href="#contact"

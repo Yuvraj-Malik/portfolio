@@ -505,7 +505,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
                 fontSize: 10,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
-                color: dark ? "#555" : "#aaa",
+                color: dark ? "#a1a1a1" : "#aaa",
               }}
             >
               {item.label}
@@ -551,7 +551,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
               fontSize: 10,
               letterSpacing: "0.15em",
               textTransform: "uppercase",
-              color: dark ? "#555" : "#aaa",
+              color: dark ? "#7c7c7c" : "#aaa",
             }}
           >
             Key Decisions
@@ -570,7 +570,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
                 style={{
                   fontFamily: "'DM Mono', monospace",
                   fontSize: 11,
-                  color: dark ? "#444" : "#ccc",
+                  color: dark ? "#a8a8a8" : "#383838",
                   flexShrink: 0,
                   marginTop: 2,
                 }}
@@ -775,7 +775,7 @@ function ProjectCard({ project, dark, c, mode, isExpanded, onToggle, index }) {
           style={{
             fontFamily: "'DM Mono', monospace",
             fontSize: 14,
-            color: dark ? "#555" : "#bbb",
+            color: dark ? "#afafaf" : "#494949",
             transform: isExpanded ? "rotate(45deg)" : "rotate(0deg)",
             transition: "transform 0.2s ease",
             display: "inline-block",
@@ -1026,8 +1026,35 @@ function ProjectExpanded({ project, dark, c, onClose }) {
           </div>
         </div>
 
-        {/* Right — tabs */}
+        {/* Right — image placeholder + tabs */}
         <div>
+          {/* Image / preview placeholder */}
+          <div
+            style={{
+              width: "100%",
+              height: 200,
+              borderRadius: 8,
+              background: dark ? "#0e0e0e" : "#f5f5f5",
+              border: `1px solid ${dark ? "#1e1e1e" : "#ebebeb"}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 20,
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 9,
+                color: dark ? "#2e2e2e" : "#d0d0d0",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+              }}
+            >
+              Preview placeholder
+            </span>
+          </div>
+
           <div
             style={{
               display: "flex",
@@ -1055,8 +1082,8 @@ function ProjectExpanded({ project, dark, c, onClose }) {
                         ? "#f0f0f0"
                         : "#111"
                       : dark
-                        ? "#555"
-                        : "#aaa",
+                        ? "#a7a7a7"
+                        : "#717171",
                   transition: "color 0.15s ease, border-color 0.15s ease",
                 }}
               >
@@ -1239,26 +1266,11 @@ export default function Projects() {
                 color: dark ? "#aaa" : "#666",
                 lineHeight: 1.6,
                 letterSpacing: "0.02em",
-                margin: "0 0 10px 0",
+                margin: 0,
               }}
             >
               Not experiments. Real architectures built to scale, adapt, and
               perform.
-            </p>
-            <p
-              style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 11.5,
-                color: dark ? "#555" : "#aaa",
-                lineHeight: 1.6,
-                letterSpacing: "0.02em",
-                margin: 0,
-                maxWidth: 560,
-              }}
-            >
-              Each system explores a different aspect of real-time interaction —
-              computer vision, spatial computing, AI pipelines, and full-stack
-              infrastructure.
             </p>
           </div>
 
@@ -1316,8 +1328,8 @@ export default function Projects() {
                           ? "#e0e0e0"
                           : "#111"
                         : dark
-                          ? "#555"
-                          : "#aaa",
+                          ? "#9c9c9c"
+                          : "#606060",
                     transition: "all 0.15s ease",
                   }}
                 >
@@ -1361,7 +1373,7 @@ export default function Projects() {
                           ? "#e0e0e0"
                           : "#111"
                         : dark
-                          ? "#555"
+                          ? "#8a8a8a"
                           : "#aaa",
                     transition: "all 0.15s ease",
                   }}
