@@ -1123,6 +1123,18 @@ export default function Projects() {
     return null;
   });
 
+  // Listen for hash changes from Footer / About deep links
+  useEffect(() => {
+    const onHashChange = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (PROJECTS.find((p) => p.id === hash)) {
+        setExpandedId(hash);
+      }
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
   // Sync URL hash when expanded project changes
   useEffect(() => {
     if (expandedId) {

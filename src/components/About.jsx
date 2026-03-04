@@ -441,7 +441,17 @@ function ProjectDetail({ project, dark, c, onBack }) {
       </div>
 
       <a
-        href={`/projects/${project.id}`}
+        href={`#projects`}
+        onClick={(e) => {
+          e.preventDefault();
+          // Set hash to project id — Projects.jsx listens and auto-expands
+          window.location.hash = project.id;
+          // Give the hash change a tick then scroll to projects
+          setTimeout(() => {
+            const el = document.getElementById("projects");
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+          }, 50);
+        }}
         style={{
           fontFamily: "'DM Mono', monospace",
           fontSize: 11.5,
@@ -451,6 +461,7 @@ function ProjectDetail({ project, dark, c, onBack }) {
           borderBottom: `1px solid ${dark ? "#555" : "#ccc"}`,
           paddingBottom: 2,
           transition: "border-color 0.15s ease",
+          cursor: "pointer",
         }}
         onMouseEnter={(e) => (e.currentTarget.style.borderColor = c.heading)}
         onMouseLeave={(e) =>

@@ -762,39 +762,6 @@ export default function Contact() {
               )}
             </div>
           </div>
-
-          {/* footer */}
-          <div
-            style={{
-              marginTop: 80,
-              paddingTop: 24,
-              borderTop: `1px solid ${c.divider}`,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "'Instrument Serif', Georgia, serif",
-                fontSize: 14,
-                color: c.footerText,
-                fontStyle: "italic",
-              }}
-            >
-              Yuvraj Malik
-            </span>
-            <span
-              style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 10,
-                color: c.footerText,
-                letterSpacing: "0.08em",
-              }}
-            >
-              Built with React · {new Date().getFullYear()}
-            </span>
-          </div>
         </div>
       </section>
     </>

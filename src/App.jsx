@@ -7,6 +7,7 @@ import Contact from "./components/Contact";
 import Projects from "./components/Projects";
 import { Eclipse } from "lucide-react"; 
 import Journey from "./components/Journey";
+import Footer from "./components/Footer";
 
 export default function App() {
   const [dark, setDark] = useState(() => {
@@ -38,6 +39,7 @@ export default function App() {
         <Projects />
         <Journey />
         <Contact />
+        <Footer />
       </main>
     </div>
   );
