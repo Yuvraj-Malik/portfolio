@@ -812,62 +812,150 @@ function ProjectCard({ project, dark, c, mode, isExpanded, onToggle, index }) {
 }
 
 // Expanded detail panel — renders full-width below a row
-function ProjectExpanded({ project, dark, c }) {
+function ProjectExpanded({ project, dark, c, onClose }) {
   const [activeTab, setActiveTab] = useState("Overview");
-  const ref = useRef(null);
-
-  useEffect(() => {
-    if (ref.current) {
-      setTimeout(
-        () =>
-          ref.current.scrollIntoView({ behavior: "smooth", block: "nearest" }),
-        80,
-      );
-    }
-  }, []);
 
   return (
     <div
-      ref={ref}
       style={{
-        gridColumn: "1 / -1",
-        borderTop: `1px solid ${dark ? "#1a1a1a" : "#efefef"}`,
-        borderBottom: `1px solid ${dark ? "#1a1a1a" : "#efefef"}`,
-        padding: "28px 0 32px 0",
-        animation: "proj-slide-down 0.3s cubic-bezier(0.16,1,0.3,1) both",
-        overflow: "hidden",
+        animation: "proj-fade-up 0.25s cubic-bezier(0.16,1,0.3,1) both",
       }}
     >
-      <div
-        style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 40 }}
+      {/* Back button */}
+      <button
+        onClick={onClose}
+        style={{
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          fontFamily: "'DM Mono', monospace",
+          fontSize: 11,
+          color: dark ? "#888" : "#888",
+          letterSpacing: "0.08em",
+          padding: "0 0 20px 0",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          transition: "color 0.15s ease",
+        }}
+        onMouseEnter={(e) =>
+          (e.currentTarget.style.color = dark ? "#fff" : "#000")
+        }
+        onMouseLeave={(e) =>
+          (e.currentTarget.style.color = dark ? "#888" : "#888")
+        }
       >
-        {/* Left — preview + buttons */}
+        ← All Projects
+      </button>
+
+      {/* Content — 2 column */}
+      <div
+        style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 48 }}
+      >
+        {/* Left — meta + preview + buttons */}
         <div>
           <div
             style={{
-              width: "100%",
-              height: 180,
-              borderRadius: 8,
-              background: dark ? "#111" : "#f5f5f5",
-              border: `1px solid ${dark ? "#1e1e1e" : "#ebebeb"}`,
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              marginBottom: 16,
+              gap: 10,
+              marginBottom: 6,
             }}
           >
             <span
               style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 9,
-                color: dark ? "#3a3a3a" : "#c8c8c8",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
+                fontFamily: "'Instrument Serif', Georgia, serif",
+                fontSize: 28,
+                fontWeight: 400,
+                color: dark ? "#fff" : "#050505",
+                letterSpacing: "-0.02em",
+                lineHeight: 1.1,
               }}
             >
-              Preview placeholder
+              {project.title}
             </span>
+            <StatusBadge status={project.status} dark={dark} />
           </div>
+
+          <p
+            style={{
+              fontFamily: "'DM Mono', monospace",
+              fontSize: 12,
+              color: dark ? "#aaa" : "#555",
+              lineHeight: 1.65,
+              letterSpacing: "0.02em",
+              marginBottom: 20,
+            }}
+          >
+            {project.thesis}
+          </p>
+
+          {/* Highlights */}
+          <div style={{ marginBottom: 20 }}>
+            {project.highlights.map((h, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  gap: 10,
+                  padding: "7px 0",
+                  borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.05)"}`,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "'DM Mono', monospace",
+                    fontSize: 11,
+                    color: dark ? "#555" : "#ccc",
+                    flexShrink: 0,
+                  }}
+                >
+                  —
+                </span>
+                <span
+                  style={{
+                    fontFamily: "'DM Mono', monospace",
+                    fontSize: 12,
+                    color: dark ? "#c0c0c0" : "#444",
+                    lineHeight: 1.55,
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  {h}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Tech pills */}
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 6,
+              marginBottom: 24,
+            }}
+          >
+            {project.tech.map((t) => (
+              <TechPill key={t} label={t} dark={dark} />
+            ))}
+          </div>
+
+          {/* Authority signal */}
+          <p
+            style={{
+              fontFamily: "'DM Mono', monospace",
+              fontSize: 10,
+              color: dark ? "#555" : "#bbb",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              marginBottom: 20,
+            }}
+          >
+            ↳ {project.authoritySignal}
+          </p>
+
+          {/* Buttons */}
           <div style={{ display: "flex", gap: 8 }}>
             {project.github && (
               <a
@@ -881,7 +969,7 @@ function ProjectExpanded({ project, dark, c }) {
                   textDecoration: "none",
                   border: `1px solid ${dark ? "#333" : "#ddd"}`,
                   borderRadius: 100,
-                  padding: "7px 14px",
+                  padding: "7px 16px",
                   letterSpacing: "0.06em",
                   transition: "all 0.15s ease",
                   display: "inline-flex",
@@ -922,9 +1010,12 @@ function ProjectExpanded({ project, dark, c }) {
                   textDecoration: "none",
                   background: dark ? "#f0f0f0" : "#111",
                   borderRadius: 100,
-                  padding: "7px 14px",
+                  padding: "7px 16px",
                   letterSpacing: "0.06em",
                   transition: "opacity 0.15s ease",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
                 onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
@@ -941,16 +1032,13 @@ function ProjectExpanded({ project, dark, c }) {
             style={{
               display: "flex",
               borderBottom: `1px solid ${dark ? "#222" : "#e8e8e8"}`,
-              marginBottom: 18,
+              marginBottom: 20,
             }}
           >
             {TABS.map((t) => (
               <button
                 key={t}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActiveTab(t);
-                }}
+                onClick={() => setActiveTab(t)}
                 style={{
                   background: "none",
                   border: "none",
@@ -960,7 +1048,7 @@ function ProjectExpanded({ project, dark, c }) {
                   fontFamily: "'DM Mono', monospace",
                   fontSize: 11,
                   letterSpacing: "0.08em",
-                  padding: "5px 12px",
+                  padding: "6px 14px",
                   color:
                     activeTab === t
                       ? dark
@@ -979,7 +1067,6 @@ function ProjectExpanded({ project, dark, c }) {
           <div
             key={activeTab}
             style={{ animation: "proj-expand 0.15s ease both" }}
-            onClick={(e) => e.stopPropagation()}
           >
             <ProjectTabContent
               project={project}
@@ -1285,49 +1372,55 @@ export default function Projects() {
             </div>
           </div>
 
-          {/* ── Project list — 2-column grid, expansion breaks full width below its row ── */}
-          <div className="proj-a4">
-            {(() => {
-              const rows = [];
-              for (let i = 0; i < filtered.length; i += 2) {
-                const pair = filtered.slice(i, i + 2);
-                const expandedInRow = pair.find((p) => p.id === expandedId);
-                rows.push(
-                  <div key={i}>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
-                        gap: 12,
-                        marginBottom: expandedInRow ? 0 : 12,
-                      }}
-                    >
-                      {pair.map((project, j) => (
-                        <ProjectCard
-                          key={project.id}
-                          project={project}
-                          dark={dark}
-                          c={c}
-                          mode={mode}
-                          index={i + j}
-                          isExpanded={expandedId === project.id}
-                          onToggle={() => handleToggle(project.id)}
-                        />
-                      ))}
-                    </div>
-                    {expandedInRow && (
-                      <ProjectExpanded
-                        key={expandedInRow.id + "-expanded"}
-                        project={expandedInRow}
-                        dark={dark}
-                        c={c}
-                      />
-                    )}
-                  </div>,
+          {/* ── Project list ── */}
+          <div
+            className="proj-a4"
+            style={{ position: "relative", minHeight: 400 }}
+          >
+            {/* Grid view */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 12,
+                opacity: expandedId ? 0 : 1,
+                pointerEvents: expandedId ? "none" : "auto",
+                transition: "opacity 0.2s ease",
+                position: expandedId ? "absolute" : "relative",
+                inset: 0,
+              }}
+            >
+              {filtered.map((project, i) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  dark={dark}
+                  c={c}
+                  mode={mode}
+                  index={i}
+                  isExpanded={false}
+                  onToggle={() => handleToggle(project.id)}
+                />
+              ))}
+            </div>
+
+            {/* Full-takeover expanded view */}
+            {expandedId &&
+              (() => {
+                const project =
+                  filtered.find((p) => p.id === expandedId) ||
+                  PROJECTS.find((p) => p.id === expandedId);
+                if (!project) return null;
+                return (
+                  <ProjectExpanded
+                    key={expandedId}
+                    project={project}
+                    dark={dark}
+                    c={c}
+                    onClose={() => setExpandedId(null)}
+                  />
                 );
-              }
-              return rows;
-            })()}
+              })()}
           </div>
 
           {/* ── Engineering Decisions ── */}
