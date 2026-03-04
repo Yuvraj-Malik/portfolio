@@ -18,22 +18,96 @@ function useDarkMode() {
 }
 
 const TIMELINE = [
-  { year: "2026", title: "Spatial Console", type: "project" },
-  { year: "2026", title: "Stark Paper Analyzer", type: "project" },
-  { year: "2026", title: "Anime Clash", type: "project" },
-  { year: "2026", title: "Air Canvas", type: "project" },
-  { year: "2026", title: "Web Dev Intern — SkillCraft", type: "internship" },
-  { year: "2025", title: "Code Vault", type: "project" },
-  { year: "2025", title: "Bomb Difuse", type: "project" },
-  { year: "2025", title: "Core Member — LEAD", type: "leadership" },
-  { year: "2025", title: "AI Pose Systems", type: "project" },
-  { year: "2025", title: "AI/ML Intern — Auraflo", type: "internship" },
-  { year: "2024", title: "Executive Member — LEAD", type: "leadership" },
-  { year: "2024", title: "Member — OWASP TIET", type: "leadership" },
+  {
+    year: "2026",
+    title: "Spatial Console",
+    type: "project",
+    tip: "Gesture-controlled 3D structural simulation",
+    stack: "React · Three.js · MediaPipe",
+  },
+  {
+    year: "2026",
+    title: "Stark Paper Analyzer",
+    type: "project",
+    tip: "Research PDF → structured intelligence",
+    stack: "FastAPI · Gemini 2.5 · React",
+  },
+  {
+    year: "2026",
+    title: "Anime Clash",
+    type: "project",
+    tip: "Deterministic daily anime popularity game",
+    stack: "Vanilla JS · Netlify Functions",
+  },
+  {
+    year: "2026",
+    title: "Code Vault",
+    type: "project",
+    tip: "Live coding competition platform",
+    stack: "React 19 · Node.js · MongoDB",
+  },
+  {
+    year: "2026",
+    title: "Air Canvas",
+    type: "project",
+    tip: "Touchless real-time drawing via CV",
+    stack: "Python · OpenCV · MediaPipe",
+  },
+  {
+    year: "2026",
+    title: "Web Dev Intern — SkillCraft",
+    type: "internship",
+    tip: "Frontend development internship",
+    stack: "React · HTML5",
+  },
+  {
+    year: "2025",
+    title: "Bomb Difuse",
+    type: "project",
+    tip: "Arduino reaction game with LED + buzzer",
+    stack: "Arduino C++ · Embedded I/O",
+  },
+  {
+    year: "2025",
+    title: "Core Member — LEAD",
+    type: "leadership",
+    tip: "Technical workshops, events, mentoring",
+    stack: "LEAD Society, TIET",
+  },
+  {
+    year: "2025",
+    title: "AI Pose Systems",
+    type: "project",
+    tip: "High knees + squat depth form trackers",
+    stack: "Python · TensorFlow Lite · MoveNet",
+  },
+  {
+    year: "2025",
+    title: "AI/ML Intern — Auraflo",
+    type: "internship",
+    tip: "CV pipelines + sensor glove motion detection",
+    stack: "TensorFlow · OpenCV · PyTorch",
+  },
   {
     year: "2024",
-    title: "B.E. Computer Engineering — TIET",
+    title: "Executive Member — OWASP TIET",
+    type: "leadership",
+    tip: "Security-focused technical society",
+    stack: "OWASP Chapter, TIET",
+  },
+  {
+    year: "2024",
+    title: "Executive Member — LEAD",
+    type: "leadership",
+    tip: "Led Seaferno tech event, workshops",
+    stack: "LEAD Society, TIET",
+  },
+  {
+    year: "2024",
+    title: "B.E. Computer Engineering",
     type: "education",
+    tip: "Systems, algorithms, AI fundamentals",
+    stack: "Thapar Institute · 2024–2028",
   },
 ];
 
@@ -41,7 +115,7 @@ const ROLES = [
   {
     role: "Core Member",
     org: "LEAD Society, TIET",
-    duration: "Aug 2025 — Present",
+    duration: "Oct 2024 — Present",
     type: "Leadership",
     bullets: [
       "Leading technical workshops on HTML, CSS, and Git",
@@ -74,7 +148,7 @@ const ROLES = [
   {
     role: "B.E. Computer Engineering",
     org: "Thapar Institute of Engineering & Technology",
-    duration: "2024 — 2027",
+    duration: "2024 — 2028",
     type: "Education",
     bullets: [
       "Core focus: systems, algorithms, data structures, AI",
@@ -84,7 +158,6 @@ const ROLES = [
   },
 ];
 
-// Dot color per type — subtle tint, not loud
 const TYPE_DOT = {
   project: { dark: "#4a7fa5", light: "#2563a8" },
   leadership: { dark: "#4a9e6e", light: "#1a6e45" },
@@ -100,6 +173,7 @@ const TYPE_BADGE = {
 
 export default function Journey() {
   const dark = useDarkMode();
+  const [hoveredIdx, setHoveredIdx] = useState(null);
 
   const c = {
     heading: dark ? "#ffffff" : "#080808",
@@ -111,25 +185,24 @@ export default function Journey() {
     cardBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.015)",
     cardBorder: dark ? "#1e1e1e" : "#e0e0e0",
     cardHover: dark ? "#303030" : "#c8c8c8",
-    yearColor: dark ? "#666666" : "#999999",
-    bullet: dark ? "#555555" : "#aaaaaa",
+    yearColor: dark ? "#a3a3a3" : "#444444",
+    bullet: dark ? "#909090" : "#aaaaaa",
     bulletText: dark ? "#aaaaaa" : "#444444",
     roleTitle: dark ? "#ffffff" : "#111111",
-    roleOrg: dark ? "#bbbbbb" : "#555555",
-    roleDur: dark ? "#555555" : "#aaaaaa",
+    roleOrg: dark ? "#bbbbbb" : "#555555", 
+    roleDur: dark ? "#989898" : "#474646",
     badgeBorder: dark ? "#333333" : "#cccccc",
     badgeText: dark ? "#888888" : "#777777",
-    titleDot: dark ? "#888888" : "#777777",
   };
 
-  // Group timeline by year
   const years = [...new Set(TIMELINE.map((t) => t.year))];
 
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap');
-        @keyframes jx-fade { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes jx-fade { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes tip-in  { from { opacity:0; transform:translateY(-50%) scale(0.97); } to { opacity:1; transform:translateY(-50%) scale(1); } }
         .jx-a1 { animation: jx-fade 0.55s cubic-bezier(0.16,1,0.3,1) 0.05s both; }
         .jx-a2 { animation: jx-fade 0.55s cubic-bezier(0.16,1,0.3,1) 0.12s both; }
         .jx-a3 { animation: jx-fade 0.55s cubic-bezier(0.16,1,0.3,1) 0.20s both; }
@@ -144,6 +217,7 @@ export default function Journey() {
           position: "relative",
         }}
       >
+        {/* Dot grid */}
         <div
           style={{
             position: "absolute",
@@ -221,11 +295,12 @@ export default function Journey() {
             <p
               style={{
                 fontFamily: "'DM Mono', monospace",
-                fontSize: 12,
-                color: c.subtext,
+                fontSize: 11,
+                color: dark ? "#666" : "#aaa",
                 lineHeight: 1.6,
                 letterSpacing: "0.02em",
                 margin: 0,
+                maxWidth: 440,
               }}
             >
               Projects built and roles held — in the order they shaped my
@@ -243,7 +318,7 @@ export default function Journey() {
               alignItems: "start",
             }}
           >
-            {/* LEFT: compact timeline — title + type dot only */}
+            {/* LEFT: timeline */}
             <div>
               <p
                 style={{
@@ -259,7 +334,7 @@ export default function Journey() {
               </p>
 
               <div style={{ position: "relative" }}>
-                {/* Continuous vertical line */}
+                {/* Vertical line */}
                 <div
                   style={{
                     position: "absolute",
@@ -278,55 +353,63 @@ export default function Journey() {
                       key={year}
                       style={{ marginBottom: yi < years.length - 1 ? 20 : 0 }}
                     >
-                      {/* Year marker */}
+                      {/* Year separator */}
                       <div
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          gap: 14,
-                          marginBottom: 8,
+                          gap: 8,
+                          marginBottom: 10,
                         }}
                       >
                         <div
                           style={{
-                            width: 11,
-                            height: 11,
-                            borderRadius: "50%",
+                            width: 12,
+                            height: 1,
+                            background: dark ? "#333" : "#ddd",
                             flexShrink: 0,
-                            background: dark ? "#222" : "#eee",
-                            border: `1px solid ${dark ? "#444" : "#bbb"}`,
-                            zIndex: 2,
-                            position: "relative",
                           }}
                         />
                         <span
                           style={{
-                            fontFamily: "'Instrument Serif', Georgia, serif",
-                            fontSize: 14,
-                            fontStyle: "italic",
+                            fontFamily: "'DM Mono', monospace",
+                            fontSize: 10,
+                            letterSpacing: "0.16em",
                             color: c.yearColor,
-                            letterSpacing: "0.01em",
+                            whiteSpace: "nowrap",
                           }}
                         >
                           {year}
                         </span>
+                        <div
+                          style={{
+                            flex: 1,
+                            height: 1,
+                            background: dark ? "#222" : "#eaeaea",
+                          }}
+                        />
                       </div>
 
                       {/* Items */}
                       {items.map((item, ii) => {
                         const dotColor = TYPE_DOT[item.type];
+                        const key = `${yi}-${ii}`;
+                        const isHovered = hoveredIdx === key;
                         return (
                           <div
                             key={ii}
                             style={{
                               display: "flex",
                               alignItems: "center",
-                              gap: 14,
-                              paddingLeft: 0,
+                              gap: 10,
                               marginBottom: ii < items.length - 1 ? 6 : 0,
+                              cursor: "default",
+                              width: "fit-content",
                             }}
+                            onMouseEnter={() => setHoveredIdx(key)}
+                            onMouseLeave={() => setHoveredIdx(null)}
                           >
-                            {/* Colored dot */}
+                            {/* Dot */}
                             <div
                               style={{
                                 width: 7,
@@ -339,24 +422,88 @@ export default function Journey() {
                                   : dotColor.light,
                                 zIndex: 2,
                                 position: "relative",
+                                transition: "transform 0.15s ease",
+                                transform: isHovered
+                                  ? "scale(1.5)"
+                                  : "scale(1)",
                               }}
                             />
+
+                            {/* Title + tooltip wrapper */}
                             <span
                               style={{
-                                fontFamily:
-                                  item.type === "project"
-                                    ? "'Instrument Serif', Georgia, serif"
-                                    : "'DM Mono', monospace",
-                                fontSize: item.type === "project" ? 14 : 11.5,
-                                color: c.body,
-                                letterSpacing:
-                                  item.type === "project"
-                                    ? "-0.01em"
-                                    : "0.02em",
-                                lineHeight: 1.3,
+                                position: "relative",
+                                display: "inline-block",
                               }}
                             >
-                              {item.title}
+                              <span
+                                style={{
+                                  fontFamily:
+                                    item.type === "project"
+                                      ? "'Instrument Serif', Georgia, serif"
+                                      : "'DM Mono', monospace",
+                                  fontSize: item.type === "project" ? 14 : 11.5,
+                                  color: isHovered
+                                    ? dark
+                                      ? "#ffffff"
+                                      : "#000000"
+                                    : c.body,
+                                  letterSpacing:
+                                    item.type === "project"
+                                      ? "-0.01em"
+                                      : "0.02em",
+                                  lineHeight: 1.3,
+                                  transition: "color 0.15s ease",
+                                }}
+                              >
+                                {item.title}
+                              </span>
+
+                              {/* Tooltip */}
+                              {isHovered && (
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    left: "calc(100% + 10px)",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    background: dark ? "#0e0e0e" : "#ffffff",
+                                    border: `1px solid ${dark ? "#2a2a2a" : "#e0e0e0"}`,
+                                    borderRadius: 8,
+                                    padding: "8px 12px",
+                                    whiteSpace: "nowrap",
+                                    zIndex: 20,
+                                    pointerEvents: "none",
+                                    boxShadow: dark
+                                      ? "0 4px 20px rgba(0,0,0,0.5)"
+                                      : "0 4px 20px rgba(0,0,0,0.1)",
+                                    animation: "tip-in 0.12s ease both",
+                                  }}
+                                >
+                                  <p
+                                    style={{
+                                      margin: "0 0 3px 0",
+                                      fontFamily: "'DM Mono', monospace",
+                                      fontSize: 11,
+                                      color: dark ? "#dddddd" : "#222222",
+                                      letterSpacing: "0.02em",
+                                    }}
+                                  >
+                                    {item.tip}
+                                  </p>
+                                  <p
+                                    style={{
+                                      margin: 0,
+                                      fontFamily: "'DM Mono', monospace",
+                                      fontSize: 10,
+                                      color: dark ? "#555555" : "#aaaaaa",
+                                      letterSpacing: "0.04em",
+                                    }}
+                                  >
+                                    {item.stack}
+                                  </p>
+                                </div>
+                              )}
                             </span>
                           </div>
                         );
@@ -394,7 +541,7 @@ export default function Journey() {
                       style={{
                         fontFamily: "'DM Mono', monospace",
                         fontSize: 9,
-                        color: dark ? "#555" : "#aaa",
+                        color: dark ? "#c9c9c9" : "#4a4a4a",
                         letterSpacing: "0.1em",
                         textTransform: "uppercase",
                       }}
@@ -406,7 +553,7 @@ export default function Journey() {
               </div>
             </div>
 
-            {/* RIGHT: role + education cards */}
+            {/* RIGHT: roles + education */}
             <div>
               <p
                 style={{
@@ -449,7 +596,6 @@ export default function Journey() {
                         (e.currentTarget.style.borderColor = c.cardBorder)
                       }
                     >
-                      {/* Badge */}
                       <span
                         style={{
                           fontFamily: "'DM Mono', monospace",
@@ -476,13 +622,14 @@ export default function Journey() {
                       >
                         {r.type}
                       </span>
+
                       <span
                         style={{
                           fontFamily: "'Instrument Serif', Georgia, serif",
                           fontSize: 15,
                           fontWeight: 400,
                           color: c.roleTitle,
-                          letterSpacing: "-0.01em",
+                          letterSpacing: "0.01em",
                           lineHeight: 1.2,
                           marginBottom: 4,
                         }}
@@ -513,6 +660,7 @@ export default function Journey() {
                       >
                         {r.duration}
                       </span>
+
                       <div
                         style={{
                           height: 1,
@@ -520,6 +668,7 @@ export default function Journey() {
                           marginBottom: 10,
                         }}
                       />
+
                       {r.bullets.map((b, bi) => (
                         <div
                           key={bi}

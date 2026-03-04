@@ -1561,9 +1561,13 @@ export default function Projects() {
                   fontSize: 12,
                   color: dark ? "#666" : "#999",
                   letterSpacing: "0.02em",
+                  lineHeight: 1.7,
+                  maxWidth: 460,
                 }}
               >
-                I'm open to internships, collaborations, and serious projects.
+                I build systems that work under pressure — not just demos.
+                <br />
+                If you have a real problem, I want to hear it.
               </p>
             </div>
             <a
