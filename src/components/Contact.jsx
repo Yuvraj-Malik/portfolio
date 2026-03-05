@@ -80,12 +80,6 @@ const LINKS = [
     value: "Patiala, Punjab, India",
     href: null,
   },
-  {
-    icon: <IconPhone />,
-    label: "Phone",
-    value: "+91 98765 43210",
-    href: "tel:+919876543210",
-  },
 ];
 
 export default function Contact() {
