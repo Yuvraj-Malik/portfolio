@@ -18,13 +18,43 @@ const BOOT_LINES = [
 ];
 
 const SOCIAL_LINKS = [
-  { name: "GitHub", href: "https://github.com/Yuvraj-Malik" },
+  {
+    name: "GitHub",
+    href: "https://github.com/Yuvraj-Malik",
+    icon: (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z" />
+      </svg>
+    ),
+  },
   {
     name: "LinkedIn",
     href: "https://www.linkedin.com/in/yuvraj-malik-b00005303/",
+    icon: (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
+        <circle cx="4" cy="4" r="2" />
+      </svg>
+    ),
   },
-  { name: "LeetCode", href: "https://leetcode.com/u/Yuvraj_Malik/" },
-  { name: "CodeChef", href: "https://www.codechef.com/users/ymalik_be24" },
+  {
+    name: "LeetCode",
+    href: "https://leetcode.com/u/Yuvraj_Malik/",
+    icon: (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z" />
+      </svg>
+    ),
+  },
+  {
+    name: "CodeChef",
+    href: "https://www.codechef.com/users/yuvraj_malik",
+    icon: (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M11.257.004C5.29.004.493 4.8.493 10.768c0 3.228 1.418 6.122 3.666 8.123L2.894 21.5l2.707-1.258a10.22 10.22 0 0 0 5.656 1.754c5.967 0 10.764-4.796 10.764-10.764C22.021 5.266 17.678.004 11.257.004zm-.001 1.5c5.139 0 9.263 4.124 9.263 9.264 0 5.139-4.124 9.263-9.263 9.263a8.74 8.74 0 0 1-4.921-1.508l-1.877.872.826-2.01a8.717 8.717 0 0 1-2.291-5.903c0-5.139 4.124-9.978 8.263-9.978zm.805 3.644c-.447 0-.854.148-1.168.393l-.002-.002c-.022.017-.041.036-.062.054a1.846 1.846 0 0 0-.676 1.433c0 1.022.83 1.852 1.852 1.852h.056c.022 0 .043-.003.065-.004.943-.05 1.685-.83 1.685-1.789 0-.99-.803-1.879-1.75-1.937zm-3.21 3.577c-1.5.007-2.84 1.084-2.84 2.84 0 1.547 1.082 2.666 2.535 2.84h.588c1.45-.174 2.533-1.293 2.533-2.84 0-1.547-1.136-2.833-2.535-2.84h-.281zm6.364 0c-1.393.014-2.531 1.3-2.531 2.84 0 1.547 1.082 2.666 2.533 2.84h.588c1.45-.174 2.533-1.293 2.533-2.84 0-1.756-1.334-2.833-2.84-2.84h-.283z" />
+      </svg>
+    ),
+  },
 ];
 
 const PRINCIPLES = [
@@ -73,7 +103,7 @@ function TerminalCard({ dark }) {
   }, [lines]);
 
   const lineStyle = (cls) => {
-    if (cls === "dim") return { color: dark ? "#666" : "#494949" };
+    if (cls === "dim") return { color: dark ? "#666" : "#bbb" };
     if (cls === "green") return { color: dark ? "#4ade80" : "#16a34a" };
     if (cls === "accent")
       return { color: dark ? "#ffffff" : "#111111", fontWeight: 500 };
@@ -143,7 +173,7 @@ function TerminalCard({ dark }) {
               fontFamily: "'DM Mono', monospace",
               fontSize: "11px",
               letterSpacing: "0.06em",
-              color: dark ? "#777" : "#5d5d5d",
+              color: dark ? "#777" : "#bbb",
               marginLeft: "8px",
             }}
           >
@@ -212,12 +242,15 @@ function TerminalCard({ dark }) {
             target="_blank"
             rel="noopener noreferrer"
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
               fontFamily: "'DM Mono', monospace",
               fontSize: "11px",
               letterSpacing: "0.04em",
               color: dark ? "#f0f0f0" : "#111",
               textDecoration: "none",
-              padding: "7px 16px",
+              padding: "7px 14px",
               borderRadius: "100px",
               border: dark
                 ? "1px solid rgba(255,255,255,0.3)"
@@ -243,6 +276,7 @@ function TerminalCard({ dark }) {
                 : "rgba(0,0,0,0.2)";
             }}
           >
+            {s.icon}
             {s.name}
           </a>
         ))}
@@ -307,7 +341,7 @@ export default function Hero() {
             position: "relative",
             zIndex: 1,
             paddingTop: "96px",
-            paddingBottom: "60px",
+            paddingBottom: "20px",
           }}
         >
           {/* ── LEFT ── */}
@@ -481,7 +515,7 @@ export default function Hero() {
                   <span
                     style={{
                       fontFamily: "'DM Mono', monospace",
-                      fontSize: "12.5px",
+                      fontSize: "10px",
                       textTransform: "uppercase",
                       letterSpacing: "0.14em",
                       color: dark ? "#666" : "#999",
@@ -494,6 +528,7 @@ export default function Hero() {
               ))}
             </div>
           </div>
+
           {/* ── RIGHT ── */}
           <div
             className="hero-a6"

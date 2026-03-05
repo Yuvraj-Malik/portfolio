@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import emailjs from "@emailjs/browser";
 
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
+const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
 
 function useDarkMode() {
   const [dark, setDark] = useState(() =>
@@ -22,10 +22,10 @@ function useDarkMode() {
   return dark;
 }
 
-const IconEmail = ({ size = 13 }) => (
+const IconEmail = () => (
   <svg
-    width={size}
-    height={size}
+    width="13"
+    height="13"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -37,10 +37,10 @@ const IconEmail = ({ size = 13 }) => (
     <path d="m2 7 10 7 10-7" />
   </svg>
 );
-const IconLocation = ({ size = 13 }) => (
+const IconLocation = () => (
   <svg
-    width={size}
-    height={size}
+    width="13"
+    height="13"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -52,46 +52,73 @@ const IconLocation = ({ size = 13 }) => (
     <circle cx="12" cy="10" r="2.5" />
   </svg>
 );
-const IconGithub = ({ size = 13 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z" />
+const IconPhone = () => (
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.18 6.18l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 17l.19-.08z" />
   </svg>
 );
-const IconLinkedIn = ({ size = 13 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
-    <circle cx="4" cy="4" r="2" />
-  </svg>
-);
+
+const LINKS = [
+  {
+    icon: <IconEmail />,
+    label: "Email",
+    value: "yuvraj.malik003@gmail.com",
+    href: "mailto:yuvraj.malik003@gmail.com",
+  },
+  {
+    icon: <IconLocation />,
+    label: "Location",
+    value: "Patiala, Punjab, India",
+    href: null,
+  },
+  {
+    icon: <IconPhone />,
+    label: "Phone",
+    value: "+91 98765 43210",
+    href: "tel:+919876543210",
+  },
+];
 
 export default function Contact() {
   const dark = useDarkMode();
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
   const [status, setStatus] = useState("idle");
   const [focused, setFocused] = useState(null);
 
   const c = {
-    bg: dark ? "#080808" : "#ffffff",
     heading: dark ? "#ffffff" : "#080808",
-    body: dark ? "#999999" : "#666666",
+    body: dark ? "#888888" : "#666666",
     label: dark ? "#cfcfcf" : "#1d1d1d",
     divider: dark ? "#1a1a1a" : "#eeeeee",
-    cardBg: dark ? "rgba(255,255,255,0.025)" : "rgba(0,0,0,0.018)",
+    cardBg: dark ? "rgba(255,255,255,0.025)" : "rgba(0,0,0,0.015)",
     cardBorder: dark ? "#1e1e1e" : "#e8e8e8",
-    cardHover: dark ? "#2a2a2a" : "#d0d0d0",
+    cardHover: dark ? "#2a2a2a" : "#d4d4d4",
     inputBg: dark ? "rgba(255,255,255,0.04)" : "#ffffff",
     inputBorder: dark ? "#282828" : "#e4e4e4",
-    inputFocus: dark ? "#484848" : "#999999",
+    inputFocus: dark ? "#505050" : "#888888",
     inputText: dark ? "#eeeeee" : "#111111",
-    metaText: dark ? "#c1c1c1" : "#494949",
-    iconColor: dark ? "#cfcfcf" : "#3f3f3f",
+    metaText: dark ? "#444444" : "#bbbbbb",
+    iconColor: dark ? "#444444" : "#c0c0c0",
     infoValue: dark ? "#cccccc" : "#222222",
     btnBg: dark ? "#ffffff" : "#111111",
     btnText: dark ? "#111111" : "#ffffff",
-    mutedBtn: dark ? "#1e1e1e" : "#f0f0f0",
-    mutedBtnText: dark ? "#666666" : "#888888",
-    footerText: dark ? "#252525" : "#e0e0e0",
+    footerText: dark ? "#282828" : "#e0e0e0",
+    trustText: dark ? "#3a3a3a" : "#d0d0d0",
   };
 
   const handleChange = (e) =>
@@ -104,17 +131,22 @@ export default function Contact() {
       await emailjs.send(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
-        { from_name: form.name, from_email: form.email, message: form.message },
+        {
+          from_name: form.name,
+          from_email: form.email,
+          phone: form.phone,
+          message: form.message,
+        },
         EMAILJS_PUBLIC_KEY,
       );
       setStatus("success");
-      setForm({ name: "", email: "", message: "" });
+      setForm({ name: "", email: "", phone: "", message: "" });
     } catch {
       setStatus("error");
     }
   };
 
-  const inputStyle = (field) => ({
+  const inputBase = (field) => ({
     width: "100%",
     boxSizing: "border-box",
     fontFamily: "'DM Mono', monospace",
@@ -126,62 +158,44 @@ export default function Contact() {
     padding: "10px 13px",
     outline: "none",
     letterSpacing: "0.02em",
-    transition: "border-color 0.15s ease",
+    transition: "border-color 0.18s ease, box-shadow 0.18s ease",
+    boxShadow:
+      focused === field
+        ? `0 0 0 3px ${dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)"}`
+        : "none",
     resize: "none",
   });
-
-  const LINKS = [
-    {
-      icon: <IconEmail />,
-      label: "Email",
-      value: "yuvraj.malik003@gmail.com",
-      href: "mailto:yuvraj.malik003@gmail.com",
-    },
-    {
-      icon: <IconGithub />,
-      label: "GitHub",
-      value: "github.com/Yuvraj-Malik",
-      href: "https://github.com/Yuvraj-Malik",
-    },
-    {
-      icon: <IconLinkedIn />,
-      label: "LinkedIn",
-      value: "linkedin.com/in/yuvraj-malik",
-      href: "https://www.linkedin.com/in/yuvraj-malik-b00005303/",
-    },
-    {
-      icon: <IconLocation />,
-      label: "Location",
-      value: "Patiala, Punjab, India",
-      href: null,
-    },
-  ];
 
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap');
-        @keyframes ct-up   { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes ct-drop { from { opacity:0; transform:translateY(-6px) scaleY(0.97); } to { opacity:1; transform:translateY(0) scaleY(1); } }
+        @keyframes ct-up   { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes ct-drop { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
         .ct-a1 { animation: ct-up 0.6s cubic-bezier(0.16,1,0.3,1) 0.05s both; }
-        .ct-a2 { animation: ct-up 0.6s cubic-bezier(0.16,1,0.3,1) 0.15s both; }
-        .ct-a3 { animation: ct-up 0.6s cubic-bezier(0.16,1,0.3,1) 0.25s both; }
-        .ct-expand { animation: ct-drop 0.28s cubic-bezier(0.16,1,0.3,1) both; transform-origin: top; }
-        .ct-link { transition: color 0.15s ease; }
-        .ct-link:hover { color: ${dark ? "#fff" : "#000"} !important; }
-        .ct-card { transition: border-color 0.15s ease; }
-        .ct-input::placeholder { color: ${dark ? "#333" : "#ccc"}; }
+        .ct-a2 { animation: ct-up 0.6s cubic-bezier(0.16,1,0.3,1) 0.13s both; }
+        .ct-a3 { animation: ct-up 0.6s cubic-bezier(0.16,1,0.3,1) 0.22s both; }
+        .ct-form { animation: ct-drop 0.25s cubic-bezier(0.16,1,0.3,1) both; }
+        .ct-card {
+          transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .ct-card:hover {
+          transform: translateY(-1px);
+          box-shadow: ${dark ? "0 4px 16px rgba(0,0,0,0.3)" : "0 4px 16px rgba(0,0,0,0.06)"};
+        }
+        .ct-link { transition: color 0.15s ease; text-decoration: none; }
+        .ct-link:hover { color: ${dark ? "#ffffff" : "#000000"} !important; }
+        .ct-input::placeholder { color: ${dark ? "#333333" : "#c8c8c8"}; }
       `}</style>
 
       <section
         id="contact"
         style={{
-          padding: "7.5rem 3rem 4rem 3rem",
+          padding: "7.5rem 3rem 5rem 3rem",
           boxSizing: "border-box",
           position: "relative",
         }}
       >
-        {/* dot grid */}
         <div
           style={{
             position: "absolute",
@@ -210,7 +224,7 @@ export default function Contact() {
               display: "flex",
               alignItems: "center",
               gap: 12,
-              marginBottom: 56,
+              marginBottom: 36,
             }}
           >
             <span
@@ -236,29 +250,46 @@ export default function Contact() {
             </span>
           </div>
 
-          {/* big heading — full width */}
-          <div className="ct-a2" style={{ marginBottom: 64 }}>
+          {/* headline */}
+          <div className="ct-a2" style={{ marginBottom: 60 }}>
             <h2
               style={{
                 fontFamily: "'Instrument Serif', Georgia, serif",
-                fontSize: "clamp(2.4rem, 5vw, 4rem)",
+                fontSize: "clamp(2.2rem, 4.5vw, 3.6rem)",
                 fontWeight: 400,
                 lineHeight: 1.0,
                 letterSpacing: "-0.04em",
                 color: c.heading,
-                margin: 0,
+                margin: "0 0 14px 0",
               }}
             >
               Let's build something{" "}
               <em
-                style={{ fontStyle: "italic", color: dark ? "#919191" : "#ccc" }}
+                style={{
+                  fontStyle: "italic",
+                  color: dark ? "#404040" : "#cccccc",
+                }}
               >
                 real.
               </em>
             </h2>
+            <p
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 12,
+                color: c.body,
+                lineHeight: 1.8,
+                letterSpacing: "0.02em",
+                margin: 0,
+                maxWidth: 420,
+              }}
+            >
+              Interesting challenge, a project idea, or just want to talk
+              systems — I'd love to hear from you.
+            </p>
           </div>
 
-          {/* two-col: links left, CTA right */}
+          {/* two-col */}
           <div
             className="ct-a3"
             style={{
@@ -268,35 +299,20 @@ export default function Contact() {
               alignItems: "start",
             }}
           >
-            {/* LEFT — links + blurb */}
+            {/* LEFT */}
             <div
               style={{
-                paddingRight: 64,
+                paddingRight: 60,
                 borderRight: `1px solid ${c.divider}`,
               }}
             >
-              <p
-                style={{
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: 12,
-                  color: c.body,
-                  lineHeight: 1.8,
-                  letterSpacing: "0.02em",
-                  margin: "0 0 40px 0",
-                  maxWidth: 380,
-                }}
-              >
-                Interesting challenge, a project idea, or just want to talk
-                systems — I'd love to hear from you.
-              </p>
-
-              {/* link grid — 2 columns */}
+              {/* 2×2 contact cards */}
               <div
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",
-                  gap: 12,
-                  marginBottom: 16,
+                  gap: 14,
+                  marginBottom: 14,
                 }}
               >
                 {LINKS.map((item, i) => (
@@ -304,10 +320,11 @@ export default function Contact() {
                     key={i}
                     className="ct-card"
                     style={{
-                      padding: "14px 16px",
+                      padding: "20px 20px",
                       border: `1px solid ${c.cardBorder}`,
                       borderRadius: 10,
                       background: c.cardBg,
+                      cursor: item.href ? "pointer" : "default",
                     }}
                     onMouseEnter={(e) =>
                       (e.currentTarget.style.borderColor = c.cardHover)
@@ -320,15 +337,15 @@ export default function Contact() {
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: 7,
-                        marginBottom: 6,
+                        gap: 6,
+                        marginBottom: 5,
                       }}
                     >
                       <span style={{ color: c.iconColor }}>{item.icon}</span>
                       <span
                         style={{
                           fontFamily: "'DM Mono', monospace",
-                          fontSize: 9,
+                          fontSize: 9.5,
                           color: c.metaText,
                           letterSpacing: "0.14em",
                           textTransform: "uppercase",
@@ -347,9 +364,8 @@ export default function Contact() {
                         className="ct-link"
                         style={{
                           fontFamily: "'DM Mono', monospace",
-                          fontSize: 11,
+                          fontSize: 12,
                           color: c.infoValue,
-                          textDecoration: "none",
                           letterSpacing: "0.02em",
                           display: "block",
                           overflow: "hidden",
@@ -375,7 +391,7 @@ export default function Contact() {
                 ))}
               </div>
 
-              {/* Resume */}
+              {/* Resume card */}
               <a
                 href="/resume.pdf"
                 download
@@ -383,8 +399,8 @@ export default function Contact() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 10,
-                  padding: "12px 16px",
+                  justifyContent: "space-between",
+                  padding: "20px 20px",
                   border: `1px solid ${c.cardBorder}`,
                   borderRadius: 10,
                   background: c.cardBg,
@@ -397,47 +413,48 @@ export default function Contact() {
                   (e.currentTarget.style.borderColor = c.cardBorder)
                 }
               >
-                <svg
-                  width="13"
-                  height="13"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke={c.iconColor}
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                  <line x1="12" y1="18" x2="12" y2="12" />
-                  <line x1="9" y1="15" x2="15" y2="15" />
-                </svg>
-                <span
-                  style={{
-                    fontFamily: "'DM Mono', monospace",
-                    fontSize: 11,
-                    color: c.infoValue,
-                    letterSpacing: "0.04em",
-                  }}
-                >
-                  Resume
-                </span>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke={c.iconColor}
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="12" y1="18" x2="12" y2="12" />
+                    <line x1="9" y1="15" x2="15" y2="15" />
+                  </svg>
+                  <span
+                    style={{
+                      fontFamily: "'DM Mono', monospace",
+                      fontSize: 11,
+                      color: c.infoValue,
+                      letterSpacing: "0.04em",
+                    }}
+                  >
+                    Resume
+                  </span>
+                </div>
                 <span
                   style={{
                     fontFamily: "'DM Mono', monospace",
                     fontSize: 11,
                     color: c.metaText,
-                    marginLeft: "auto",
+                    letterSpacing: "0.04em",
                   }}
                 >
-                  ↓ PDF
+                  Download PDF →
                 </span>
               </a>
             </div>
 
-            {/* RIGHT — CTA + form */}
-            <div style={{ paddingLeft: 64 }}>
-              {/* static CTA */}
+            {/* RIGHT */}
+            <div style={{ paddingLeft: 60 }}>
               <p
                 style={{
                   fontFamily: "'DM Mono', monospace",
@@ -445,7 +462,7 @@ export default function Contact() {
                   color: c.metaText,
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
-                  marginBottom: 20,
+                  marginBottom: 12,
                 }}
               >
                 Send a message
@@ -453,14 +470,14 @@ export default function Contact() {
               <p
                 style={{
                   fontFamily: "'Instrument Serif', Georgia, serif",
-                  fontSize: 22,
+                  fontSize: 21,
                   color: c.heading,
                   letterSpacing: "-0.02em",
                   lineHeight: 1.2,
                   marginBottom: 8,
                 }}
               >
-                Ready to start a project?
+                Tell me about your idea.
               </p>
               <p
                 style={{
@@ -469,14 +486,15 @@ export default function Contact() {
                   color: c.body,
                   lineHeight: 1.75,
                   letterSpacing: "0.02em",
-                  marginBottom: 28,
+                  marginBottom: 24,
+                  maxWidth: 340,
                 }}
               >
-                Drop me a message and I'll get back to you within 24 hours to
-                discuss your ideas.
+                Drop a message and I'll get back within 24 hours to dig into the
+                details.
               </p>
 
-              {/* toggle button */}
+              {/* CTA button — hidden once form opens */}
               {!open && (
                 <button
                   onClick={() => setOpen(true)}
@@ -491,9 +509,6 @@ export default function Contact() {
                     letterSpacing: "0.06em",
                     cursor: "pointer",
                     transition: "opacity 0.15s ease",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
                   onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
@@ -502,16 +517,16 @@ export default function Contact() {
                 </button>
               )}
 
-              {/* expandable form */}
+              {/* Expandable form */}
               {open && (
-                <div className="ct-expand">
+                <div className="ct-form">
                   {status === "success" ? (
                     <div
                       style={{
-                        padding: "28px 0",
                         display: "flex",
                         flexDirection: "column",
                         gap: 10,
+                        paddingTop: 4,
                       }}
                     >
                       <div
@@ -524,9 +539,9 @@ export default function Contact() {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          fontSize: 14,
-                          color: dark ? "#5a9e5a" : "#2a7a2a",
                           fontFamily: "'DM Mono', monospace",
+                          fontSize: 15,
+                          color: dark ? "#5a9e5a" : "#2a7a2a",
                         }}
                       >
                         ✓
@@ -537,7 +552,6 @@ export default function Contact() {
                           fontSize: 18,
                           color: c.heading,
                           margin: 0,
-                          letterSpacing: "-0.01em",
                         }}
                       >
                         Message sent.
@@ -548,50 +562,30 @@ export default function Contact() {
                           fontSize: 11,
                           color: c.body,
                           margin: 0,
-                          lineHeight: 1.6,
+                          lineHeight: 1.65,
                         }}
                       >
                         I'll get back to you within 24 hours.
                       </p>
-                      <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
-                        <button
-                          onClick={() => {
-                            setStatus("idle");
-                          }}
-                          style={{
-                            fontFamily: "'DM Mono', monospace",
-                            fontSize: 11,
-                            color: c.btnText,
-                            background: c.btnBg,
-                            border: "none",
-                            borderRadius: 100,
-                            padding: "9px 20px",
-                            letterSpacing: "0.05em",
-                            cursor: "pointer",
-                          }}
-                        >
-                          Send another
-                        </button>
-                        <button
-                          onClick={() => {
-                            setOpen(false);
-                            setStatus("idle");
-                          }}
-                          style={{
-                            fontFamily: "'DM Mono', monospace",
-                            fontSize: 11,
-                            color: c.mutedBtnText,
-                            background: c.mutedBtn,
-                            border: "none",
-                            borderRadius: 100,
-                            padding: "9px 20px",
-                            letterSpacing: "0.05em",
-                            cursor: "pointer",
-                          }}
-                        >
-                          Close
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => setStatus("idle")}
+                        style={{
+                          alignSelf: "flex-start",
+                          marginTop: 6,
+                          fontFamily: "'DM Mono', monospace",
+                          fontSize: 10,
+                          color: c.metaText,
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          letterSpacing: "0.06em",
+                          textTransform: "uppercase",
+                          padding: 0,
+                          textDecoration: "underline",
+                        }}
+                      >
+                        Send another
+                      </button>
                     </div>
                   ) : (
                     <form
@@ -599,9 +593,10 @@ export default function Contact() {
                       style={{
                         display: "flex",
                         flexDirection: "column",
-                        gap: 12,
+                        gap: 11,
                       }}
                     >
+                      {/* Row 1 — Name + Email */}
                       <div
                         style={{
                           display: "grid",
@@ -615,14 +610,16 @@ export default function Contact() {
                             label: "Name",
                             type: "text",
                             ph: "Your name",
+                            required: true,
                           },
                           {
                             key: "email",
                             label: "Email",
                             type: "email",
                             ph: "your@email.com",
+                            required: true,
                           },
-                        ].map(({ key, label, type, ph }) => (
+                        ].map(({ key, label, type, ph, required }) => (
                           <div key={key}>
                             <label
                               style={{
@@ -641,16 +638,56 @@ export default function Contact() {
                               className="ct-input"
                               type={type}
                               name={key}
-                              required
+                              required={required}
                               placeholder={ph}
                               value={form[key]}
                               onChange={handleChange}
                               onFocus={() => setFocused(key)}
                               onBlur={() => setFocused(null)}
-                              style={inputStyle(key)}
+                              style={inputBase(key)}
                             />
                           </div>
                         ))}
+                      </div>
+
+                      {/* Row 2 — Phone (optional, full width) */}
+                      <div>
+                        <label
+                          style={{
+                            fontFamily: "'DM Mono', monospace",
+                            fontSize: 9,
+                            color: c.metaText,
+                            letterSpacing: "0.14em",
+                            textTransform: "uppercase",
+                            display: "block",
+                            marginBottom: 5,
+                          }}
+                        >
+                          Phone{" "}
+                          <span
+                            style={{
+                              fontFamily: "'DM Mono', monospace",
+                              fontSize: 9,
+                              color: dark ? "#333" : "#ccc",
+                              letterSpacing: "0.06em",
+                              textTransform: "lowercase",
+                            }}
+                          >
+                            (optional)
+                          </span>
+                        </label>
+                        <input
+                          className="ct-input"
+                          type="tel"
+                          name="phone"
+                          pattern="[0-9+\-\s]{10,15}"
+                          placeholder="+91 XXXXX XXXXX"
+                          value={form.phone}
+                          onChange={handleChange}
+                          onFocus={() => setFocused("phone")}
+                          onBlur={() => setFocused(null)}
+                          style={inputBase("phone")}
+                        />
                       </div>
 
                       <div>
@@ -672,12 +709,12 @@ export default function Contact() {
                           name="message"
                           required
                           rows={4}
-                          placeholder="What are you working on?"
+                          placeholder="Tell me about your idea, project, or challenge."
                           value={form.message}
                           onChange={handleChange}
                           onFocus={() => setFocused("message")}
                           onBlur={() => setFocused(null)}
-                          style={{ ...inputStyle("message"), display: "block" }}
+                          style={{ ...inputBase("message"), display: "block" }}
                         />
                       </div>
 
@@ -694,11 +731,12 @@ export default function Contact() {
                         </p>
                       )}
 
+                      {/* submit row */}
                       <div
                         style={{
                           display: "flex",
-                          alignItems: "center",
-                          gap: 12,
+                          flexDirection: "column",
+                          gap: 8,
                           marginTop: 2,
                         }}
                       >
@@ -723,6 +761,7 @@ export default function Contact() {
                               status === "loading" ? "not-allowed" : "pointer",
                             transition: "opacity 0.15s ease",
                             whiteSpace: "nowrap",
+                            alignSelf: "flex-start",
                           }}
                           onMouseEnter={(e) => {
                             if (status !== "loading")
@@ -736,25 +775,16 @@ export default function Contact() {
                             ? "Sending..."
                             : "Send Message →"}
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setOpen(false);
-                            setStatus("idle");
-                          }}
+                        <span
                           style={{
                             fontFamily: "'DM Mono', monospace",
-                            fontSize: 11,
-                            color: c.mutedBtnText,
-                            background: "none",
-                            border: "none",
-                            cursor: "pointer",
+                            fontSize: 10,
+                            color: c.metaText,
                             letterSpacing: "0.04em",
-                            padding: "11px 0",
                           }}
                         >
-                          Cancel
-                        </button>
+                          All messages go directly to my inbox.
+                        </span>
                       </div>
                     </form>
                   )}

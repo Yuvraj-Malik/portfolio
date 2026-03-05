@@ -629,7 +629,7 @@ export default function About() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          padding: "5.5rem 3rem 3rem 3rem",
+          padding: "5.5rem 3rem 0 3rem",
           scrollMarginTop: "25px",
           boxSizing: "border-box",
           position: "relative",

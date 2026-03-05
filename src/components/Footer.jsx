@@ -87,34 +87,25 @@ function openProject(id) {
   }, 50);
 }
 
-const STATS = [
-  { label: "Projects Built", value: "10+" },
-  { label: "LeetCode Solved", value: "0 → 200+" },
-  { label: "Currently Learning", value: "System Design" },
-  { label: "Focus", value: "Full Stack + AI" },
-];
-
 export default function Footer() {
   const dark = useDarkMode();
 
   const c = {
     bg: dark ? "#060606" : "#f5f5f5",
     heading: dark ? "#ffffff" : "#080808",
-    body: dark ? "#9b9b9b" : "#7b7a7a",
-    label: dark ? "#bdbbbb" : "#414141",
+    body: dark ? "#777777" : "#888888",
+    label: dark ? "#333333" : "#cccccc",
     divider: dark ? "#141414" : "#e8e8e8",
-    link: dark ? "#c4c1c1" : "#797979",
+    link: dark ? "#666666" : "#999999",
     linkHover: dark ? "#ffffff" : "#000000",
     iconBg: dark ? "#111111" : "#eeeeee",
     iconHover: dark ? "#1e1e1e" : "#e0e0e0",
     iconColor: dark ? "#777777" : "#888888",
-    statBg: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.03)",
-    statBorder: dark ? "#161616" : "#e8e8e8",
-    statValue: dark ? "#cccccc" : "#222222",
+
     btnBg: dark ? "#ffffff" : "#111111",
     btnText: dark ? "#111111" : "#ffffff",
-    mutedBtnBg: dark ? "#111111" : "#e6e6e6",
-    mutedBtnText: dark ? "#8e8e8e" : "#686868",
+    mutedBtnBg: dark ? "#111111" : "#eeeeee",
+    mutedBtnText: dark ? "#666666" : "#888888",
     dot: "#4ade80",
   };
 
@@ -141,10 +132,7 @@ export default function Footer() {
           transition: opacity 0.15s ease, transform 0.15s ease;
         }
         .ft-top:hover { opacity: 0.7 !important; transform: translateY(-2px); }
-        .ft-stat {
-          transition: border-color 0.15s ease;
-        }
-        .ft-stat:hover { border-color: ${dark ? "#2a2a2a" : "#cccccc"} !important; }
+
       `}</style>
 
       <footer
@@ -371,7 +359,7 @@ export default function Footer() {
                   fontFamily: "'Instrument Serif', Georgia, serif",
                   fontSize: 17,
                   color: c.heading,
-                  letterSpacing: "0.01em",
+                  letterSpacing: "-0.02em",
                   lineHeight: 1.2,
                   margin: "0 0 8px 0",
                 }}
@@ -384,7 +372,7 @@ export default function Footer() {
                   fontSize: 11,
                   color: c.body,
                   lineHeight: 1.7,
-                  letterSpacing: "0.01em",
+                  letterSpacing: "0.02em",
                   margin: "0 0 20px 0",
                 }}
               >
@@ -434,54 +422,6 @@ export default function Footer() {
                 </a>
               </div>
             </div>
-          </div>
-
-          {/* ── Stats bar ── */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: 1,
-              borderBottom: `1px solid ${c.divider}`,
-            }}
-          >
-            {STATS.map((s, i) => (
-              <div
-                key={i}
-                className="ft-stat"
-                style={{
-                  padding: "20px 24px",
-                  borderRight:
-                    i < STATS.length - 1 ? `1px solid ${c.divider}` : "none",
-                  background: c.statBg,
-                }}
-              >
-                <p
-                  style={{
-                    fontFamily: "'Instrument Serif', Georgia, serif",
-                    fontSize: 20,
-                    color: c.statValue,
-                    letterSpacing: "-0.02em",
-                    margin: "0 0 3px 0",
-                    lineHeight: 1,
-                  }}
-                >
-                  {s.value}
-                </p>
-                <p
-                  style={{
-                    fontFamily: "'DM Mono', monospace",
-                    fontSize: 9,
-                    color: c.label,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    margin: 0,
-                  }}
-                >
-                  {s.label}
-                </p>
-              </div>
-            ))}
           </div>
 
           {/* ── Bottom bar ── */}
