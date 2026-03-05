@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import emailjs from "@emailjs/browser";
 
-const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
 function useDarkMode() {
   const [dark, setDark] = useState(() =>
@@ -80,6 +80,12 @@ const LINKS = [
     value: "Patiala, Punjab, India",
     href: null,
   },
+  {
+    icon: <IconPhone />,
+    label: "Phone",
+    value: "+91 98765 43210",
+    href: "tel:+919876543210",
+  },
 ];
 
 export default function Contact() {
@@ -121,6 +127,11 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("loading");
+
+    console.log("SERVICE:", EMAILJS_SERVICE_ID);
+    console.log("TEMPLATE:", EMAILJS_TEMPLATE_ID);
+    console.log("PUBLIC:", EMAILJS_PUBLIC_KEY);
+
     try {
       await emailjs.send(
         EMAILJS_SERVICE_ID,
@@ -135,7 +146,8 @@ export default function Contact() {
       );
       setStatus("success");
       setForm({ name: "", email: "", phone: "", message: "" });
-    } catch {
+    } catch (error) {
+      console.error("EmailJS error:", error);
       setStatus("error");
     }
   };
@@ -734,41 +746,96 @@ export default function Contact() {
                           marginTop: 2,
                         }}
                       >
-                        <button
-                          type="submit"
-                          disabled={status === "loading"}
+                        <div
                           style={{
-                            fontFamily: "'DM Mono', monospace",
-                            fontSize: 12,
-                            color: c.btnText,
-                            background:
-                              status === "loading"
-                                ? dark
-                                  ? "#333"
-                                  : "#aaa"
-                                : c.btnBg,
-                            border: "none",
-                            borderRadius: 100,
-                            padding: "11px 24px",
-                            letterSpacing: "0.06em",
-                            cursor:
-                              status === "loading" ? "not-allowed" : "pointer",
-                            transition: "opacity 0.15s ease",
-                            whiteSpace: "nowrap",
-                            alignSelf: "flex-start",
-                          }}
-                          onMouseEnter={(e) => {
-                            if (status !== "loading")
-                              e.currentTarget.style.opacity = "0.8";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.opacity = "1";
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 10,
                           }}
                         >
-                          {status === "loading"
-                            ? "Sending..."
-                            : "Send Message →"}
-                        </button>
+                          <button
+                            type="submit"
+                            disabled={status === "loading"}
+                            style={{
+                              fontFamily: "'DM Mono', monospace",
+                              fontSize: 12,
+                              color: c.btnText,
+                              background:
+                                status === "loading"
+                                  ? dark
+                                    ? "#333"
+                                    : "#aaa"
+                                  : c.btnBg,
+                              border: "none",
+                              borderRadius: 100,
+                              padding: "11px 24px",
+                              letterSpacing: "0.06em",
+                              cursor:
+                                status === "loading"
+                                  ? "not-allowed"
+                                  : "pointer",
+                              transition: "opacity 0.15s ease",
+                              whiteSpace: "nowrap",
+                            }}
+                            onMouseEnter={(e) => {
+                              if (status !== "loading")
+                                e.currentTarget.style.opacity = "0.8";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.opacity = "1";
+                            }}
+                          >
+                            {status === "loading"
+                              ? "Sending..."
+                              : "Send Message →"}
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setOpen(false);
+                              setForm({
+                                name: "",
+                                email: "",
+                                phone: "",
+                                message: "",
+                              });
+                              setStatus("idle");
+                            }}
+                            style={{
+                              fontFamily: "'DM Mono', monospace",
+                              fontSize: 12,
+                              color: dark ? "#555" : "#aaa",
+                              background: "none",
+                              border: `1px solid ${dark ? "#2a2a2a" : "#e0e0e0"}`,
+                              borderRadius: 100,
+                              padding: "11px 20px",
+                              letterSpacing: "0.06em",
+                              cursor: "pointer",
+                              transition:
+                                "color 0.15s ease, border-color 0.15s ease",
+                              whiteSpace: "nowrap",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.color = dark
+                                ? "#aaa"
+                                : "#555";
+                              e.currentTarget.style.borderColor = dark
+                                ? "#555"
+                                : "#aaa";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.color = dark
+                                ? "#555"
+                                : "#aaa";
+                              e.currentTarget.style.borderColor = dark
+                                ? "#2a2a2a"
+                                : "#e0e0e0";
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </div>
                         <span
                           style={{
                             fontFamily: "'DM Mono', monospace",

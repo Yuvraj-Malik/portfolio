@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect } from "react";
 import AiFace from "./AiFace";
 
 const NAV_ITEMS = [
@@ -15,7 +15,7 @@ export default function Navbar({ dark, setDark }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [time, setTime] = useState("");
 
-  // Live clock — the one detail Pratham definitely doesn't have
+  // Live clock
   useEffect(() => {
     const tick = () => {
       const now = new Date();
@@ -33,11 +33,12 @@ export default function Navbar({ dark, setDark }) {
     return () => clearInterval(id);
   }, []);
 
+  // Scroll tracking — only for progress + active section
   useEffect(() => {
     const onScroll = () => {
       const st = window.scrollY;
       const dh = document.documentElement.scrollHeight - window.innerHeight;
-      setScrolled(st > 50);
+      setScrolled(st > 40);
       setScrollPct(dh > 0 ? Math.min(st / dh, 1) : 0);
       const ids = ["about", "projects", "journey", "contact"];
       let current = null;
@@ -53,16 +54,18 @@ export default function Navbar({ dark, setDark }) {
   }, []);
 
   const c = {
-    bg: dark ? "rgba(6,6,6,0.9)" : "rgba(255,255,255,0.9)",
-    border: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)",
-    text: dark ? "#ffffff" : "#080808",
-    muted: dark ? "#484848" : "#b8b8b8",
-    link: dark ? "#666" : "#999",
+    bg: dark ? "rgba(10,10,10,0.60)" : "rgba(255,255,255,0.65)",
+    border: dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.08)",
+    text: dark ? "#e8e8e8" : "#111111",
+    muted: dark ? "#444444" : "#bbbbbb",
+    link: dark ? "#606060" : "#888888",
     active: dark ? "#ffffff" : "#000000",
-    ctaBg: dark ? "#ffffff" : "#080808",
-    ctaTxt: dark ? "#080808" : "#ffffff",
+    ctaBg: dark ? "#ffffff" : "#0a0a0a",
+    ctaTxt: dark ? "#0a0a0a" : "#ffffff",
     dot: "#22c55e",
-    divider: dark ? "#1a1a1a" : "#ececec",
+    bar: dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.35)",
+    chamber: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)",
+    chamberB: dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.08)",
   };
 
   return (
@@ -70,146 +73,138 @@ export default function Navbar({ dark, setDark }) {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap');
 
-        /* ── Progress bar — top edge, not bottom ── */
-        .nb-bar {
-          position: fixed; top: 0; left: 0; z-index: 100;
-          height: 1.5px; background: ${c.text};
-          transition: width 0.12s linear;
-          opacity: ${scrollPct > 0.01 ? 0.25 : 0};
-          pointer-events: none;
-        }
-
-        /* ── The nav pill / strip ── */
-        .nb-nav {
-          transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
-        }
-
-        /* ── Links ── */
+        /* ── Nav links — underline grows from center on hover/active ── */
         .nb-link {
           font-family: 'DM Mono', monospace;
-          font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+          font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
           text-decoration: none; color: ${c.link};
-          padding: 6px 12px; position: relative;
-          transition: color 0.15s ease;
+          padding: 0 13px; height: 100%;
+          display: flex; align-items: center;
+          position: relative;
+          transition: color 0.2s ease;
           white-space: nowrap;
         }
         .nb-link:hover { color: ${c.active}; }
         .nb-link.active { color: ${c.active}; }
-        /* Active: a tiny horizontal line ABOVE the text, not below */
-        .nb-link.active::before {
+        /* Underline — expands from center, sits at bottom of link */
+        .nb-link::after {
           content: '';
-          position: absolute; top: 0; left: 12px; right: 12px;
-          height: 1px; background: ${c.active}; opacity: 0.5;
+          position: absolute; bottom: 11px;
+          left: 50%; right: 50%;
+          height: 1px;
+          background: ${c.active};
+          transition: left 0.22s ease, right 0.22s ease;
+          opacity: 0.55;
+        }
+        .nb-link.active::after, .nb-link:hover::after {
+          left: 13px; right: 13px;
         }
 
-        /* ── AiFace wrapper — sits between the two nav groups ── */
-        .nb-face-wrap {
-          padding: 0 16px;
-          border-left: 1px solid ${c.divider};
-          border-right: 1px solid ${c.divider};
-          display: flex; align-items: center;
-          /* subtle inner glow */
-          box-shadow: ${
-            dark
-              ? "inset 8px 0 12px -8px rgba(255,255,255,0.03), inset -8px 0 12px -8px rgba(255,255,255,0.03)"
-              : "inset 8px 0 12px -8px rgba(0,0,0,0.03), inset -8px 0 12px -8px rgba(0,0,0,0.03)"
-          };
+        /* ── nb-link underline offset adjustment for centered layout ── */
+        .nb-link::after { bottom: 10px; }
+
+        /* ── Scroll progress bar ── */
+        .nb-progress {
+          position: absolute; bottom: 0; left: 0;
+          height: 1px; background: ${c.bar};
+          transition: width 0.1s linear;
+          pointer-events: none;
         }
 
-        /* ── Live clock ── unique differentiator */
+        /* ── Clock ── */
         .nb-clock {
           font-family: 'DM Mono', monospace;
-          font-size: 9.5px; letter-spacing: 0.1em;
+          font-size: 8.5px; letter-spacing: 0.12em;
           color: ${c.muted};
-          white-space: nowrap;
           font-variant-numeric: tabular-nums;
-          user-select: none;
+          user-select: none; white-space: nowrap;
+        }
+
+        /* ── Availability dot ── */
+        .nb-dot {
+          width: 5px; height: 5px; border-radius: 50%;
+          background: ${c.dot}; box-shadow: 0 0 5px ${c.dot};
+          flex-shrink: 0;
+          animation: dot-pulse 2.5s ease-in-out infinite;
+        }
+        @keyframes dot-pulse {
+          0%,100% { opacity:1; box-shadow: 0 0 5px ${c.dot}; }
+          50%      { opacity:0.4; box-shadow: 0 0 2px ${c.dot}; }
+        }
+
+        /* ── CTA — pill shape, premium feel ── */
+        .nb-cta {
+          font-family: 'DM Mono', monospace;
+          font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+          color: ${c.ctaTxt}; background: ${c.ctaBg};
+          text-decoration: none;
+          padding: 9px 20px;
+          border-radius: 999px;
+          display: inline-flex; align-items: center; gap: 6px;
+          white-space: nowrap; flex-shrink: 0;
+          transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .nb-cta:hover {
+          opacity: 0.88;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 14px ${dark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.15)"};
         }
 
         /* ── Theme toggle ── */
         .nb-theme {
           font-family: 'DM Mono', monospace;
           font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
-          color: ${c.muted}; background: none; border: none;
-          cursor: pointer; padding: 6px 8px;
+          color: ${c.link}; background: none; border: none;
+          cursor: pointer; padding: 0 12px; height: 100%;
           display: flex; align-items: center; gap: 5px;
-          transition: color 0.15s ease; white-space: nowrap; flex-shrink: 0;
+          transition: color 0.2s ease; white-space: nowrap;
+          border-left: 1px solid ${c.border};
         }
         .nb-theme:hover { color: ${c.active}; }
 
-        /* ── CTA — sharp rectangle, not pill ── */
-        /* This is the key visual diff from Pratham's rounded pill CTA */
-        .nb-cta {
-          font-family: 'DM Mono', monospace;
-          font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
-          color: ${c.ctaTxt}; background: ${c.ctaBg};
-          text-decoration: none; padding: 7px 16px;
-          border-radius: 3px;    /* almost-square — not pill */
-          display: inline-flex; align-items: center; gap: 6px;
-          white-space: nowrap; flex-shrink: 0;
-          transition: opacity 0.15s ease, transform 0.15s ease;
-        }
-        .nb-cta:hover { opacity: 0.8; transform: translateY(-1px); }
-
-        /* ── Thin divider between elements ── */
-        .nb-sep {
-          width: 1px; flex-shrink: 0;
-          background: ${c.divider};
-          align-self: stretch;
-          margin: 10px 0;
-        }
-
-        /* ── Availability dot ── */
-        .nb-dot {
-          width: 5px; height: 5px; border-radius: 50%;
-          background: ${c.dot};
-          box-shadow: 0 0 6px ${c.dot};
-          flex-shrink: 0;
-          animation: nb-pulse 2.5s ease-in-out infinite;
-        }
-        @keyframes nb-pulse {
-          0%,100% { opacity:1; box-shadow: 0 0 6px ${c.dot}; }
-          50%      { opacity:0.4; box-shadow: 0 0 2px ${c.dot}; }
+        /* ── Vertical dividers ── */
+        .nb-vdiv {
+          width: 1px; background: ${c.border};
+          align-self: stretch; flex-shrink: 0;
         }
 
         /* ── Hamburger (mobile) ── */
         .nb-ham {
           background: none; border: none; cursor: pointer;
-          color: ${c.text}; padding: 4px;
+          color: ${c.text}; padding: 0 16px; height: 100%;
           display: none; align-items: center;
           transition: opacity 0.15s;
         }
         .nb-ham:hover { opacity: 0.6; }
 
-        /* ── Mobile full-screen overlay ── */
+        /* ── Mobile overlay ── */
         @keyframes nb-overlay-in {
           from { opacity: 0; }
           to   { opacity: 1; }
         }
         .nb-overlay {
           position: fixed; inset: 0; z-index: 55;
-          background: ${c.bg};
-          backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+          background: ${dark ? "rgba(6,6,6,0.97)" : "rgba(255,255,255,0.97)"};
+          backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
           display: flex; flex-direction: column;
           align-items: center; justify-content: center;
           animation: nb-overlay-in 0.2s ease both;
         }
         .nb-mob-link {
           font-family: 'Instrument Serif', Georgia, serif;
-          font-size: clamp(36px, 9vw, 56px); font-weight: 400;
+          font-size: clamp(38px, 10vw, 58px); font-weight: 400;
           letter-spacing: -0.025em; color: ${c.link};
-          text-decoration: none; padding: 10px 0;
+          text-decoration: none; padding: 8px 0; line-height: 1.1;
           transition: color 0.15s ease;
-          line-height: 1.1;
         }
         .nb-mob-link:hover, .nb-mob-link.active { color: ${c.active}; }
 
-        /* Page-load fade in */
-        @keyframes nb-in {
-          from { opacity: 0; transform: translateY(-5px); }
+        /* Page-load entrance */
+        @keyframes nb-drop {
+          from { opacity: 0; transform: translateY(-100%); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        .nb-anim { animation: nb-in 0.5s cubic-bezier(0.16,1,0.3,1) 0.1s both; }
+        .nb-entrance { animation: nb-drop 0.45s cubic-bezier(0.16,1,0.3,1) both; }
 
         @media (max-width: 768px) {
           .nb-desktop { display: none !important; }
@@ -220,228 +215,182 @@ export default function Navbar({ dark, setDark }) {
         }
       `}</style>
 
-      {/* Progress bar */}
-      <div className="nb-bar" style={{ width: `${scrollPct * 100}%` }} />
-
-      {/* ── Main navbar ── */}
+      {/* ══════════════════════════════════════════
+          THE NAVBAR — fixed, full-width, never moves
+          Height: 56px. Two zones separated by the
+          AiFace chamber dead-center.
+      ══════════════════════════════════════════ */}
       <header
-        className="nb-anim"
+        className="nb-entrance"
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           right: 0,
           zIndex: 50,
-          padding: scrolled ? "12px 20px" : "0",
-          transition: "padding 0.4s cubic-bezier(0.16,1,0.3,1)",
-          pointerEvents: "none",
+          height: scrolled ? 48 : 56,
+          background: c.bg,
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          borderBottom: `1px solid ${c.border}`,
+          display: "flex",
+          alignItems: "stretch",
+          transition: "height 0.2s ease",
         }}
       >
-        <nav
-          className="nb-nav"
+        {/* Scroll progress lives in the bottom border */}
+        <div className="nb-progress" style={{ width: `${scrollPct * 100}%` }} />
+
+        {/* ── LEFT ZONE: AiFace + name + clock ── */}
+        <div
           style={{
-            maxWidth: scrolled ? 860 : "100%",
-            margin: "0 auto",
             display: "flex",
             alignItems: "center",
-            height: 56,
-            padding: scrolled ? "0 20px" : "0 3rem",
-            background: c.bg,
-            // KEY DIFF: no blur when flat — Pratham always blurs
-            backdropFilter: scrolled ? "blur(20px) saturate(160%)" : "none",
-            WebkitBackdropFilter: scrolled
-              ? "blur(20px) saturate(160%)"
-              : "none",
-            borderRadius: scrolled
-              ? 6
-              : 0 /* slight radius when pill, sharp edge when flat */,
-            border: scrolled ? `1px solid ${c.border}` : "none",
-            borderBottom: !scrolled ? `1px solid ${c.divider}` : undefined,
-            boxShadow: scrolled
-              ? dark
-                ? "0 4px 24px rgba(0,0,0,0.6)"
-                : "0 4px 24px rgba(0,0,0,0.08)"
-              : "none",
-            pointerEvents: "all",
-            gap: 0,
+            padding: "0 0 0 3rem",
+            gap: 10,
+            flexShrink: 0,
           }}
         >
-          {/* LEFT — wordmark + clock */}
-          <a
-            href="#hero"
-            style={{
-              fontFamily: "'Instrument Serif', Georgia, serif",
-              fontSize: 17,
-              fontWeight: 400,
-              letterSpacing: "-0.02em",
-              color: c.text,
-              textDecoration: "none",
-              flexShrink: 0,
-              display: "flex",
-              flexDirection: "column",
-              lineHeight: 1,
-              gap: 1,
-              marginRight: "auto",
-            }}
-          >
-            Yuvraj Malik
-            {/* Live clock under the name — like a dev terminal timestamp */}
-            <span className="nb-clock">{time}</span>
-          </a>
-
-          {/* CENTER — nav + AiFace (desktop) */}
-          <div
-            className="nb-desktop"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 0,
-              marginRight: "auto",
-            }}
-          >
-            {/* Left nav pair */}
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {NAV_ITEMS.slice(0, 2).map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className={`nb-link${activeId === item.href.slice(1) ? " active" : ""}`}
-                >
-                  {item.label}
-                </a>
-              ))}
-            </div>
-
-            {/* AiFace — bordered chamber */}
-            <div className="nb-face-wrap">
-              <AiFace />
-            </div>
-
-            {/* Right nav pair */}
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {NAV_ITEMS.slice(2).map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className={`nb-link${activeId === item.href.slice(1) ? " active" : ""}`}
-                >
-                  {item.label}
-                </a>
-              ))}
-            </div>
+          {/* AiFace — brand icon to the left of name */}
+          <div className="nb-desktop" style={{ flexShrink: 0 }}>
+            <AiFace />
           </div>
 
-          {/* RIGHT — controls */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              flexShrink: 0,
-            }}
-          >
-            {/* Availability — desktop */}
-            <div
-              className="nb-desktop"
-              style={{ display: "flex", alignItems: "center", gap: 6 }}
+          <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
+            <a
+              href="#hero"
+              style={{
+                fontFamily: "'Instrument Serif', Georgia, serif",
+                fontSize: 16,
+                fontWeight: 400,
+                letterSpacing: "-0.02em",
+                color: c.text,
+                textDecoration: "none",
+                lineHeight: 1,
+              }}
             >
-              <span className="nb-dot" />
-              <span
-                style={{
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: 9,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: c.muted,
-                }}
-              >
-                Open
-              </span>
-            </div>
+              Yuvraj Malik
+            </a>
+            <span className="nb-clock nb-desktop">{time}</span>
+          </div>
+        </div>
 
-            <div className="nb-sep nb-desktop" />
+        {/* ── CENTER ZONE: all 4 nav links ── */}
+        <nav
+          className="nb-desktop"
+          style={{
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            alignItems: "center",
+            gap: 4,
+            height: "100%",
+          }}
+        >
+          {NAV_ITEMS.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className={`nb-link${activeId === item.href.slice(1) ? " active" : ""}`}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
 
-            {/* Theme */}
-            <button onClick={() => setDark(!dark)} className="nb-theme">
-              {dark ? (
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="4" />
-                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-                </svg>
-              ) : (
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                </svg>
-              )}
-              {dark ? "Light" : "Dark"}
-            </button>
-
-            <div className="nb-sep" />
-
-            {/* CTA — SHARP corners, not a pill */}
-            <a href="#contact" className="nb-cta">
-              Let's Talk
+        {/* ── RIGHT ZONE: theme toggle + CTA + hamburger ── */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            padding: "0 3rem 0 0",
+            gap: 16,
+            flexShrink: 0,
+            marginLeft: "auto",
+          }}
+        >
+          {/* Theme toggle */}
+          <button
+            onClick={() => setDark(!dark)}
+            className="nb-theme nb-desktop"
+            style={{ borderLeft: "none", padding: 0 }}
+          >
+            {dark ? (
               <svg
-                width="8"
-                height="8"
+                width="10"
+                height="10"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2.5"
+                strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <path d="M5 12h14M12 5l7 7-7 7" />
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
               </svg>
-            </a>
-
-            {/* Mobile hamburger */}
-            <button className="nb-ham" onClick={() => setMobileOpen(true)}>
+            ) : (
               <svg
-                width="20"
-                height="20"
+                width="10"
+                height="10"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="1.8"
+                strokeWidth="2"
                 strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <line x1="3" y1="7" x2="21" y2="7" />
-                <line x1="3" y1="12" x2="16" y2="12" />
-                <line x1="3" y1="17" x2="21" y2="17" />
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
               </svg>
-            </button>
-          </div>
-        </nav>
+            )}
+            {dark ? "Light" : "Dark"}
+          </button>
+
+          {/* CTA */}
+          <a href="#contact" className="nb-cta nb-desktop">
+            Let's Talk
+            <svg
+              width="8"
+              height="8"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </a>
+
+          {/* Mobile hamburger */}
+          <button className="nb-ham" onClick={() => setMobileOpen(true)}>
+            <svg
+              width="20"
+              height="14"
+              viewBox="0 0 20 14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            >
+              <line x1="0" y1="1" x2="20" y2="1" />
+              <line x1="0" y1="7" x2="14" y2="7" />
+              <line x1="0" y1="13" x2="20" y2="13" />
+            </svg>
+          </button>
+        </div>
       </header>
 
       {/* ── Mobile full-screen overlay ── */}
       {mobileOpen && (
         <div className="nb-overlay">
-          {/* Close */}
           <button
             onClick={() => setMobileOpen(false)}
             style={{
               position: "absolute",
-              top: 24,
+              top: 20,
               right: "3rem",
               background: "none",
               border: "none",
@@ -463,12 +412,10 @@ export default function Navbar({ dark, setDark }) {
             </svg>
           </button>
 
-          {/* AiFace */}
-          <div style={{ marginBottom: 32, opacity: 0.7 }}>
+          <div style={{ marginBottom: 32, opacity: 0.6 }}>
             <AiFace />
           </div>
 
-          {/* Big serif links */}
           {NAV_ITEMS.map((item) => (
             <a
               key={item.href}
@@ -480,7 +427,6 @@ export default function Navbar({ dark, setDark }) {
             </a>
           ))}
 
-          {/* CTA */}
           <a
             href="#contact"
             onClick={() => setMobileOpen(false)}
@@ -494,7 +440,7 @@ export default function Navbar({ dark, setDark }) {
               background: c.ctaBg,
               textDecoration: "none",
               padding: "10px 28px",
-              borderRadius: 3,
+              borderRadius: 999,
               display: "inline-flex",
               alignItems: "center",
               gap: 8,
@@ -515,11 +461,10 @@ export default function Navbar({ dark, setDark }) {
             </svg>
           </a>
 
-          {/* Theme + clock at bottom */}
           <div
             style={{
               position: "absolute",
-              bottom: 28,
+              bottom: 24,
               display: "flex",
               alignItems: "center",
               gap: 16,
@@ -533,18 +478,15 @@ export default function Navbar({ dark, setDark }) {
               style={{
                 fontFamily: "'DM Mono', monospace",
                 fontSize: 10,
-                letterSpacing: "0.14em",
+                letterSpacing: "0.12em",
                 textTransform: "uppercase",
                 color: c.muted,
                 background: "none",
                 border: "none",
                 cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                gap: 5,
               }}
             >
-              {dark ? "☀" : "☽"}
+              {dark ? "☀ Light" : "☽ Dark"}
             </button>
           </div>
         </div>
