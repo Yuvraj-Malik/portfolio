@@ -80,12 +80,6 @@ const LINKS = [
     value: "Patiala, Punjab, India",
     href: null,
   },
-  {
-    icon: <IconPhone />,
-    label: "Phone",
-    value: "+91 98765 43210",
-    href: "tel:+919876543210",
-  },
 ];
 
 export default function Contact() {
@@ -110,10 +104,10 @@ export default function Contact() {
     cardHover: dark ? "#2a2a2a" : "#d4d4d4",
     inputBg: dark ? "rgba(255,255,255,0.04)" : "#ffffff",
     inputBorder: dark ? "#282828" : "#e4e4e4",
-    inputFocus: dark ? "#505050" : "#888888",
+    inputFocus: dark ? "#505050" : "#323232",
     inputText: dark ? "#eeeeee" : "#111111",
-    metaText: dark ? "#444444" : "#bbbbbb",
-    iconColor: dark ? "#444444" : "#c0c0c0",
+    metaText: dark ? "#c5c5c5" : "#252525",
+    iconColor: dark ? "#d6d6d6" : "#1d1d1d",
     infoValue: dark ? "#cccccc" : "#222222",
     btnBg: dark ? "#ffffff" : "#111111",
     btnText: dark ? "#111111" : "#ffffff",
@@ -273,7 +267,7 @@ export default function Contact() {
               <em
                 style={{
                   fontStyle: "italic",
-                  color: dark ? "#404040" : "#cccccc",
+                  color: dark ? "#747474" : "#878787",
                 }}
               >
                 real.
@@ -805,7 +799,7 @@ export default function Contact() {
                             style={{
                               fontFamily: "'DM Mono', monospace",
                               fontSize: 12,
-                              color: dark ? "#555" : "#aaa",
+                              color: dark ? "#c1c1c1" : "#aaa",
                               background: "none",
                               border: `1px solid ${dark ? "#2a2a2a" : "#e0e0e0"}`,
                               borderRadius: 100,

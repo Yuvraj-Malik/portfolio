@@ -946,7 +946,7 @@ function ProjectExpanded({ project, dark, c, onClose }) {
             style={{
               fontFamily: "'DM Mono', monospace",
               fontSize: 10,
-              color: dark ? "#555" : "#bbb",
+              color: dark ? "#ffffff" : "#000000",
               letterSpacing: "0.1em",
               textTransform: "uppercase",
               marginBottom: 20,
