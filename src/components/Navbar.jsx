@@ -58,7 +58,7 @@ export default function Navbar({ dark, setDark }) {
     border: dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.08)",
     text: dark ? "#e8e8e8" : "#111111",
     muted: dark ? "#9a9a9a" : "#1f1f1f",
-    link: dark ? "#a5a5a5" : "#303030",
+    link: dark ? "#a5a5a5" : "#2a2a2a",
     active: dark ? "#ffffff" : "#000000",
     ctaBg: dark ? "#ffffff" : "#0a0a0a",
     ctaTxt: dark ? "#0a0a0a" : "#ffffff",
