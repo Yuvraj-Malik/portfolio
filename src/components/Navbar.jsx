@@ -56,7 +56,7 @@ export default function Navbar({ dark, setDark }) {
   const c = {
     bg: dark ? "rgba(10,10,10,0.60)" : "rgba(255,255,255,0.65)",
     border: dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.08)",
-    text: dark ? "#e8e8e8" : "#111111",
+    text: dark ? "#e8e8e8" : "#141414",
     muted: dark ? "#9a9a9a" : "#1f1f1f",
     link: dark ? "#a5a5a5" : "#2a2a2a",
     active: dark ? "#ffffff" : "#000000",
