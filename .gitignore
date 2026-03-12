@@ -13,7 +13,7 @@ dist-ssr
 *.local
 .env
 
-hero_old.txt
+favicon.png
 
 # Editor directories and files
 .vscode/*
