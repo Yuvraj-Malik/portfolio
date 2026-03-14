@@ -7,4 +7,18 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  build: {
+    target: "es2019",
+    cssCodeSplit: true,
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom", "react-router-dom"],
+          firebase: ["firebase/app", "firebase/firestore"],
+          icons: ["lucide-react"],
+        },
+      },
+    },
+  },
 })

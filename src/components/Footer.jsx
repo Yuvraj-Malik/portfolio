@@ -93,7 +93,7 @@ export default function Footer() {
   const c = {
     bg: dark ? "#060606" : "#f5f5f5",
     heading: dark ? "#ffffff" : "#080808",
-    body: dark ? "#777777" : "#888888",
+    body: dark ? "#959595" : "#888888",
     label: dark ? "#aaaaaa" : "#494949",
     divider: dark ? "#141414" : "#e8e8e8",
     link: dark ? "#9d9d9d" : "#5b5b5b",
@@ -105,7 +105,7 @@ export default function Footer() {
     btnBg: dark ? "#ffffff" : "#111111",
     btnText: dark ? "#111111" : "#ffffff",
     mutedBtnBg: dark ? "#111111" : "#eeeeee",
-    mutedBtnText: dark ? "#666666" : "#888888",
+    mutedBtnText: dark ? "#a7a7a7" : "#888888",
     dot: "#4ade80",
   };
 
