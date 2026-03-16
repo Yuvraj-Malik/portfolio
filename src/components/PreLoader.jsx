@@ -123,6 +123,7 @@ export default function Preloader({ onDone = () => {} }) {
   const fg = dark ? "#e8e8e8" : "#0a0a0a";
   const dim = dark ? "rgba(232,232,232,0.18)" : "rgba(10,10,10,0.18)";
   const dim2 = dark ? "rgba(232,232,232,0.35)" : "rgba(10,10,10,0.35)";
+  const tagTone = dark ? "rgba(232,232,232,0.78)" : "rgba(10,10,10,0.68)";
   const grid = dark ? "rgba(255,255,255,0.035)" : "rgba(0,0,0,0.04)";
   const line = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
   const brak = dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)";
@@ -207,12 +208,12 @@ export default function Preloader({ onDone = () => {} }) {
         .pl-tagline {
           font-family: 'DM Mono', monospace;
           font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
-          color: ${dim}; margin-top: 8px; min-height: 14px;
+          color: ${tagTone}; margin-top: 8px; min-height: 14px;
           transition: opacity 300ms ease;
         }
         .pl-cursor {
           display: inline-block; width: 1px; height: 11px;
-          background: ${dim}; vertical-align: middle;
+          background: ${tagTone}; vertical-align: middle;
           margin-left: 2px;
           animation: pl-blink 0.85s step-start infinite;
         }
