@@ -625,11 +625,10 @@ export default function About() {
       <section
         id="about"
         style={{
-          minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          padding: "5.5rem 3rem 0 3rem",
+          justifyContent: "flex-start",
+          padding: "4rem 3rem 2rem 3rem",
           scrollMarginTop: "25px",
           boxSizing: "border-box",
           position: "relative",

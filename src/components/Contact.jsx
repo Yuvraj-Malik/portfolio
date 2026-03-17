@@ -191,7 +191,7 @@ export default function Contact() {
       <section
         id="contact"
         style={{
-          padding: "7.5rem 3rem 5rem 3rem",
+          padding: "4.5rem 3rem 3rem 3rem",
           boxSizing: "border-box",
           position: "relative",
         }}

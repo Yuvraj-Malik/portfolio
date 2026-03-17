@@ -319,7 +319,7 @@ export default function Hero() {
 
       <section
         id="hero"
-        className="relative min-h-screen flex items-center px-8 md:px-12 overflow-hidden"
+        className="relative flex items-center px-8 md:px-12 overflow-hidden"
       >
         {/* Dot grid */}
         <div

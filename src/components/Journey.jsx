@@ -189,7 +189,7 @@ export default function Journey() {
     bullet: dark ? "#909090" : "#aaaaaa",
     bulletText: dark ? "#aaaaaa" : "#444444",
     roleTitle: dark ? "#ffffff" : "#111111",
-    roleOrg: dark ? "#bbbbbb" : "#555555", 
+    roleOrg: dark ? "#bbbbbb" : "#555555",
     roleDur: dark ? "#989898" : "#474646",
     badgeBorder: dark ? "#333333" : "#cccccc",
     badgeText: dark ? "#888888" : "#777777",
@@ -212,7 +212,7 @@ export default function Journey() {
       <section
         id="journey"
         style={{
-          padding: "7.5rem 3rem 3rem 3rem",
+          padding: "4.5rem 3rem 2.5rem 3rem",
           boxSizing: "border-box",
           position: "relative",
         }}

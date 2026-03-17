@@ -23,56 +23,63 @@ const PROJECTS = [
   {
     id: "spatial-console",
     title: "Spatial Console",
-    thesis:
-      "A browser-based 3D spatial engine that validates structural stability in real-time and supports gesture-driven interaction.",
+    // Showcase: hook + short description
+    thesis: "Build in 3D using just your hands.",
     category: "AI System",
     status: "active",
     type: "ai",
-    tech: ["React", "Three.js", "MediaPipe", "Reducer Architecture"],
+    tech: ["MediaPipe Hands", "Three.js", "React Three Fiber"],
+    // Showcase: key features as highlights
     highlights: [
-      "Real-time structural validation using adjacency graph + BFS support detection",
-      "Controlled collapse simulation of unstable clusters",
-      "Full gesture-based 3D interaction via virtual pointer emulation",
+      "Control a 3D cursor using live hand tracking",
+      "Create, move, and place cubes using gestures",
+      "Snap structures cleanly onto a grid",
+      "Build entirely touch-free, directly in the browser",
     ],
+    // Showcase: interaction description as authority signal
     authoritySignal:
-      "Input-agnostic engine (mouse + gesture without rewriting logic)",
+      "Move your hand → the cursor follows. Gesture → a cube appears. Drag → it snaps perfectly into place.",
+    // Engineered: overview
     overview: {
       problem:
-        "Traditional 3D design tools require expensive hardware and steep learning curves, making spatial prototyping inaccessible.",
+        "Creating and manipulating 3D content typically depends on a mouse, keyboard, and complex tools — making spatial interaction unintuitive and inaccessible for many users.",
       approach:
-        "Built a gesture-driven interface using MediaPipe hand tracking mapped to a Three.js scene, with a reducer-based state machine managing draft vs confirmed placements.",
+        "Built a touchless 3D building system where MediaPipe tracks hand landmarks, gesture logic interprets intent, and a React Three Fiber scene updates in real time.",
       outcome:
-        "A fully functional 3D structural builder controlled entirely by hand gestures, running in-browser with no external hardware.",
+        "A browser-based spatial environment where your hand becomes the controller — no mouse, no keyboard, just real-time gesture interaction with instant visual feedback.",
     },
+    // Engineered: architecture
     architecture: {
       description:
-        "Three-layer system: gesture capture → intent parser → scene renderer. State managed via a strict reducer pattern to prevent invalid structural states.",
+        "Webcam Input → Hand Landmarks (MediaPipe) → Gesture Controller → Action Controller → State (Reducer) → 3D Renderer → UI Feedback. Gesture interpretation and rendering logic are fully separated to keep each layer independently testable.",
       decisions: [
-        "Chose React Three Fiber over raw Three.js for declarative scene management",
-        "BFS-based stability validation runs on every placement to prevent invalid structures",
-        "MediaPipe runs on a separate web worker to avoid blocking the render thread",
+        "Separated gesture interpretation from rendering logic — changes to one don't affect the other",
+        "Used grid snapping for predictable, reliable placement without free-form ambiguity",
+        "Added continuous visual feedback (cursor previews) so intent is always visible to the user",
       ],
     },
+    // Engineered: challenges mapped as problem → solution pairs
     challenges: [
-      "Hand landmark jitter caused false positives — solved with a rolling average filter over 5 frames",
-      "Three.js raycasting conflicted with gesture pointer emulation — required custom hit-test layer",
-      "Reducer state grew complex fast — refactored to use action creators with validation middleware",
+      "Noisy hand tracking caused unstable cursor — applied smoothing and threshold-based position updates",
+      "Differentiating intentional gestures from natural motion — introduced gesture gating using confidence scores and timing checks",
+      "State-driven architecture minimizes re-renders — efficient snapping and lightweight rendering keep the scene responsive",
     ],
+    // Engineered: metrics reframed around performance + trade-offs
     metrics: [
       {
-        label: "Gesture Recognition Latency",
-        value: "<40ms",
-        context: "per frame",
+        label: "Rendering Architecture",
+        value: "State-driven",
+        context: "minimises re-renders",
       },
       {
-        label: "Stability Check Speed",
-        value: "~2ms",
-        context: "BFS on 100 nodes",
+        label: "Placement System",
+        value: "Grid snap",
+        context: "predictable & reliable",
       },
       {
-        label: "Browser Render Target",
-        value: "60 FPS",
-        context: "Chrome desktop",
+        label: "Stability trade-off",
+        value: "Reliability",
+        context: "prioritised over latency",
       },
     ],
     github: "https://github.com/Yuvraj-Malik/spatial-console",
@@ -763,7 +770,7 @@ function ProjectCard({ project, dark, c, mode, isExpanded, onToggle, index }) {
                 : dark
                   ? "#c0c0c0"
                   : "#333",
-              letterSpacing: isShowcase ? "0.01em" : "0.02em",
+              letterSpacing: isShowcase ? "-0.01em" : "0.02em",
               transition: "color 0.15s ease",
             }}
           >
@@ -811,48 +818,331 @@ function ProjectCard({ project, dark, c, mode, isExpanded, onToggle, index }) {
   );
 }
 
-// Expanded detail panel — renders full-width below a row
-function ProjectExpanded({ project, dark, c, onClose }) {
+// Expanded detail panel — two completely different layouts per mode
+function ProjectExpanded({ project, dark, c, mode, onClose }) {
   const [activeTab, setActiveTab] = useState("Overview");
+  const isShowcase = mode === "showcase";
 
+  const BackBtn = () => (
+    <button
+      onClick={onClose}
+      style={{
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        fontFamily: "'DM Mono', monospace",
+        fontSize: 11,
+        color: dark ? "#888" : "#888",
+        letterSpacing: "0.08em",
+        padding: "0 0 28px 0",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 6,
+        transition: "color 0.15s ease",
+      }}
+      onMouseEnter={(e) =>
+        (e.currentTarget.style.color = dark ? "#fff" : "#000")
+      }
+      onMouseLeave={(e) =>
+        (e.currentTarget.style.color = dark ? "#888" : "#888")
+      }
+    >
+      ← All Projects
+    </button>
+  );
+
+  // ── SHOWCASE LAYOUT — visual, spacious, impression-first ──
+  if (isShowcase) {
+    return (
+      <div
+        style={{
+          animation: "proj-fade-up 0.25s cubic-bezier(0.16,1,0.3,1) both",
+        }}
+      >
+        <BackBtn />
+
+        {/* Large preview */}
+        <div
+          style={{
+            width: "100%",
+            height: 260,
+            borderRadius: 10,
+            background: dark ? "#0a0a0a" : "#f0f0f0",
+            border: `1px solid ${dark ? "#1e1e1e" : "#e8e8e8"}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: 36,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "'DM Mono', monospace",
+              fontSize: 9,
+              color: dark ? "#a1a1a1" : "#3b3b3b",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+            }}
+          >
+            Demo / Preview
+          </span>
+        </div>
+
+        {/* Title + hook + CTA row */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            marginBottom: 14,
+            gap: 24,
+          }}
+        >
+          <div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                marginBottom: 8,
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "'Instrument Serif', Georgia, serif",
+                  fontSize: 34,
+                  fontWeight: 400,
+                  color: dark ? "#fff" : "#050505",
+                  letterSpacing: "-0.03em",
+                  lineHeight: 1,
+                }}
+              >
+                {project.title}
+              </span>
+              <StatusBadge status={project.status} dark={dark} />
+            </div>
+            <p
+              style={{
+                fontFamily: "'Instrument Serif', Georgia, serif",
+                fontSize: 18,
+                fontStyle: "italic",
+                color: dark ? "#888" : "#aaa",
+                margin: 0,
+                lineHeight: 1.4,
+              }}
+            >
+              {project.thesis}
+            </p>
+          </div>
+          <div
+            style={{ display: "flex", gap: 8, flexShrink: 0, paddingTop: 4 }}
+          >
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: 11,
+                  color: dark ? "#ccc" : "#444",
+                  textDecoration: "none",
+                  border: `1px solid ${dark ? "#333" : "#ddd"}`,
+                  borderRadius: 100,
+                  padding: "7px 16px",
+                  letterSpacing: "0.06em",
+                  transition: "all 0.15s ease",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = dark ? "#888" : "#888";
+                  e.currentTarget.style.color = dark ? "#fff" : "#000";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = dark ? "#333" : "#ddd";
+                  e.currentTarget.style.color = dark ? "#ccc" : "#444";
+                }}
+              >
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  style={{ flexShrink: 0 }}
+                >
+                  <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
+                </svg>
+                GitHub →
+              </a>
+            )}
+            {project.live && (
+              <a
+                href={project.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: 11,
+                  color: dark ? "#111" : "#fff",
+                  textDecoration: "none",
+                  background: dark ? "#f0f0f0" : "#111",
+                  borderRadius: 100,
+                  padding: "7px 16px",
+                  letterSpacing: "0.06em",
+                  transition: "opacity 0.15s ease",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+              >
+                Live Demo ↗
+              </a>
+            )}
+          </div>
+        </div>
+
+        <div
+          style={{
+            height: 1,
+            background: dark ? "#1a1a1a" : "#ebebeb",
+            margin: "24px 0",
+          }}
+        />
+
+        {/* Two-column: features left, tech + feel right */}
+        <div
+          style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 48 }}
+        >
+          <div>
+            <p
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 10,
+                letterSpacing: "0.16em",
+                textTransform: "uppercase",
+                color: dark ? "#a8a8a8" : "#2c2c2c",
+                margin: "0 0 14px 0",
+              }}
+            >
+              Key Features
+            </p>
+            {project.highlights.map((h, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  gap: 14,
+                  padding: "11px 0",
+                  alignItems: "flex-start",
+                  borderBottom: `1px solid ${dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.05)"}`,
+                }}
+              >
+                <span
+                  style={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: "50%",
+                    flexShrink: 0,
+                    background: dark
+                      ? "rgba(255,255,255,0.05)"
+                      : "rgba(0,0,0,0.04)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontFamily: "'DM Mono', monospace",
+                    fontSize: 9,
+                    color: dark ? "#adadad" : "#2b2b2b",
+                    marginTop: 1,
+                  }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span
+                  style={{
+                    fontFamily: "'DM Mono', monospace",
+                    fontSize: 13,
+                    color: dark ? "#c8c8c8" : "#333",
+                    lineHeight: 1.6,
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  {h}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div>
+            <p
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 10,
+                letterSpacing: "0.16em",
+                textTransform: "uppercase",
+                color: dark ? "#b7b7b7" : "#424242",
+                margin: "0 0 14px 0",
+              }}
+            >
+              Built With
+            </p>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 7,
+                marginBottom: 28,
+              }}
+            >
+              {project.tech.map((t) => (
+                <TechPill key={t} label={t} dark={dark} />
+              ))}
+            </div>
+            <p
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 10,
+                letterSpacing: "0.16em",
+                textTransform: "uppercase",
+                color: dark ? "#c9c9c9" : "#2c2c2c",
+                margin: "0 0 10px 0",
+              }}
+            >
+              How it feels
+            </p>
+            <p
+              style={{
+                fontFamily: "'Instrument Serif', Georgia, serif",
+                fontSize: 15,
+                fontStyle: "italic",
+                color: dark ? "#9e9e9e" : "#1d1d1d",
+                lineHeight: 1.6,
+                margin: 0,
+              }}
+            >
+              "{project.authoritySignal}"
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── ENGINEERED LAYOUT — dense, structured, system-design-doc ──
   return (
     <div
       style={{
         animation: "proj-fade-up 0.25s cubic-bezier(0.16,1,0.3,1) both",
       }}
     >
-      {/* Back button */}
-      <button
-        onClick={onClose}
-        style={{
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          fontFamily: "'DM Mono', monospace",
-          fontSize: 11,
-          color: dark ? "#888" : "#888",
-          letterSpacing: "0.08em",
-          padding: "0 0 20px 0",
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          transition: "color 0.15s ease",
-        }}
-        onMouseEnter={(e) =>
-          (e.currentTarget.style.color = dark ? "#fff" : "#000")
-        }
-        onMouseLeave={(e) =>
-          (e.currentTarget.style.color = dark ? "#888" : "#888")
-        }
-      >
-        ← All Projects
-      </button>
+      <BackBtn />
 
-      {/* Content — 2 column */}
       <div
         style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 48 }}
       >
-        {/* Left — meta + preview + buttons */}
+        {/* Left — problem statement, highlights, tech, authority, buttons */}
         <div>
           <div
             style={{
@@ -887,10 +1177,9 @@ function ProjectExpanded({ project, dark, c, onClose }) {
               marginBottom: 20,
             }}
           >
-            {project.thesis}
+            {project.overview.problem}
           </p>
 
-          {/* Highlights */}
           <div style={{ marginBottom: 20 }}>
             {project.highlights.map((h, i) => (
               <div
@@ -927,7 +1216,6 @@ function ProjectExpanded({ project, dark, c, onClose }) {
             ))}
           </div>
 
-          {/* Tech pills */}
           <div
             style={{
               display: "flex",
@@ -941,7 +1229,6 @@ function ProjectExpanded({ project, dark, c, onClose }) {
             ))}
           </div>
 
-          {/* Authority signal */}
           <p
             style={{
               fontFamily: "'DM Mono', monospace",
@@ -955,7 +1242,6 @@ function ProjectExpanded({ project, dark, c, onClose }) {
             ↳ {project.authoritySignal}
           </p>
 
-          {/* Buttons */}
           <div style={{ display: "flex", gap: 8 }}>
             {project.github && (
               <a
@@ -1026,13 +1312,12 @@ function ProjectExpanded({ project, dark, c, onClose }) {
           </div>
         </div>
 
-        {/* Right — image placeholder + tabs */}
+        {/* Right — smaller preview + full tabbed deep-dive */}
         <div>
-          {/* Image / preview placeholder */}
           <div
             style={{
               width: "100%",
-              height: 200,
+              height: 160,
               borderRadius: 8,
               background: dark ? "#0e0e0e" : "#f5f5f5",
               border: `1px solid ${dark ? "#1e1e1e" : "#ebebeb"}`,
@@ -1046,7 +1331,7 @@ function ProjectExpanded({ project, dark, c, onClose }) {
               style={{
                 fontFamily: "'DM Mono', monospace",
                 fontSize: 9,
-                color: dark ? "#2e2e2e" : "#d0d0d0",
+                color: dark ? "#2e2e2e" : "#424242",
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
               }}
@@ -1190,7 +1475,7 @@ export default function Projects() {
       <section
         id="projects"
         style={{
-          padding: "7.5rem 3rem 0 3rem",
+          padding: "4.5rem 3rem 2.5rem 3rem",
           boxSizing: "border-box",
           position: "relative",
         }}
@@ -1437,6 +1722,7 @@ export default function Projects() {
                     project={project}
                     dark={dark}
                     c={c}
+                    mode={mode}
                     onClose={() => setExpandedId(null)}
                   />
                 );
@@ -1516,7 +1802,7 @@ export default function Projects() {
                       fontSize: 16,
                       fontWeight: 400,
                       color: c.heading,
-                      letterSpacing: "0.02em",
+                      letterSpacing: "-0.01em",
                       lineHeight: 1.3,
                     }}
                   >
