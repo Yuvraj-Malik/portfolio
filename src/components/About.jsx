@@ -477,9 +477,9 @@ function ProjectDetail({ project, dark, c, onBack }) {
 function ProblemsView({ dark, c }) {
   const stats = [
     { label: "Total Solved", value: "200+", context: "across all platforms" },
-    { label: "Easy", value: "80+", context: "foundation & patterns" },
+    { label: "Easy", value: "90+", context: "foundation & patterns" },
     { label: "Medium", value: "100+", context: "core problem solving" },
-    { label: "Hard", value: "20+", context: "advanced techniques" },
+    { label: "Hard", value: "10+", context: "advanced techniques" },
   ];
   return (
     <div>
