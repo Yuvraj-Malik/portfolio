@@ -107,34 +107,29 @@ function highlightMatch(text, query) {
 // COMMAND REGISTRY
 // ─────────────────────────────────────────────────────────────────────────────
 const COMMANDS = [
-  // Navigation
-  { id: "nav-home",     category: "navigate", icon: "⌂", label: "Go to Home",     desc: "Scroll to the top",            aliases: ["home","top","start","hero"],                               action: "scroll:#hero" },
-  { id: "nav-about",    category: "navigate", icon: "◉", label: "Go to About",    desc: "Jump to the about section",    aliases: ["about","bio","who"],                                       action: "scroll:#about" },
-  { id: "nav-projects", category: "navigate", icon: "◈", label: "Go to Projects", desc: "Browse all projects",          aliases: ["projects","work","portfolio","code"],                      action: "scroll:#projects" },
-  { id: "nav-journey",  category: "navigate", icon: "◎", label: "Go to Journey",  desc: "Timeline & experience",        aliases: ["journey","timeline","experience"],                         action: "scroll:#journey" },
-  { id: "nav-contact",  category: "navigate", icon: "◌", label: "Go to Contact",  desc: "Get in touch",                 aliases: ["contact","reach","message","hire"],                        action: "scroll:#contact" },
-  // Actions
-  { id: "act-resume",   category: "action",   icon: "↓", label: "Download Resume", desc: "Open resume PDF",             aliases: ["resume","cv","download","pdf"],                            action: "open:/resume.pdf" },
-  { id: "act-github",   category: "action",   icon: "◆", label: "Open GitHub",    desc: "View source code and repos",   aliases: ["github","git","repos","source"],                           action: `open:${PORTFOLIO.links.github}` },
-  { id: "act-linkedin", category: "action",   icon: "◇", label: "Open LinkedIn",  desc: "Connect professionally",       aliases: ["linkedin","connect","network"],                            action: `open:${PORTFOLIO.links.linkedin}` },
-  { id: "act-leetcode", category: "action",   icon: "◑", label: "Open LeetCode",  desc: "View competitive programming", aliases: ["leetcode","dsa","competitive"],                            action: `open:${PORTFOLIO.links.leetcode}` },
-  { id: "act-email",    category: "action",   icon: "✉", label: "Copy Email",     desc: "Copy email to clipboard",      aliases: ["email","copy email","mail","clipboard"],                   action: "copy:yuvraj.malik003@gmail.com" },
-  { id: "act-theme",    category: "action",   icon: "◐", label: "Toggle Theme",   desc: "Switch dark / light mode",     aliases: ["theme","dark mode","light mode","toggle"],                 action: "theme" },
-  // Terminal
-  { id: "term-help",     category: "terminal", icon: ">", label: "help",    desc: "List all available commands", aliases: ["help","commands","what can you do"],                             action: "terminal:help" },
-  { id: "term-whoami",   category: "terminal", icon: ">", label: "whoami",  desc: "Who is Yuvraj Malik",         aliases: ["whoami","who are you","who is yuvraj","introduce yourself"],      action: "terminal:whoami" },
-  { id: "term-skills",   category: "terminal", icon: ">", label: "skills",  desc: "List technical skills",       aliases: ["skills","tech stack","technologies"],                            action: "terminal:skills" },
-  { id: "term-projects", category: "terminal", icon: ">", label: "projects",desc: "List all projects",           aliases: ["list projects","all projects","project list"],                   action: "terminal:projects" },
-  { id: "term-clear",    category: "terminal", icon: ">", label: "clear",   desc: "Clear the palette history",   aliases: ["clear","reset","cls"],                                           action: "terminal:clear" },
-  // Ask Me
-  { id: "ai-hire",      category: "ai", icon: "✦", label: "Why should we hire you?",     desc: "The honest pitch",           aliases: ["why hire","why you","pitch","convince me"],            action: "ai:hire" },
-  { id: "ai-different", category: "ai", icon: "✦", label: "What makes you different?",   desc: "What sets you apart",        aliases: ["what makes you different","what sets you apart"],      action: "ai:different" },
-  { id: "ai-journey",   category: "ai", icon: "✦", label: "Tell me your journey",        desc: "Background and story",       aliases: ["tell me your journey","your story","background"],      action: "ai:journey" },
-  { id: "ai-contact",   category: "ai", icon: "✦", label: "How can I contact you?",      desc: "Get in touch details",       aliases: ["contact info","how to contact","how to reach"],        action: "ai:contact" },
-  // Easter Eggs
-  { id: "egg-surprise", category: "easter", icon: "★", label: "surprise me",     desc: "???",  aliases: ["surprise","random","fun","lucky"],                              action: "easter:surprise" },
-  { id: "egg-hack",     category: "easter", icon: "★", label: "hack the system", desc: "...",  aliases: ["hack","hacker","matrix","glitch","sudo"],                       action: "easter:hack" },
-  { id: "egg-jarvis",   category: "easter", icon: "★", label: "jarvis",          desc: "...",  aliases: ["jarvis","hey jarvis","iron man","tony stark"],                  action: "easter:jarvis" },
+  { id: "nav-home",     category: "navigate", icon: "⌂", label: "Go to Home",     desc: "Scroll to the top",            aliases: ["home","top","start","hero"],               action: "scroll:#hero" },
+  { id: "nav-about",    category: "navigate", icon: "◉", label: "Go to About",    desc: "Jump to the about section",    aliases: ["about","bio","who"],                       action: "scroll:#about" },
+  { id: "nav-projects", category: "navigate", icon: "◈", label: "Go to Projects", desc: "Browse all projects",          aliases: ["projects","work","portfolio","code"],      action: "scroll:#projects" },
+  { id: "nav-journey",  category: "navigate", icon: "◎", label: "Go to Journey",  desc: "Timeline & experience",        aliases: ["journey","timeline","experience"],         action: "scroll:#journey" },
+  { id: "nav-contact",  category: "navigate", icon: "◌", label: "Go to Contact",  desc: "Get in touch",                 aliases: ["contact","reach","message","hire"],        action: "scroll:#contact" },
+  { id: "act-resume",   category: "action",   icon: "↓", label: "Download Resume", desc: "Open resume PDF",             aliases: ["resume","cv","download","pdf"],            action: "open:/resume.pdf" },
+  { id: "act-github",   category: "action",   icon: "◆", label: "Open GitHub",    desc: "View source code and repos",   aliases: ["github","git","repos","source"],           action: `open:${PORTFOLIO.links.github}` },
+  { id: "act-linkedin", category: "action",   icon: "◇", label: "Open LinkedIn",  desc: "Connect professionally",       aliases: ["linkedin","connect","network"],            action: `open:${PORTFOLIO.links.linkedin}` },
+  { id: "act-leetcode", category: "action",   icon: "◑", label: "Open LeetCode",  desc: "View competitive programming", aliases: ["leetcode","dsa","competitive"],            action: `open:${PORTFOLIO.links.leetcode}` },
+  { id: "act-email",    category: "action",   icon: "✉", label: "Copy Email",     desc: "Copy email to clipboard",      aliases: ["email","copy email","mail","clipboard"],   action: "copy:yuvraj.malik003@gmail.com" },
+  { id: "act-theme",    category: "action",   icon: "◐", label: "Toggle Theme",   desc: "Switch dark / light mode",     aliases: ["theme","dark mode","light mode","toggle"], action: "theme" },
+  { id: "term-help",     category: "terminal", icon: ">", label: "help",    desc: "List all available commands", aliases: ["help","commands","what can you do"],                        action: "terminal:help" },
+  { id: "term-whoami",   category: "terminal", icon: ">", label: "whoami",  desc: "Who is Yuvraj Malik",         aliases: ["whoami","who are you","who is yuvraj","introduce yourself"], action: "terminal:whoami" },
+  { id: "term-skills",   category: "terminal", icon: ">", label: "skills",  desc: "List technical skills",       aliases: ["skills","tech stack","technologies"],                       action: "terminal:skills" },
+  { id: "term-projects", category: "terminal", icon: ">", label: "projects",desc: "List all projects",           aliases: ["list projects","all projects","project list"],              action: "terminal:projects" },
+  { id: "term-clear",    category: "terminal", icon: ">", label: "clear",   desc: "Clear the palette history",   aliases: ["clear","reset","cls"],                                      action: "terminal:clear" },
+  { id: "ai-hire",      category: "ai", icon: "✦", label: "Why should we hire you?",     desc: "The honest pitch",        aliases: ["why hire","why you","pitch","convince me"],           action: "ai:hire" },
+  { id: "ai-different", category: "ai", icon: "✦", label: "What makes you different?",   desc: "What sets you apart",     aliases: ["what makes you different","what sets you apart"],    action: "ai:different" },
+  { id: "ai-journey",   category: "ai", icon: "✦", label: "Tell me your journey",        desc: "Background and story",    aliases: ["tell me your journey","your story","background"],    action: "ai:journey" },
+  { id: "ai-contact",   category: "ai", icon: "✦", label: "How can I contact you?",      desc: "Get in touch details",    aliases: ["contact info","how to contact","how to reach"],      action: "ai:contact" },
+  { id: "egg-surprise", category: "easter", icon: "★", label: "surprise me",     desc: "???", aliases: ["surprise","random","fun","lucky"],                   action: "easter:surprise" },
+  { id: "egg-hack",     category: "easter", icon: "★", label: "hack the system", desc: "...", aliases: ["hack","hacker","matrix","glitch","sudo"],            action: "easter:hack" },
+  { id: "egg-jarvis",   category: "easter", icon: "★", label: "jarvis",          desc: "...", aliases: ["jarvis","hey jarvis","iron man","tony stark"],       action: "easter:jarvis" },
 ];
 
 const CATEGORY_META = {
@@ -147,9 +142,8 @@ const CATEGORY_META = {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // AI — Gemini with smart local fallback
-// HOW TO ENABLE: create .env file in project root with:
-// VITE_GEMINI_API_KEY=your_key_here
-// Get free key at: aistudio.google.com
+// HOW TO ENABLE: create .env in project root → VITE_GEMINI_API_KEY=your_key
+// Free key at: aistudio.google.com
 // ─────────────────────────────────────────────────────────────────────────────
 const SYSTEM_PROMPT = `You are Yuvraj Malik's portfolio AI assistant. Answer questions about Yuvraj as if you are him. Be concise, confident, direct. Max 80 words unless more detail is needed.
 
@@ -170,81 +164,188 @@ PORTFOLIO DATA:
 - What makes different: ${PORTFOLIO.what_makes_different}
 - Journey: ${PORTFOLIO.journey}
 
-RULES: Only use data above. Never invent facts. Speak as Yuvraj (first person). For greetings, introduce yourself briefly. For personal questions like girlfriend/relationship/age/salary, answer with wit and personality — don't deflect or say "my portfolio doesn't cover that". Be human. If asked something genuinely not in the data, say "I don't have that info — reach me at ${PORTFOLIO.email}"`;
+RULES:
+- Speak as Yuvraj in first person. Never say "Yuvraj" — say "I".
+- For "who is this", "who are you", "introduce yourself" → give a confident intro: name, role, what you build, education.
+- For personal questions (girlfriend, age, salary, hobbies) → answer with wit and personality. Don't deflect.
+- For rude/offensive input → respond with calm confidence, not aggression. A single dry line is fine.
+- Only use data above. Never invent facts.
+- If something isn't in the data, say "I don't have that info — reach me at ${PORTFOLIO.email}"`;
 
-
-// Smart local fallback — used when no API key is set
+// ─────────────────────────────────────────────────────────────────────────────
+// LOCAL AI — custom answers for every predictable question
+// Returns null if nothing matches → Gemini handles it
+// ─────────────────────────────────────────────────────────────────────────────
 function localAIResponse(q) {
-  const t = q.toLowerCase();
+  const t = q.toLowerCase().trim();
 
-  if (t.includes("girlfriend") || t.includes("relationship") || t.includes("dating") || t.includes("single") || t.includes("married") || t.includes("wife") || t.includes("partner"))
-    return `Currently in a committed relationship — with my code editor. She never crashes (unlike my last React app). My GitHub commit history is the only streak I'm maintaining right now.`;
+  // ── RUDE / OFFENSIVE ─────────────────────────────────────────────────────
+  const rudeWords = ["fuck","shit","bitch","cunt","bastard","idiot","stupid","dumb","loser","moron","chutiya","bc","mc","bkl","lodu","gandu","bakwas","bekar","faltu","worthless","useless","trash","garbage","pathetic"];
+  if (rudeWords.some(w => t.includes(w)))
+    return `Bold of you to open a portfolio and start here. Anyway — I've built gesture-controlled 3D environments and AI systems from scratch. Stick around, it gets interesting.`;
 
-  if (t.includes("age") || t.includes("how old") || t.includes("born") || t.includes("birthday"))
-    return `I'm a second-year Computer Engineering student at Thapar Institute, batch 2024–2028. You can do the math — but I prefer to be judged by what I've shipped, not how old I am.`;
+  // ── GREETINGS ─────────────────────────────────────────────────────────────
+  if (/^(hi+|hello+|hey+|yo|sup|hiya|heya|howdy|greetings|wassup|what.?s up|namaste|hola|bonjour|salut|ciao|oi|aight|aayo)$/.test(t))
+    return `Hey! I'm ${PORTFOLIO.name} — ${PORTFOLIO.role}. ${PORTFOLIO.tagline} Ask me anything.`;
 
-  if (t.includes("hobby") || t.includes("free time") || t.includes("fun") || t.includes("outside") || t.includes("passion"))
-    return `Chess — district-level gold medalist. And building things that don't need to exist yet. The line between hobby and work is blurry when you enjoy both equally.`;
+  // ── IDENTITY ──────────────────────────────────────────────────────────────
+  if (t.match(/who (is|are|r) (this|he|yuvraj|this dude|this guy|this person|u|you)|who made this|whose portfolio|introduce yourself|tell me about yourself|about yourself|who are you/))
+    return `I'm ${PORTFOLIO.name} — ${PORTFOLIO.role} based in ${PORTFOLIO.location}. ${PORTFOLIO.tagline} Currently studying Computer Engineering at Thapar Institute (2024–2028) while shipping real systems: gesture-controlled 3D, multi-LLM AI assistants, and full-stack platforms.`;
 
-  if (t.includes("favourite") || t.includes("favorite") || t.includes("fav ") || t.includes("best language") || t.includes("prefer"))
-    return `Python for AI and quick thinking. JavaScript when the product has to look good. C++ when there's no OS and everything is on fire. Depends what needs solving.`;
+  // ── RELATIONSHIP / GF ─────────────────────────────────────────────────────
+  if (t.match(/girlfriend|\bgf\b|\bbf\b|boyfriend|relationship|dating|\bsingle\b|married|wife|husband|partner|crush|love life|love interest|does he like|is he taken|available|\bbae\b|\bboo\b|pyaar|ladki/))
+    return `Currently in a committed relationship — with my code editor. She never crashes (unlike my last React app). My GitHub streak is the only streak I'm maintaining right now.`;
 
-  if (t.includes("salary") || t.includes("pay") || t.includes("money") || t.includes("package") || t.includes("ctc"))
-    return `Ha. Open to conversations — but the right problem matters more than the number. If the work is interesting enough, we can figure out the rest.`;
+  // ── AGE / DOB ─────────────────────────────────────────────────────────────
+  if (t.match(/how old|\bage\b|\bborn\b|birthday|\bdob\b|birth date|year of birth|kitne saal|umar/))
+    return `Second-year Computer Engineering student at Thapar Institute, batch 2024–2028. Judge me by what I've shipped, not how old I am.`;
 
-  if (t.includes("funny") || t.includes("joke") || t.includes("laugh") || t.includes("humor"))
-    return `Why do programmers prefer dark mode? Because light attracts bugs. — That's the only one I know. I express humor through variable names in my code.`;
+  // ── LOOKS / APPEARANCE ───────────────────────────────────────────────────
+  if (t.match(/handsome|good.?looking|cute|\bugly\b|\blooks\b|appearance|\bhot\b|attractive|pretty|\bface\b|\bheight\b|\btall\b|\bshort\b|weight|\bfat\b|\bthin\b|\bbody\b|sundar|kaisa dikhta/))
+    return `I'll let the code speak for itself. Though "dangerously overloaded" has been used to describe my skill set — make of that what you will.`;
 
-  if (/^(hi|hello|hey|yo|sup)$/.test(t))
-    return `Hello. I'm ${PORTFOLIO.name} — ${PORTFOLIO.role}. Ask me about skills, projects, journey, or contact.`;
+  // ── PERSONALITY / VIBE ───────────────────────────────────────────────────
+  if (t.match(/personality|\bvibe\b|\benergy\b|\baura\b|introvert|extrovert|\bshy\b|confident|arrogant|humble|attitude|\bego\b|\bchill\b|boring|\bnerd\b|\bgeek\b|kaisa insaan|swabhav/))
+    return `Introvert who ships loud. I'd rather build something impressive than talk about building it. Chess player, systems thinker, occasional debugger at 2am.`;
 
-  if (t.includes("who are you") || t.includes("introduce") || t.includes("about yourself"))
-    return `I'm ${PORTFOLIO.name}, a ${PORTFOLIO.role} based in ${PORTFOLIO.location}. ${PORTFOLIO.tagline} Currently studying at ${PORTFOLIO.education.split("·")[0].trim()}.`;
+  // ── FRIENDS / SOCIAL LIFE ────────────────────────────────────────────────
+  if (t.match(/\bfriends\b|social life|social media|instagram|twitter|snapchat|popular|\bcool\b|\bdost\b|\byaar\b|hang out|\bparty\b|going out|akela|lonely/))
+    return `I exist. I have friends. Most conversations eventually turn into "have you seen this project I'm building?" They tolerate me.`;
 
-  if (t.includes("skill") || t.includes("stack") || t.includes("technolog") || t.includes("know"))
+  // ── MONEY / SALARY ───────────────────────────────────────────────────────
+  if (t.match(/salary|\bpay\b|\bmoney\b|package|\bctc\b|compensation|stipend|\bearn\b|\brich\b|\bpoor\b|\bbroke\b|paise|rupee|lakh|crore|how much (do|does|will|would)/))
+    return `Open to conversations — but the right problem matters more than the number. If the work is interesting enough, we'll figure out the rest.`;
+
+  // ── HOBBIES / FREE TIME ──────────────────────────────────────────────────
+  if (t.match(/hobby|hobbies|free time|outside.?work|passion|\binterest\b|pastime|weekend|spare time|kya karta|timepass|fun karta/))
+    return `Chess — district-level gold medalist. And building things that don't need to exist yet. The line between hobby and work disappeared a while ago.`;
+
+  // ── FOOD ─────────────────────────────────────────────────────────────────
+  if (t.match(/\bfood\b|\beat\b|\bdish\b|cuisine|khana|favourite food|kya khata|cook|cooking|kitchen|chef|\bbake\b|maggi|chai|\bcoffee\b/))
+    return `Diet entirely fueled by unresolved bugs and chai. I've automated the question of what to eat — that counts as cooking, right?`;
+
+  // ── MOVIES / SHOWS ───────────────────────────────────────────────────────
+  if (t.match(/movie|film|show|series|\bwatch\b|netflix|favourite show|tv|web series|dekhta/))
+    return `Interstellar, The Social Network, Mr. Robot. Anything with a well-designed system. I watch things that make me want to build.`;
+
+  // ── MUSIC ────────────────────────────────────────────────────────────────
+  if (t.match(/music|\bsong\b|playlist|\blisten\b|singer|band|artist|favourite song|kya sunta/))
+    return `Lofi when coding. Something loud when debugging. Silence when actually thinking.`;
+
+  // ── ANIME ────────────────────────────────────────────────────────────────
+  if (t.match(/\banime\b|manga|weeb|otaku|favourite anime|which anime/))
+    return `Let's not go there or we'll be here all day. But yes.`;
+
+  // ── GAMING ───────────────────────────────────────────────────────────────
+  if (t.match(/\bgame\b|gaming|\bplay\b|gamer|favourite game|khelna|video game/))
+    return `Chess, mostly. And occasionally I build the games instead of playing them — see: Anime Clash, Bomb Difuse.`;
+
+  // ── FAVOURITE LANGUAGE/TECH ──────────────────────────────────────────────
+  if (t.match(/fav(ou?rite)? (language|tech|framework|tool|stack)|best language|prefer (to )?(code|use|work)/))
+    return `Python for AI. JavaScript when it has to look good. C++ when there's no OS and everything is on fire. Depends what needs solving.`;
+
+  // ── JOKES / HUMOUR ───────────────────────────────────────────────────────
+  if (t.match(/\bjoke\b|\bfunny\b|\blaugh\b|humou?r|comedy|make me laugh|entertain|\broast\b|haha|\blol\b|lmao|ek joke|mazak/))
+    return `Why do programmers prefer dark mode? Because light attracts bugs. That's the only one I know. I express humor through variable names.`;
+
+  // ── ROAST ────────────────────────────────────────────────────────────────
+  if (t.match(/roast (me|him|yuvraj|yourself)|criticize|weakness|bad at|not good at|failure|\bflaws\b|kya nahi aata/))
+    return `Fine. I sometimes over-engineer things that could be simple. I've rewritten Jarvis three times. I debug by adding more logs than a forest. But the output? Worth it.`;
+
+  // ── COMPLIMENTS ──────────────────────────────────────────────────────────
+  if (t.match(/impressive|\bwow\b|amazing|\bgreat\b|awesome|\bcool\b|nice work|good job|well done|love (it|this|the)|\brespect\b|\bdope\b|\bfire\b|\blit\b|bahut accha|wah|ekdum|mast/))
+    return `Appreciate it. Now hire me. 😄`;
+
+  // ── TESTING THE BOT ──────────────────────────────────────────────────────
+  if (t.match(/\btest\b|testing|\bcheck\b|hello world|\bping\b|are you (there|working|alive|on)|can you hear|kya tu sun|sun raha/))
+    return `Online. All systems nominal. Ask me anything.`;
+
+  // ── AI / THIS CHATBOT ─────────────────────────────────────────────────────
+  if (t.match(/are you (an? )?ai|are you (a )?bot|are you real|are you human|who built you|how do you work|what are you|are you chatgpt|are you gemini|tu bot hai|real hai/))
+    return `I'm an AI assistant built into Yuvraj's portfolio — powered by Gemini and his portfolio data. I answer as him. For anything I miss, he's at ${PORTFOLIO.email}`;
+
+  // ── COMPARISON ───────────────────────────────────────────────────────────
+  if (t.match(/pratham|compare|better than|\bvs\b|versus|competition|other developer|kisise better/))
+    return `I'll let the work speak. Eight shipped projects, cross-stack depth from AI pipelines to hardware, and a portfolio that doubles as a command center. Make your own call.`;
+
+  // ── EXISTENTIAL / RANDOM ─────────────────────────────────────────────────
+  if (t.match(/meaning of life|\b42\b|universe|\bgod\b|exist|consciousness|philosophy|\bdeep\b|zindagi ka matlab|sab moh maya/))
+    return `42. Also: ship things, think in systems, sleep occasionally. That's roughly my philosophy.`;
+
+  // ── AVAILABILITY / HIRING ────────────────────────────────────────────────
+  if (t.match(/available|open to work|looking for (job|work|opportunity|role)|hire|internship|full.?time|freelance|remote|kaam chahiye/))
+    return `Yes — open to interesting opportunities. Full-time, internship, or freelance. The work has to be meaningful. Reach me at ${PORTFOLIO.email}`;
+
+  // ── FUTURE GOALS ─────────────────────────────────────────────────────────
+  if (t.match(/goal|future|plan|dream|ambition|where do you see|5 years|aspiration|what do you want|aage kya/))
+    return `Build systems that feel like science fiction — and eventually, build the company around one of them. For now: ship things that matter, learn obsessively, stay ahead.`;
+
+  // ── COLLEGE / EDUCATION ──────────────────────────────────────────────────
+  if (t.match(/college|university|thapar|\btiet\b|education|degree|\bcgpa\b|\bgpa\b|marks|percentage|10th|12th|school|padhai|parhna/))
+    return `Studying ${PORTFOLIO.education}. CGPA? Good enough to not worry about — I'm more focused on what I'm shipping.`;
+
+  // ── SKILLS ───────────────────────────────────────────────────────────────
+  if (t.match(/skill|\bstack\b|technolog|what do you know|what can you do|capabilities|languages|tools|framework/))
     return `My stack: ${PORTFOLIO.skills.languages.join(", ")} · ${PORTFOLIO.skills.frontend.join(", ")} · ${PORTFOLIO.skills.backend.join(", ")} · ${PORTFOLIO.skills.ai_ml.join(", ")}. Also Flutter for mobile and Arduino for embedded.`;
 
-  if (t.includes("project") || t.includes("built") || t.includes("work") || t.includes("portfolio"))
-    return `I've built ${PORTFOLIO.projects.length} projects: ${PORTFOLIO.projects.map(p => p.name).join(", ")}. From gesture-controlled 3D environments to multi-LLM AI systems.`;
+  // ── PROJECTS ─────────────────────────────────────────────────────────────
+  if (t.match(/project|\bbuilt\b|what have you (made|built|created|done)|show me your work|your work|portfolio pieces/))
+    return `${PORTFOLIO.projects.length} projects shipped: ${PORTFOLIO.projects.map(p => p.name).join(", ")}. Gesture-controlled 3D to multi-LLM AI systems.`;
 
-  if (t.includes("hire") || t.includes("why you") || t.includes("pitch") || t.includes("convince"))
+  // ── SPECIFIC PROJECTS ────────────────────────────────────────────────────
+  if (t.includes("jarvis"))
+    return `Jarvis — multi-LLM voice assistant controlling my desktop: WhatsApp, YouTube, email. Multi-provider fallback for 99%+ uptime. Built in Python.`;
+  if (t.match(/spatial|\b3d\b|gesture|hand tracking/))
+    return `Spatial Console — browser-based 3D builder controlled by hand gestures. No mouse, no keyboard. Just MediaPipe + React Three Fiber in your browser.`;
+  if (t.match(/stark|paper|analyzer|\bpdf\b|research/))
+    return `Stark Paper Analyzer — upload a research PDF, get structured intelligence. FastAPI + Gemini 2.5 + React. Turns dense papers into something readable.`;
+  if (t.match(/code vault|coding arena|competition/))
+    return `Code Vault — live team-based coding arena. Hosted a 30-team campus competition with zero downtime. React 19, Node.js, MongoDB.`;
+  if (t.match(/air canvas|drawing|touchless/))
+    return `Air Canvas — draw on a 5000×5000 canvas using just your hand. No touch needed. OpenCV + MediaPipe.`;
+  if (t.match(/pose|exercise|fitness|workout/))
+    return `AI Pose Detection — real-time exercise form scoring with ~90% accuracy. TensorFlow Lite + MoveNet.`;
+  if (t.match(/anime clash|anime game/))
+    return `Anime Clash — deterministic daily anime popularity game. Think Wordle but for anime debates. Multiple game modes.`;
+  if (t.match(/\bbomb\b|arduino|hardware/))
+    return `Bomb Difuse — physical reaction game on bare-metal Arduino. No OS, no libraries, raw C++ and a buzzer. Nobody asked. Built it anyway.`;
+
+  // ── WHY HIRE ─────────────────────────────────────────────────────────────
+  if (t.match(/why hire|hire you|why you|why should (i|we)|pitch yourself|sell yourself|convince me|make your case|kyun rakhe/))
     return PORTFOLIO.why_hire;
 
-  if (t.includes("different") || t.includes("unique") || t.includes("stand out") || t.includes("special"))
+  // ── WHAT MAKES YOU DIFFERENT ─────────────────────────────────────────────
+  if (t.match(/different|unique|stand out|special|what sets you apart|why you over others|better than others|alag kya/))
     return PORTFOLIO.what_makes_different;
 
-  if (t.includes("journey") || t.includes("story") || t.includes("background") || t.includes("started"))
+  // ── JOURNEY / BACKGROUND ─────────────────────────────────────────────────
+  if (t.match(/journey|\bstory\b|background|how (did you start|you started|you got into|you began)|your path|shuru kaise|kaise start/))
     return PORTFOLIO.journey;
 
-  if (t.includes("contact") || t.includes("email") || t.includes("reach"))
-    return `Email: ${PORTFOLIO.email} · GitHub: ${PORTFOLIO.links.github} · LinkedIn: ${PORTFOLIO.links.linkedin}`;
+  // ── EXPERIENCE / INTERNSHIP ──────────────────────────────────────────────
+  if (t.match(/experience|internship|\bintern\b|work history|previous work|worked at|\bjob\b|kaam kiya/))
+    return `${PORTFOLIO.experience.map(e => `${e.role} at ${e.org} (${e.year})`).join(" · ")}.`;
 
-  if (t.includes("education") || t.includes("study") || t.includes("college") || t.includes("thapar") || t.includes("degree"))
-    return `I'm studying ${PORTFOLIO.education}.`;
-
-  if (t.includes("experience") || t.includes("intern") || t.includes("work history"))
-    return `${PORTFOLIO.experience.map(e => `${e.role} at ${e.org} (${e.year})`).join(", ")}.`;
-
-  if (t.includes("location") || t.includes("where") || t.includes("city") || t.includes("india"))
-    return `I'm based in ${PORTFOLIO.location}.`;
-
-  if (t.includes("jarvis"))
-    return `Jarvis is my most personal project — a multi-LLM voice assistant that controls my desktop: WhatsApp, YouTube, email, and more. Built in Python with multi-provider fallback for 99%+ uptime.`;
-
-  if (t.includes("spatial") || t.includes("3d") || t.includes("gesture"))
-    return `Spatial Console is a browser-based 3D builder controlled entirely by hand gestures. No mouse, no keyboard — just MediaPipe hand tracking and React Three Fiber.`;
-
-  if (t.includes("achievement") || t.includes("chess") || t.includes("accomplish"))
+  // ── ACHIEVEMENTS ─────────────────────────────────────────────────────────
+  if (t.match(/achievement|accomplish|\baward\b|\bwin\b|\bwon\b|\bmedal\b|chess|proud of|highlight|kya jeeta/))
     return `Highlights: ${PORTFOLIO.achievements.join(". ")}.`;
 
-  return `I don't have a specific answer for that. Try asking about my skills, projects, experience, or why you should hire me. Or just type "help" to see all commands.`;
+  // ── CONTACT ──────────────────────────────────────────────────────────────
+  if (t.match(/contact|\breach\b|get in touch|how to (reach|contact|find)|connect with|(^|\s)email($|\s)/))
+    return `Email: ${PORTFOLIO.email} · GitHub: ${PORTFOLIO.links.github} · LinkedIn: ${PORTFOLIO.links.linkedin}`;
+
+  // ── LOCATION ─────────────────────────────────────────────────────────────
+  if (t.match(/where (are you|do you live|from|based)|\blocation\b|\bcity\b|india|patiala|punjab|kahan rehta/))
+    return `Based in ${PORTFOLIO.location}.`;
+
+  // No local match → Gemini handles it
+  return null;
 }
+
 
 async function askGemini(messages) {
   const lastQuestion = messages[messages.length - 1]?.content || "";
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-  // No key → local fallback immediately, no loading delay
   if (!apiKey) return localAIResponse(normalizeQuery(lastQuestion));
 
   try {
@@ -263,13 +364,11 @@ async function askGemini(messages) {
         body: JSON.stringify({
           systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
           contents,
-          generationConfig: { temperature: 0.6, maxOutputTokens: 400 },
+          generationConfig: { temperature: 0.7, maxOutputTokens: 400 },
         }),
       }
     );
-
     if (!res.ok) return localAIResponse(normalizeQuery(lastQuestion));
-
     const data = await res.json();
     const text = data?.candidates?.[0]?.content?.parts?.map(p => p?.text || "").join("").trim();
     return text || localAIResponse(normalizeQuery(lastQuestion));
@@ -279,7 +378,7 @@ async function askGemini(messages) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// STATIC RESPONSES — no API call needed
+// STATIC RESPONSES
 // ─────────────────────────────────────────────────────────────────────────────
 function getStaticResponse(action) {
   switch (action) {
@@ -357,13 +456,13 @@ function getStaticResponse(action) {
         { type: "prose", title: "Fun Fact",          text: "I built Jarvis before finishing my second year. Some call it reckless. I call it Tuesday." },
         { type: "prose", title: "Unpopular Opinion", text: "The best code is the code you don't write. I've deleted more than I've shipped — and the projects got better every time." },
         { type: "prose", title: "Secret",            text: "The 'science fiction' in my tagline isn't metaphor. Gesture-controlled 3D, multi-modal AI, real-time pose detection — all sci-fi ten years ago." },
-        { type: "prose", title: "Hot Take",          text: "Most portfolios are just resumes with animations. Mine is an argument. Every project exists to prove something that people thought was too hard." },
+        { type: "prose", title: "Hot Take",          text: "Most portfolios are just resumes with animations. Mine is an argument. Every project exists to prove something people thought was too hard." },
         { type: "prose", title: "Origin Story",      text: "I got into coding because I was too lazy to do repetitive tasks manually. Turns out automation is just organized laziness — and I'm very organized." },
-        { type: "prose", title: "Chess + Code",      text: "I'm a district-level chess gold medalist. Chess taught me to think 10 moves ahead. I apply the same logic to system design — always planning for what breaks next." },
-        { type: "prose", title: "The Jarvis Story",  text: "Jarvis started as a voice command script and turned into a full desktop AI. It now manages my WhatsApp, YouTube, and email. My laptop basically runs itself." },
+        { type: "prose", title: "Chess + Code",      text: "District-level chess gold medalist. Chess taught me to think 10 moves ahead. I apply the same logic to system design — always planning for what breaks next." },
+        { type: "prose", title: "The Jarvis Story",  text: "Jarvis started as a voice command script and became a full desktop AI. It now manages WhatsApp, YouTube, and email. My laptop basically runs itself." },
         { type: "prose", title: "Confession",        text: "I've rewritten Jarvis from scratch three times. Not because it broke — because I kept learning better ways to build it. Version 3 is the one I'm proud of." },
-        { type: "prose", title: "Weird Flex",        text: "I once built a working bomb-defuse game on an Arduino with no OS, no libraries, just raw C++ and a buzzer. Nobody asked for it. I did it anyway." },
-        { type: "prose", title: "Philosophy",        text: "I don't want to work at a company that wants a coder. I want to work somewhere that needs a builder — someone who sees a problem and can't sleep until it's solved." },
+        { type: "prose", title: "Weird Flex",        text: "I built a working bomb-defuse game on Arduino — no OS, no libraries, just raw C++ and a buzzer. Nobody asked for it. I did it anyway." },
+        { type: "prose", title: "Philosophy",        text: "I don't want to work at a company that wants a coder. I want somewhere that needs a builder — someone who sees a problem and can't sleep until it's solved." },
       ];
       return list[Math.floor(Math.random() * list.length)];
     }
@@ -429,9 +528,7 @@ function ResponsePanel({ response, dark }) {
 
   return (
     <div style={{ borderTop: `1px solid ${bdr}` }}>
-      {/* Body */}
       <div style={{ padding: "10px 20px 20px 20px", maxHeight: 240, overflowY: "auto" }}>
-
         {response.type === "structured" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {response.sections.map(s => (
@@ -446,7 +543,6 @@ function ResponsePanel({ response, dark }) {
             ))}
           </div>
         )}
-
         {response.type === "projects" && (
           <div style={{ display: "flex", flexDirection: "column" }}>
             {response.items.map((p, i) => (
@@ -460,11 +556,9 @@ function ResponsePanel({ response, dark }) {
             ))}
           </div>
         )}
-
         {response.type === "prose" && (
           <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: body, lineHeight: 1.78, margin: 0, letterSpacing: "0.02em" }}>{response.text}</p>
         )}
-
         {response.type === "contact" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             {response.items.map(item => (
@@ -475,7 +569,6 @@ function ResponsePanel({ response, dark }) {
             ))}
           </div>
         )}
-
         {response.type === "terminal" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
             {response.lines.map((line, i) => (
@@ -500,9 +593,10 @@ export default function CommandPalette({ setDark }) {
   const [convoHistory, setConvoHistory] = useState([]);
   const [cmdCount,     setCmdCount]     = useState(0);
   const [mounted,      setMounted]      = useState(false);
-  const inputRef   = useRef(null);
-  const itemRefs   = useRef([]);
-  const debounceRef = useRef(null); // for auto-answer on typing
+  const [fabBurst,     setFabBurst]     = useState(false);
+  const inputRef    = useRef(null);
+  const itemRefs    = useRef([]);
+  const fabBurstRef = useRef(null);
 
   // Ctrl+K / Cmd+K
   useEffect(() => {
@@ -523,6 +617,12 @@ export default function CommandPalette({ setDark }) {
     }
   }, [open]);
 
+  useEffect(() => {
+    return () => {
+      if (fabBurstRef.current) clearTimeout(fabBurstRef.current);
+    };
+  }, []);
+
   const filtered = useMemo(() => {
     const q = normalizeQuery(query);
     if (!q) return COMMANDS.slice(0, 12);
@@ -540,36 +640,39 @@ export default function CommandPalette({ setDark }) {
     return g;
   }, [filtered]);
 
+  // ── FIX: Arrow keys always work — even when response is showing ──────────
+  // We track "listLength" separately so ArrowDown/Up always have a valid range
+  const listLength = filtered.length;
+
   useEffect(() => { itemRefs.current[selected]?.scrollIntoView({ block: "nearest" }); }, [selected]);
   useEffect(() => { setSelected(0); }, [query]);
 
-  // Auto-answer: fire AI after 600ms pause when query looks like a question
-  // (no strong command match AND query is 6+ chars)
-  useEffect(() => {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    const norm = normalizeQuery(query);
-    if (!norm || norm.length < 6) return;
-    const topScore = filtered.length > 0 ? scoreCommand(filtered[0], norm) : 0;
-    // Only auto-fire if no strong command match (score < 70) — don't hijack "skills" etc.
-    if (topScore >= 70) return;
-    debounceRef.current = setTimeout(() => {
-      sendToAI(norm);
-    }, 650);
-    return () => clearTimeout(debounceRef.current);
-  }, [query]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const sendToAI = useCallback(async (question) => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    // Skip loading state for local responses — they're instant
+
+    // Try local custom responses first — they're instant and zero cost
+    const localAnswer = localAIResponse(normalizeQuery(question));
+
     if (!apiKey) {
-      const answer = localAIResponse(normalizeQuery(question));
+      // No Gemini key — use local answer or show a decent fallback
+      const answer = localAnswer ?? `Hmm, I don't have a specific answer for that. Try: who are you · skills · projects · why hire · journey. Or reach me at ${PORTFOLIO.email}`;
       const newH = [...convoHistory, { role: "user", content: question }, { role: "assistant", content: answer }];
       setConvoHistory(newH);
       setResponse({ type: "prose", title: "Answer", text: answer });
       setCmdCount(c => c + 1);
       return;
     }
-    // Gemini — show loading
+
+    // If local answered it — use that, no API call needed
+    if (localAnswer) {
+      const newH = [...convoHistory, { role: "user", content: question }, { role: "assistant", content: localAnswer }];
+      setConvoHistory(newH);
+      setResponse({ type: "prose", title: "Answer", text: localAnswer });
+      setCmdCount(c => c + 1);
+      return;
+    }
+
+    // Local didn't match — send to Gemini
     setResponse({ type: "loading" });
     const newHistory = [...convoHistory, { role: "user", content: question }];
     setConvoHistory(newHistory);
@@ -581,7 +684,12 @@ export default function CommandPalette({ setDark }) {
 
   const executeCommand = useCallback(async (cmd) => {
     const { action } = cmd;
-    if (action.startsWith("scroll:")) { document.querySelector(action.replace("scroll:", ""))?.scrollIntoView({ behavior: "smooth" }); return; }
+    // Navigation → close palette after scrolling
+    if (action.startsWith("scroll:")) {
+      document.querySelector(action.replace("scroll:", ""))?.scrollIntoView({ behavior: "smooth" });
+      setOpen(false); return;
+    }
+    // External links → open in new tab, keep palette open
     if (action.startsWith("open:"))   { window.open(action.replace("open:", ""), "_blank"); return; }
     if (action.startsWith("copy:"))   { navigator.clipboard.writeText(action.replace("copy:", "")); setResponse({ type: "terminal", title: "Clipboard", lines: ["  ✓ Email copied to clipboard."] }); return; }
     if (action === "theme")           { if (setDark) setDark(d => !d); else document.documentElement.classList.toggle("dark", !document.documentElement.classList.contains("dark")); return; }
@@ -592,15 +700,15 @@ export default function CommandPalette({ setDark }) {
   }, [sendToAI, setDark]);
 
   const handleKeyDown = (e) => {
-    if (e.key === "Escape") { if (response) { setResponse(null); return; } setOpen(false); return; }
-    if (e.key === "ArrowDown") { e.preventDefault(); setSelected(s => Math.min(s + 1, filtered.length - 1)); }
-    if (e.key === "ArrowUp")   { e.preventDefault(); setSelected(s => Math.max(s - 1, 0)); }
+    if (e.key === "Escape") {
+      if (response) { setResponse(null); return; }
+      setOpen(false); return;
+    }
+    if (e.key === "ArrowDown") { e.preventDefault(); setSelected(s => Math.min(s + 1, listLength - 1)); return; }
+    if (e.key === "ArrowUp")   { e.preventDefault(); setSelected(s => Math.max(s - 1, 0)); return; }
     if (e.key === "Enter") {
       e.preventDefault();
       const norm = normalizeQuery(query);
-      // Clear debounce so manual Enter doesn't double-fire
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      // If response is showing and user pressed Enter on a command → execute it and clear response
       if (norm && filtered[selected]) {
         const exact = [filtered[selected].label, ...filtered[selected].aliases]
           .map(v => normalizeQuery(v).toLowerCase())
@@ -612,21 +720,12 @@ export default function CommandPalette({ setDark }) {
     }
   };
 
-  if (!open && !mounted) {
-    return (
-      <div
-        style={{ position: "fixed", bottom: 24, right: 24, zIndex: 40, fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: "0.1em", color: dark ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.18)", display: "flex", alignItems: "center", gap: 6, cursor: "pointer", transition: "color 0.2s ease", userSelect: "none" }}
-        onClick={() => setOpen(true)}
-        onMouseEnter={(e) => { e.currentTarget.style.color = dark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.4)"; }}
-        onMouseLeave={(e) => { e.currentTarget.style.color = dark ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.18)"; }}
-      >
-        <kbd style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, border: `1px solid ${dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.12)"}`, borderRadius: 3, padding: "2px 6px", color: "inherit" }}>
-          {typeof navigator !== "undefined" && navigator.platform?.includes("Mac") ? "⌘K" : "Ctrl+K"}
-        </kbd>
-        <span>Command</span>
-      </div>
-    );
-  }
+  const handleFabClick = () => {
+    setFabBurst(true);
+    if (fabBurstRef.current) clearTimeout(fabBurstRef.current);
+    fabBurstRef.current = setTimeout(() => setFabBurst(false), 320);
+    setOpen(o => !o);
+  };
 
   const bg   = dark ? "#080808"                : "#ffffff";
   const bdr  = dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.09)";
@@ -651,10 +750,14 @@ export default function CommandPalette({ setDark }) {
         @keyframes cp-bg-in    { from{opacity:0} to{opacity:1} }
         @keyframes cp-dot      { 0%,80%,100%{opacity:.3;transform:scale(.8)} 40%{opacity:1;transform:scale(1.2)} }
         @keyframes cp-panel-in { from{opacity:0;transform:scale(.97) translateY(-8px)} to{opacity:1;transform:scale(1) translateY(0)} }
+        @keyframes cp-fab-breathe { 0%,100%{ box-shadow: 0 12px 34px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.03) inset, 0 0 24px rgba(79,70,229,0.35), 0 0 42px rgba(59,130,246,0.2); } 50%{ box-shadow: 0 16px 42px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.06) inset, 0 0 38px rgba(79,70,229,0.45), 0 0 62px rgba(59,130,246,0.28); } }
+        @keyframes cp-fab-pulse { 0%{ transform: translate(-50%, -50%) scale(0.9); opacity: 0.35; } 70%{ transform: translate(-50%, -50%) scale(1.22); opacity: 0; } 100%{ transform: translate(-50%, -50%) scale(1.22); opacity: 0; } }
+        @keyframes cp-fab-click { 0%{ transform: scale(1); } 45%{ transform: scale(0.93); } 100%{ transform: scale(1); } }
+        @keyframes cp-cursor-blink { 0%,44%{ opacity: 1; } 45%,100%{ opacity: 0.2; } }
         .cp-panel { width:100%;max-width:600px;background:${bg};border:1px solid ${bdr};border-radius:10px;overflow:hidden;box-shadow:0 24px 80px ${dark?"rgba(0,0,0,0.8)":"rgba(0,0,0,0.16)"},0 4px 16px ${dark?"rgba(0,0,0,0.5)":"rgba(0,0,0,0.07)"};animation:cp-panel-in 0.18s cubic-bezier(0.16,1,0.3,1) both; }
         .cp-input { width:100%;background:transparent;border:none;outline:none;font-family:'DM Mono',monospace;font-size:14px;color:${inp};caret-color:${inp};letter-spacing:0.02em;padding:0; }
         .cp-input::placeholder { color:${ph}; }
-        .cp-list { max-height:320px;overflow-y:auto;scrollbar-width:none;padding:6px 0; }
+        .cp-list { max-height:260px;overflow-y:auto;scrollbar-width:none;padding:6px 0; }
         .cp-list::-webkit-scrollbar { display:none; }
         .cp-cmd { display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;border-left:2px solid transparent;transition:background 0.1s,border-color 0.1s; }
         .cp-cmd.sel { background:${sel};border-left-color:${dark?"rgba(255,255,255,0.18)":"rgba(0,0,0,0.13)"}; }
@@ -662,36 +765,56 @@ export default function CommandPalette({ setDark }) {
         .cp-cat { padding:6px 16px 3px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:${cat}; }
         .cp-cat:not(:first-child) { margin-top:4px; }
         .cp-footer { padding:8px 16px;border-top:1px solid ${bdr};display:flex;align-items:center;gap:14px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:${ktx}; }
+        .cp-fab-wrap { position: fixed; right: 24px; bottom: 24px; z-index: 10020; display: flex; align-items: center; justify-content: center; }
+        .cp-fab-pulse { position: absolute; width: 78px; height: 78px; border-radius: 50%; background: radial-gradient(circle, rgba(56,189,248,0.28) 0%, rgba(99,102,241,0.2) 40%, rgba(139,92,246,0) 72%); animation: cp-fab-pulse 3.6s ease-out infinite; pointer-events: none; left: 50%; top: 50%; }
+        .cp-fab { position: relative; width: 56px; height: 56px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.28); background: ${dark ? "linear-gradient(160deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08))" : "linear-gradient(160deg, rgba(255,255,255,0.12), rgba(148,163,184,0.24))"}; color: ${dark ? "#ffffff" : "#050505"}; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transform: translateY(0) scale(1) rotate(0deg); transition: transform 240ms cubic-bezier(0.22,1,0.36,1), border-color 240ms ease, box-shadow 240ms ease, background 240ms ease; box-shadow: 0 12px 34px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.03) inset, 0 0 24px rgba(79,70,229,0.35), 0 0 42px rgba(59,130,246,0.2); animation: cp-fab-breathe 4.5s ease-in-out infinite; overflow: hidden; }
+        .cp-fab::before { content: ""; position: absolute; inset: -2px; border-radius: inherit; background: conic-gradient(from 210deg, rgba(56,189,248,0.0), rgba(56,189,248,0.55), rgba(99,102,241,0.55), rgba(168,85,247,0.55), rgba(56,189,248,0.0)); filter: blur(8px); opacity: 0.32; transition: opacity 240ms ease; z-index: 0; }
+        .cp-fab::after { content: ""; position: absolute; inset: 1px; border-radius: inherit; background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.02) 36%); opacity: 0.65; pointer-events: none; z-index: 1; }
+        .cp-fab:hover, .cp-fab:focus-visible { transform: translateY(-2px) scale(1.08) rotate(-2deg); border-color: rgba(255,255,255,0.48); box-shadow: 0 18px 42px rgba(0,0,0,0.34), 0 0 0 1px rgba(255,255,255,0.1) inset, 0 0 36px rgba(59,130,246,0.4), 0 0 66px rgba(139,92,246,0.34); }
+        .cp-fab:hover::before, .cp-fab:focus-visible::before { opacity: 0.7; }
+        .cp-fab:focus-visible { outline: none; }
+        .cp-fab-open { border-color: rgba(147,197,253,0.62); box-shadow: 0 18px 42px rgba(0,0,0,0.34), 0 0 0 1px rgba(255,255,255,0.1) inset, 0 0 40px rgba(59,130,246,0.44), 0 0 70px rgba(139,92,246,0.38); }
+        .cp-fab-burst { animation: cp-fab-click 320ms cubic-bezier(0.2,1,0.3,1), cp-fab-breathe 4.5s ease-in-out infinite; }
+        .cp-fab-symbol { position: relative; z-index: 2; font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 500; letter-spacing: 0.02em; text-shadow: 0 0 12px rgba(186,230,253,0.45); transform: translateY(0.5px); }
+        .cp-cursor { display: inline-block; animation: cp-cursor-blink 1.1s steps(1, end) infinite; margin-left: 1px; }
+        .cp-fab-tip { position: absolute; left: 44%; bottom: calc(100% + 12px); transform: translate(-50%, 2px); opacity: 0; pointer-events: none; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(226,232,240,0.95); background: rgba(9,12,24,0.72); border: 1px solid rgba(148,163,184,0.35); border-radius: 6px; padding: 6px 9px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); white-space: nowrap; transition: opacity 220ms ease, transform 220ms ease; box-shadow: 0 8px 24px rgba(0,0,0,0.32), 0 0 24px rgba(59,130,246,0.15); }
+        .cp-fab-tip kbd { font-family: 'DM Mono', monospace; font-size: 9px; border: 1px solid rgba(148,163,184,0.5); border-bottom-color: rgba(148,163,184,0.72); border-radius: 4px; padding: 1px 4px; background: rgba(15,23,42,0.55); color: rgba(226,232,240,0.95); margin: 0 2px; }
+        .cp-fab-wrap:hover .cp-fab-tip, .cp-fab-wrap:focus-within .cp-fab-tip { opacity: 1; transform: translate(-50%, -3px); }
         @media(max-width:640px){ .cp-overlay{padding-top:0;align-items:flex-end;} .cp-panel{border-radius:12px 12px 0 0;max-width:100%;} }
       `}</style>
 
-      <div className="cp-overlay">
+      {/* ── Floating terminal button — ALWAYS visible ── */}
+      <div className="cp-fab-wrap">
+        <div className="cp-fab-pulse" aria-hidden="true" />
+        <button
+          onClick={handleFabClick}
+          className={`cp-fab${fabBurst ? " cp-fab-burst" : ""}${open ? " cp-fab-open" : ""}`}
+          aria-label="Open command palette"
+        >
+          <span className="cp-fab-symbol" aria-hidden="true">&gt;<span className="cp-cursor">_</span></span>
+        </button>
+        <div className="cp-fab-tip">Press <kbd>Ctrl</kbd> + <kbd>K</kbd></div>
+      </div>
+
+      {/* ── Palette overlay — only when open ── */}
+      {(open || mounted) && (
+      <div className="cp-overlay" onClick={() => setOpen(false)}>
         <div className="cp-panel" onClick={e => e.stopPropagation()}>
 
-          {/* ── Top bar: always visible — back (when response) + close ── */}
-          <div style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: "8px 12px 0 16px",
-            minHeight: 32,
-          }}>
-            {/* Back button — only visible when response is showing */}
+          {/* Top bar — back + close */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 12px 0 16px", minHeight: 32 }}>
             {response && response.type !== "loading" ? (
-              <button
-                onClick={() => setResponse(null)}
-                style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 10, color: dsc, padding: "3px 6px", borderRadius: 4, display: "flex", alignItems: "center", gap: 4, transition: "color 0.15s" }}
+              <button onClick={() => setResponse(null)}
+                style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 10, color: dsc, padding: "3px 6px", borderRadius: 4, transition: "color 0.15s" }}
                 onMouseEnter={e => (e.currentTarget.style.color = inp)}
                 onMouseLeave={e => (e.currentTarget.style.color = dsc)}
-              >
-                ← back
-              </button>
+              >← back</button>
             ) : (
               <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase", color: dsc, paddingLeft: 2 }}>
                 {response?.title || ""}
               </span>
             )}
-            {/* Close button — always */}
-            <button
-              onClick={() => setOpen(false)}
+            <button onClick={() => setOpen(false)}
               style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: dsc, padding: "0 4px", lineHeight: 1, borderRadius: 4, transition: "color 0.15s" }}
               onMouseEnter={e => (e.currentTarget.style.color = inp)}
               onMouseLeave={e => (e.currentTarget.style.color = dsc)}
@@ -699,7 +822,7 @@ export default function CommandPalette({ setDark }) {
           </div>
 
           {/* Input */}
-          <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "14px 16px", borderBottom: filtered.length > 0 || response ? `1px solid ${bdr}` : "none" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px 12px", borderBottom: `1px solid ${bdr}` }}>
             <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, color: ph, flexShrink: 0, lineHeight: 1 }}>›</span>
             <input ref={inputRef} className="cp-input" value={query}
               onChange={e => { setQuery(e.target.value); if (!e.target.value) setResponse(null); }}
@@ -713,7 +836,7 @@ export default function CommandPalette({ setDark }) {
             )}
           </div>
 
-          {/* Command list — always visible, even when response is showing */}
+          {/* Command list — always visible, response shows below it */}
           {filtered.length > 0 && (
             <div className="cp-list">
               {Object.entries(grouped).map(([c, cmds]) => (
@@ -725,7 +848,7 @@ export default function CommandPalette({ setDark }) {
                     return (
                       <div key={cmd.id} ref={el => (itemRefs.current[idx] = el)}
                         className={`cp-cmd${isSel ? " sel" : ""}`}
-                        onClick={() => executeCommand(cmd)}
+                        onClick={() => { setResponse(null); executeCommand(cmd); }}
                         onMouseEnter={() => setSelected(idx)}
                       >
                         <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: isSel ? icoS : ico, width: 16, textAlign: "center", flexShrink: 0, lineHeight: 1 }}>{cmd.icon}</span>
@@ -747,14 +870,14 @@ export default function CommandPalette({ setDark }) {
             </div>
           )}
 
-          {/* No match hint */}
-          {query.trim() && filtered.length === 0 && (
+          {/* No match */}
+          {query.trim() && filtered.length === 0 && !response && (
             <div style={{ padding: "14px 16px", fontFamily: "'DM Mono', monospace", fontSize: 11, color: dsc, letterSpacing: "0.03em" }}>
               Press <kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 2, padding: "1px 5px", fontSize: 9 }}>↵</kbd> to ask as a question
             </div>
           )}
 
-          {/* Response */}
+          {/* Response — sits below the command list */}
           <ResponsePanel response={response} dark={dark} />
 
           {/* Footer */}
@@ -771,6 +894,7 @@ export default function CommandPalette({ setDark }) {
 
         </div>
       </div>
+      )}
     </>
   );
 }
