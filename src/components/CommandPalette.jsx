@@ -253,7 +253,7 @@ function localAIResponse(q) {
     return `Fine. I sometimes over-engineer things that could be simple. I've rewritten Jarvis three times. I debug by adding more logs than a forest. But the output? Worth it.`;
 
   // ── COMPLIMENTS ──────────────────────────────────────────────────────────
-  if (t.match(/impressive|\bwow\b|amazing|\bgreat\b|awesome|\bcool\b|nice work|good job|well done|love (it|this|the)|\brespect\b|\bdope\b|\bfire\b|\blit\b|bahut accha|wah|ekdum|mast/))
+  if (t.match(/impressive|\bwow\b|amazing|\bgreat\b|awesome|\bcool\b|nice work|good job|well done|love (it|this|the)|\brespect\b|\bdope\b|\bfire\b|\blit\b|bahut accha|wah|ekdum/))
     return `Appreciate it. Now hire me. 😄`;
 
   // ── TESTING THE BOT ──────────────────────────────────────────────────────
@@ -489,11 +489,11 @@ function useDarkMode() {
 function ResponsePanel({ response, dark }) {
   const [hackChars, setHackChars] = useState([]);
 
-  const dim    = dark ? "rgba(255,255,255,0.3)"  : "rgba(0,0,0,0.3)";
-  const body   = dark ? "rgba(255,255,255,0.72)" : "rgba(0,0,0,0.67)";
+  const dim    = dark ? "rgba(255,255,255,0.3)"  : "rgba(0,0,0,0.86)";
+  const body   = dark ? "rgba(255,255,255,0.72)" : "rgba(0,0,0,1)";
   const bdr    = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
   const pill   = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
-  const pillTx = dark ? "rgba(255,255,255,0.5)"  : "rgba(0,0,0,0.48)";
+  const pillTx = dark ? "rgba(255,255,255,0.5)"  : "rgba(0,0,0,0.95)";
   const btn    = dark ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.22)";
 
   useEffect(() => {
@@ -594,6 +594,7 @@ export default function CommandPalette({ setDark }) {
   const [cmdCount,     setCmdCount]     = useState(0);
   const [mounted,      setMounted]      = useState(false);
   const [fabBurst,     setFabBurst]     = useState(false);
+  const [usedArrowNav, setUsedArrowNav] = useState(false);
   const inputRef    = useRef(null);
   const itemRefs    = useRef([]);
   const fabBurstRef = useRef(null);
@@ -612,6 +613,7 @@ export default function CommandPalette({ setDark }) {
       setTimeout(() => inputRef.current?.focus(), 40);
       setMounted(true);
       setQuery(""); setResponse(null); setSelected(0);
+      setUsedArrowNav(false);
     } else {
       setTimeout(() => setMounted(false), 200);
     }
@@ -645,7 +647,7 @@ export default function CommandPalette({ setDark }) {
   const listLength = filtered.length;
 
   useEffect(() => { itemRefs.current[selected]?.scrollIntoView({ block: "nearest" }); }, [selected]);
-  useEffect(() => { setSelected(0); }, [query]);
+  useEffect(() => { setSelected(0); setUsedArrowNav(false); }, [query]);
 
   const sendToAI = useCallback(async (question) => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -694,28 +696,44 @@ export default function CommandPalette({ setDark }) {
     if (action.startsWith("copy:"))   { navigator.clipboard.writeText(action.replace("copy:", "")); setResponse({ type: "terminal", title: "Clipboard", lines: ["  ✓ Email copied to clipboard."] }); return; }
     if (action === "theme")           { if (setDark) setDark(d => !d); else document.documentElement.classList.toggle("dark", !document.documentElement.classList.contains("dark")); return; }
     if (action === "terminal:clear")  { setConvoHistory([]); setResponse(null); setQuery(""); return; }
+
+    // Allow help to toggle closed when clicked again.
+    if (action === "terminal:help" && response?.type === "terminal" && response?.title === "help") {
+      setResponse(null);
+      return;
+    }
+
     const staticRes = getStaticResponse(action);
     if (staticRes) { setResponse(staticRes); setCmdCount(c => c + 1); return; }
     await sendToAI(cmd.label);
-  }, [sendToAI, setDark]);
+  }, [response, sendToAI, setDark]);
 
   const handleKeyDown = (e) => {
     if (e.key === "Escape") {
       if (response) { setResponse(null); return; }
       setOpen(false); return;
     }
-    if (e.key === "ArrowDown") { e.preventDefault(); setSelected(s => Math.min(s + 1, listLength - 1)); return; }
-    if (e.key === "ArrowUp")   { e.preventDefault(); setSelected(s => Math.max(s - 1, 0)); return; }
+    if (e.key === "ArrowDown") { e.preventDefault(); setUsedArrowNav(true); setSelected(s => Math.min(s + 1, listLength - 1)); return; }
+    if (e.key === "ArrowUp")   { e.preventDefault(); setUsedArrowNav(true); setSelected(s => Math.max(s - 1, 0)); return; }
     if (e.key === "Enter") {
       e.preventDefault();
       const norm = normalizeQuery(query);
       if (norm && filtered[selected]) {
-        const exact = [filtered[selected].label, ...filtered[selected].aliases]
+        const selectedCmd = filtered[selected];
+        const matchScore = scoreCommand(selectedCmd, norm);
+        const exact = [selectedCmd.label, ...selectedCmd.aliases]
           .map(v => normalizeQuery(v).toLowerCase())
           .includes(norm.toLowerCase());
-        if (exact) { setResponse(null); executeCommand(filtered[selected]); return; }
+
+        // Treat strong command matches as commands to avoid accidental AI API calls.
+        if (usedArrowNav || exact || selectedCmd.category === "navigate" || matchScore >= 70) {
+          setResponse(null);
+          executeCommand(selectedCmd);
+          setUsedArrowNav(false);
+          return;
+        }
       }
-      if (!norm && filtered[selected]) { setResponse(null); executeCommand(filtered[selected]); return; }
+      if (!norm && filtered[selected]) { setResponse(null); executeCommand(filtered[selected]); setUsedArrowNav(false); return; }
       if (norm) sendToAI(norm);
     }
   };
@@ -728,17 +746,17 @@ export default function CommandPalette({ setDark }) {
   };
 
   const bg   = dark ? "#080808"                : "#ffffff";
-  const bdr  = dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.09)";
+  const bdr  = dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.32)";
   const inp  = dark ? "rgba(255,255,255,0.85)" : "rgba(0,0,0,0.85)";
-  const ph   = dark ? "rgba(255,255,255,0.2)"  : "rgba(0,0,0,0.2)";
-  const cat  = dark ? "rgba(255,255,255,0.2)"  : "rgba(0,0,0,0.2)";
-  const lbl  = dark ? "rgba(255,255,255,0.75)" : "rgba(0,0,0,0.75)";
-  const dsc  = dark ? "rgba(255,255,255,0.3)"  : "rgba(0,0,0,0.3)";
+  const ph   = dark ? "rgba(255,255,255,0.2)"  : "rgba(0,0,0,0.72)";
+  const cat  = dark ? "rgba(255,255,255,0.2)"  : "rgba(0,0,0,0.82)";
+  const lbl  = dark ? "rgba(255,255,255,0.75)" : "rgba(0,0,0,0.9)";
+  const dsc  = dark ? "rgba(255,255,255,0.3)"  : "rgba(0,0,0,0.9)";
   const sel  = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
-  const ico  = dark ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.28)";
+  const ico  = dark ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.88)";
   const icoS = dark ? "rgba(255,255,255,0.62)" : "rgba(0,0,0,0.58)";
   const kbg  = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
-  const ktx  = dark ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.28)";
+  const ktx  = dark ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.88)";
 
   let gi = 0;
 
@@ -848,7 +866,7 @@ export default function CommandPalette({ setDark }) {
                     return (
                       <div key={cmd.id} ref={el => (itemRefs.current[idx] = el)}
                         className={`cp-cmd${isSel ? " sel" : ""}`}
-                        onClick={() => { setResponse(null); executeCommand(cmd); }}
+                        onClick={() => { setResponse(null); setUsedArrowNav(false); executeCommand(cmd); }}
                         onMouseEnter={() => setSelected(idx)}
                       >
                         <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: isSel ? icoS : ico, width: 16, textAlign: "center", flexShrink: 0, lineHeight: 1 }}>{cmd.icon}</span>
