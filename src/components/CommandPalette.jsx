@@ -170,14 +170,33 @@ PORTFOLIO DATA:
 - What makes different: ${PORTFOLIO.what_makes_different}
 - Journey: ${PORTFOLIO.journey}
 
-RULES: Only use data above. Never invent facts. Speak as Yuvraj (first person). For greetings, introduce yourself briefly. If asked something not in the data, say "I don't have that info — reach me at ${PORTFOLIO.email}"`;
+RULES: Only use data above. Never invent facts. Speak as Yuvraj (first person). For greetings, introduce yourself briefly. For personal questions like girlfriend/relationship/age/salary, answer with wit and personality — don't deflect or say "my portfolio doesn't cover that". Be human. If asked something genuinely not in the data, say "I don't have that info — reach me at ${PORTFOLIO.email}"`;
+
 
 // Smart local fallback — used when no API key is set
 function localAIResponse(q) {
   const t = q.toLowerCase();
 
-  if (/^(hi|hello|hey|yo|sup|greetings|howdy)$/.test(t))
-    return `Hey! I'm ${PORTFOLIO.name} — ${PORTFOLIO.role}. ${PORTFOLIO.tagline} Ask me anything about my work, skills, or projects.`;
+  if (t.includes("girlfriend") || t.includes("relationship") || t.includes("dating") || t.includes("single") || t.includes("married") || t.includes("wife") || t.includes("partner"))
+    return `Currently in a committed relationship — with my code editor. She never crashes (unlike my last React app). My GitHub commit history is the only streak I'm maintaining right now.`;
+
+  if (t.includes("age") || t.includes("how old") || t.includes("born") || t.includes("birthday"))
+    return `I'm a second-year Computer Engineering student at Thapar Institute, batch 2024–2028. You can do the math — but I prefer to be judged by what I've shipped, not how old I am.`;
+
+  if (t.includes("hobby") || t.includes("free time") || t.includes("fun") || t.includes("outside") || t.includes("passion"))
+    return `Chess — district-level gold medalist. And building things that don't need to exist yet. The line between hobby and work is blurry when you enjoy both equally.`;
+
+  if (t.includes("favourite") || t.includes("favorite") || t.includes("fav ") || t.includes("best language") || t.includes("prefer"))
+    return `Python for AI and quick thinking. JavaScript when the product has to look good. C++ when there's no OS and everything is on fire. Depends what needs solving.`;
+
+  if (t.includes("salary") || t.includes("pay") || t.includes("money") || t.includes("package") || t.includes("ctc"))
+    return `Ha. Open to conversations — but the right problem matters more than the number. If the work is interesting enough, we can figure out the rest.`;
+
+  if (t.includes("funny") || t.includes("joke") || t.includes("laugh") || t.includes("humor"))
+    return `Why do programmers prefer dark mode? Because light attracts bugs. — That's the only one I know. I express humor through variable names in my code.`;
+
+  if (/^(hi|hello|hey|yo|sup)$/.test(t))
+    return `Hello. I'm ${PORTFOLIO.name} — ${PORTFOLIO.role}. Ask me about skills, projects, journey, or contact.`;
 
   if (t.includes("who are you") || t.includes("introduce") || t.includes("about yourself"))
     return `I'm ${PORTFOLIO.name}, a ${PORTFOLIO.role} based in ${PORTFOLIO.location}. ${PORTFOLIO.tagline} Currently studying at ${PORTFOLIO.education.split("·")[0].trim()}.`;
@@ -338,6 +357,13 @@ function getStaticResponse(action) {
         { type: "prose", title: "Fun Fact",          text: "I built Jarvis before finishing my second year. Some call it reckless. I call it Tuesday." },
         { type: "prose", title: "Unpopular Opinion", text: "The best code is the code you don't write. I've deleted more than I've shipped — and the projects got better every time." },
         { type: "prose", title: "Secret",            text: "The 'science fiction' in my tagline isn't metaphor. Gesture-controlled 3D, multi-modal AI, real-time pose detection — all sci-fi ten years ago." },
+        { type: "prose", title: "Hot Take",          text: "Most portfolios are just resumes with animations. Mine is an argument. Every project exists to prove something that people thought was too hard." },
+        { type: "prose", title: "Origin Story",      text: "I got into coding because I was too lazy to do repetitive tasks manually. Turns out automation is just organized laziness — and I'm very organized." },
+        { type: "prose", title: "Chess + Code",      text: "I'm a district-level chess gold medalist. Chess taught me to think 10 moves ahead. I apply the same logic to system design — always planning for what breaks next." },
+        { type: "prose", title: "The Jarvis Story",  text: "Jarvis started as a voice command script and turned into a full desktop AI. It now manages my WhatsApp, YouTube, and email. My laptop basically runs itself." },
+        { type: "prose", title: "Confession",        text: "I've rewritten Jarvis from scratch three times. Not because it broke — because I kept learning better ways to build it. Version 3 is the one I'm proud of." },
+        { type: "prose", title: "Weird Flex",        text: "I once built a working bomb-defuse game on an Arduino with no OS, no libraries, just raw C++ and a buzzer. Nobody asked for it. I did it anyway." },
+        { type: "prose", title: "Philosophy",        text: "I don't want to work at a company that wants a coder. I want to work somewhere that needs a builder — someone who sees a problem and can't sleep until it's solved." },
       ];
       return list[Math.floor(Math.random() * list.length)];
     }
@@ -361,7 +387,7 @@ function useDarkMode() {
 // ─────────────────────────────────────────────────────────────────────────────
 // RESPONSE PANEL
 // ─────────────────────────────────────────────────────────────────────────────
-function ResponsePanel({ response, dark, onBack, onClose }) {
+function ResponsePanel({ response, dark }) {
   const [hackChars, setHackChars] = useState([]);
 
   const dim    = dark ? "rgba(255,255,255,0.3)"  : "rgba(0,0,0,0.3)";
@@ -370,7 +396,6 @@ function ResponsePanel({ response, dark, onBack, onClose }) {
   const pill   = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
   const pillTx = dark ? "rgba(255,255,255,0.5)"  : "rgba(0,0,0,0.48)";
   const btn    = dark ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.22)";
-  const btnH   = dark ? "rgba(255,255,255,0.6)"  : "rgba(0,0,0,0.6)";
 
   useEffect(() => {
     if (response?.type !== "hack") return;
@@ -404,25 +429,6 @@ function ResponsePanel({ response, dark, onBack, onClose }) {
 
   return (
     <div style={{ borderTop: `1px solid ${bdr}` }}>
-      {/* Header — title + back + close */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px 0 20px" }}>
-        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.18em", textTransform: "uppercase", color: dim }}>
-          {response.title || "Response"}
-        </span>
-        <div style={{ display: "flex", gap: 2 }}>
-          <button onClick={onBack}
-            style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 10, color: btn, padding: "4px 8px", borderRadius: 4, transition: "color 0.15s" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = btnH)}
-            onMouseLeave={(e) => (e.currentTarget.style.color = btn)}
-          >← back</button>
-          <button onClick={onClose}
-            style={{ background: "none", border: "none", cursor: "pointer", fontSize: 16, color: btn, padding: "4px 8px", lineHeight: 1, borderRadius: 4, transition: "color 0.15s" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = btnH)}
-            onMouseLeave={(e) => (e.currentTarget.style.color = btn)}
-          >×</button>
-        </div>
-      </div>
-
       {/* Body */}
       <div style={{ padding: "10px 20px 20px 20px", maxHeight: 240, overflowY: "auto" }}>
 
@@ -494,8 +500,9 @@ export default function CommandPalette({ setDark }) {
   const [convoHistory, setConvoHistory] = useState([]);
   const [cmdCount,     setCmdCount]     = useState(0);
   const [mounted,      setMounted]      = useState(false);
-  const inputRef = useRef(null);
-  const itemRefs = useRef([]);
+  const inputRef   = useRef(null);
+  const itemRefs   = useRef([]);
+  const debounceRef = useRef(null); // for auto-answer on typing
 
   // Ctrl+K / Cmd+K
   useEffect(() => {
@@ -536,6 +543,21 @@ export default function CommandPalette({ setDark }) {
   useEffect(() => { itemRefs.current[selected]?.scrollIntoView({ block: "nearest" }); }, [selected]);
   useEffect(() => { setSelected(0); }, [query]);
 
+  // Auto-answer: fire AI after 600ms pause when query looks like a question
+  // (no strong command match AND query is 6+ chars)
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    const norm = normalizeQuery(query);
+    if (!norm || norm.length < 6) return;
+    const topScore = filtered.length > 0 ? scoreCommand(filtered[0], norm) : 0;
+    // Only auto-fire if no strong command match (score < 70) — don't hijack "skills" etc.
+    if (topScore >= 70) return;
+    debounceRef.current = setTimeout(() => {
+      sendToAI(norm);
+    }, 650);
+    return () => clearTimeout(debounceRef.current);
+  }, [query]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const sendToAI = useCallback(async (question) => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     // Skip loading state for local responses — they're instant
@@ -559,10 +581,10 @@ export default function CommandPalette({ setDark }) {
 
   const executeCommand = useCallback(async (cmd) => {
     const { action } = cmd;
-    if (action.startsWith("scroll:")) { document.querySelector(action.replace("scroll:", ""))?.scrollIntoView({ behavior: "smooth" }); setOpen(false); return; }
-    if (action.startsWith("open:"))   { window.open(action.replace("open:", ""), "_blank"); setOpen(false); return; }
+    if (action.startsWith("scroll:")) { document.querySelector(action.replace("scroll:", ""))?.scrollIntoView({ behavior: "smooth" }); return; }
+    if (action.startsWith("open:"))   { window.open(action.replace("open:", ""), "_blank"); return; }
     if (action.startsWith("copy:"))   { navigator.clipboard.writeText(action.replace("copy:", "")); setResponse({ type: "terminal", title: "Clipboard", lines: ["  ✓ Email copied to clipboard."] }); return; }
-    if (action === "theme")           { if (setDark) setDark(d => !d); else document.documentElement.classList.toggle("dark", !document.documentElement.classList.contains("dark")); setOpen(false); return; }
+    if (action === "theme")           { if (setDark) setDark(d => !d); else document.documentElement.classList.toggle("dark", !document.documentElement.classList.contains("dark")); return; }
     if (action === "terminal:clear")  { setConvoHistory([]); setResponse(null); setQuery(""); return; }
     const staticRes = getStaticResponse(action);
     if (staticRes) { setResponse(staticRes); setCmdCount(c => c + 1); return; }
@@ -576,15 +598,16 @@ export default function CommandPalette({ setDark }) {
     if (e.key === "Enter") {
       e.preventDefault();
       const norm = normalizeQuery(query);
-      if (!response && !norm && filtered[selected]) { executeCommand(filtered[selected]); return; }
-      // If query exactly matches a command label or alias → execute it
-      if (!response && norm && filtered[selected]) {
+      // Clear debounce so manual Enter doesn't double-fire
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      // If response is showing and user pressed Enter on a command → execute it and clear response
+      if (norm && filtered[selected]) {
         const exact = [filtered[selected].label, ...filtered[selected].aliases]
           .map(v => normalizeQuery(v).toLowerCase())
           .includes(norm.toLowerCase());
-        if (exact) { executeCommand(filtered[selected]); return; }
+        if (exact) { setResponse(null); executeCommand(filtered[selected]); return; }
       }
-      // Everything else → AI
+      if (!norm && filtered[selected]) { setResponse(null); executeCommand(filtered[selected]); return; }
       if (norm) sendToAI(norm);
     }
   };
@@ -642,8 +665,38 @@ export default function CommandPalette({ setDark }) {
         @media(max-width:640px){ .cp-overlay{padding-top:0;align-items:flex-end;} .cp-panel{border-radius:12px 12px 0 0;max-width:100%;} }
       `}</style>
 
-      <div className="cp-overlay" onClick={() => setOpen(false)}>
+      <div className="cp-overlay">
         <div className="cp-panel" onClick={e => e.stopPropagation()}>
+
+          {/* ── Top bar: always visible — back (when response) + close ── */}
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            padding: "8px 12px 0 16px",
+            minHeight: 32,
+          }}>
+            {/* Back button — only visible when response is showing */}
+            {response && response.type !== "loading" ? (
+              <button
+                onClick={() => setResponse(null)}
+                style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 10, color: dsc, padding: "3px 6px", borderRadius: 4, display: "flex", alignItems: "center", gap: 4, transition: "color 0.15s" }}
+                onMouseEnter={e => (e.currentTarget.style.color = inp)}
+                onMouseLeave={e => (e.currentTarget.style.color = dsc)}
+              >
+                ← back
+              </button>
+            ) : (
+              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase", color: dsc, paddingLeft: 2 }}>
+                {response?.title || ""}
+              </span>
+            )}
+            {/* Close button — always */}
+            <button
+              onClick={() => setOpen(false)}
+              style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: dsc, padding: "0 4px", lineHeight: 1, borderRadius: 4, transition: "color 0.15s" }}
+              onMouseEnter={e => (e.currentTarget.style.color = inp)}
+              onMouseLeave={e => (e.currentTarget.style.color = dsc)}
+            >×</button>
+          </div>
 
           {/* Input */}
           <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "14px 16px", borderBottom: filtered.length > 0 || response ? `1px solid ${bdr}` : "none" }}>
@@ -660,8 +713,8 @@ export default function CommandPalette({ setDark }) {
             )}
           </div>
 
-          {/* Command list */}
-          {filtered.length > 0 && !response && (
+          {/* Command list — always visible, even when response is showing */}
+          {filtered.length > 0 && (
             <div className="cp-list">
               {Object.entries(grouped).map(([c, cmds]) => (
                 <div key={c}>
@@ -695,14 +748,14 @@ export default function CommandPalette({ setDark }) {
           )}
 
           {/* No match hint */}
-          {query.trim() && filtered.length === 0 && !response && (
+          {query.trim() && filtered.length === 0 && (
             <div style={{ padding: "14px 16px", fontFamily: "'DM Mono', monospace", fontSize: 11, color: dsc, letterSpacing: "0.03em" }}>
               Press <kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 2, padding: "1px 5px", fontSize: 9 }}>↵</kbd> to ask as a question
             </div>
           )}
 
           {/* Response */}
-          <ResponsePanel response={response} dark={dark} onBack={() => setResponse(null)} onClose={() => setOpen(false)} />
+          <ResponsePanel response={response} dark={dark} />
 
           {/* Footer */}
           <div className="cp-footer">
