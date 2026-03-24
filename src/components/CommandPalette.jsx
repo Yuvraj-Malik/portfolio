@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+﻿import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // PORTFOLIO DATA
@@ -56,7 +56,11 @@ const PORTFOLIO = {
 // HELPERS
 // ─────────────────────────────────────────────────────────────────────────────
 function normalizeQuery(q) {
-  return q.trim().replace(/[?!.]+$/, "").trim();
+  return q
+    .toLowerCase()
+    .trim()
+    .replace(/[?!.]+$/, "")
+    .replace(/\s+/g, " ");
 }
 
 function fuzzyScore(query, target) {
@@ -145,39 +149,53 @@ const CATEGORY_META = {
 // HOW TO ENABLE: create .env in project root → VITE_GEMINI_API_KEY=your_key
 // Free key at: aistudio.google.com
 // ─────────────────────────────────────────────────────────────────────────────
-const SYSTEM_PROMPT = `You are Yuvraj Malik's portfolio AI assistant. Answer questions about Yuvraj as if you are him. Be concise, confident, direct. Max 80 words unless more detail is needed.
+const SYSTEM_PROMPT = "You are Yuvraj's portfolio assistant. Answer briefly, confidently, in first person.";
 
-PORTFOLIO DATA:
-- Name: ${PORTFOLIO.name} | Role: ${PORTFOLIO.role}
-- Location: ${PORTFOLIO.location} | Email: ${PORTFOLIO.email}
-- Education: ${PORTFOLIO.education}
-- GitHub: ${PORTFOLIO.links.github} | LinkedIn: ${PORTFOLIO.links.linkedin}
-- Languages: ${PORTFOLIO.skills.languages.join(", ")}
-- Frontend: ${PORTFOLIO.skills.frontend.join(", ")}
-- Backend: ${PORTFOLIO.skills.backend.join(", ")}
-- AI/ML: ${PORTFOLIO.skills.ai_ml.join(", ")}
-- Tools: ${PORTFOLIO.skills.tools.join(", ")}
-- Projects: ${PORTFOLIO.projects.map(p => `${p.name} (${p.tech.join(", ")}): ${p.desc}`).join(" | ")}
-- Experience: ${PORTFOLIO.experience.map(e => `${e.role} @ ${e.org} ${e.year}`).join(", ")}
-- Achievements: ${PORTFOLIO.achievements.join("; ")}
-- Why hire: ${PORTFOLIO.why_hire}
-- What makes different: ${PORTFOLIO.what_makes_different}
-- Journey: ${PORTFOLIO.journey}
+const cache = new Map();
 
-RULES:
-- Speak as Yuvraj in first person. Never say "Yuvraj" — say "I".
-- For "who is this", "who are you", "introduce yourself" → give a confident intro: name, role, what you build, education.
-- For personal questions (girlfriend, age, salary, hobbies) → answer with wit and personality. Don't deflect.
-- For rude/offensive input → respond with calm confidence, not aggression. A single dry line is fine.
-- Only use data above. Never invent facts.
-- If something isn't in the data, say "I don't have that info — reach me at ${PORTFOLIO.email}"`;
+const intents = {
+  intro: ["who are you", "introduce yourself", "about you", "your intro"],
+  skills: ["skills", "tech stack", "technologies", "what do you know"],
+  projects: ["projects", "your work", "what have you built"],
+  contact: ["contact", "reach you", "email"],
+  hire: ["why hire you", "why should we hire you"],
+};
+
+function matchIntent(query) {
+  for (const [intent, phrases] of Object.entries(intents)) {
+    if (phrases.some((phrase) => query.includes(phrase))) return intent;
+  }
+  return null;
+}
+
+function getIntentResponse(intent) {
+  switch (intent) {
+    case "intro":
+      return `I'm ${PORTFOLIO.name} — ${PORTFOLIO.role} based in ${PORTFOLIO.location}. ${PORTFOLIO.tagline} I'm studying Computer Engineering at Thapar while building real-world AI and full-stack systems.`;
+    case "skills":
+      return `My stack: ${PORTFOLIO.skills.languages.join(", ")} · ${PORTFOLIO.skills.frontend.join(", ")} · ${PORTFOLIO.skills.backend.join(", ")} · ${PORTFOLIO.skills.ai_ml.join(", ")}.`;
+    case "projects":
+      return `${PORTFOLIO.projects.length} projects shipped: ${PORTFOLIO.projects.map((p) => p.name).join(", ")}.`;
+    case "contact":
+      return `Email: ${PORTFOLIO.email} · GitHub: ${PORTFOLIO.links.github} · LinkedIn: ${PORTFOLIO.links.linkedin}`;
+    case "hire":
+      return PORTFOLIO.why_hire;
+    default:
+      return null;
+  }
+}
+
+function shouldUseAI(query) {
+  const triggers = ["why", "how", "explain", "describe", "tell me more"];
+  return triggers.some((trigger) => query.includes(trigger));
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // LOCAL AI — custom answers for every predictable question
 // Returns null if nothing matches → Gemini handles it
 // ─────────────────────────────────────────────────────────────────────────────
 function localAIResponse(q) {
-  const t = q.toLowerCase().trim();
+  const t = normalizeQuery(q);
 
   // ── RUDE / OFFENSIVE ─────────────────────────────────────────────────────
   const rudeWords = ["fuck","shit","bitch","cunt","bastard","idiot","stupid","dumb","loser","moron","chutiya","bc","mc","bkl","lodu","gandu","bakwas","bekar","faltu","worthless","useless","trash","garbage","pathetic"];
@@ -344,9 +362,9 @@ function localAIResponse(q) {
 
 
 async function askGemini(messages) {
-  const lastQuestion = messages[messages.length - 1]?.content || "";
+  const lastQuestion = normalizeQuery(messages[messages.length - 1]?.content || "");
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-  if (!apiKey) return localAIResponse(normalizeQuery(lastQuestion));
+  if (!apiKey) return localAIResponse(lastQuestion) || `I don't have that info — reach me at ${PORTFOLIO.email}`;
 
   try {
     const contents = messages
@@ -368,12 +386,13 @@ async function askGemini(messages) {
         }),
       }
     );
-    if (!res.ok) return localAIResponse(normalizeQuery(lastQuestion));
+    if (!res.ok) return localAIResponse(lastQuestion) || `I don't have that info — reach me at ${PORTFOLIO.email}`;
     const data = await res.json();
     const text = data?.candidates?.[0]?.content?.parts?.map(p => p?.text || "").join("").trim();
-    return text || localAIResponse(normalizeQuery(lastQuestion));
+    if (text) return text;
+    return localAIResponse(lastQuestion) || `I don't have that info — reach me at ${PORTFOLIO.email}`;
   } catch {
-    return localAIResponse(normalizeQuery(lastQuestion));
+    return localAIResponse(lastQuestion) || `I don't have that info — reach me at ${PORTFOLIO.email}`;
   }
 }
 
@@ -590,7 +609,6 @@ export default function CommandPalette({ setDark }) {
   const [query,        setQuery]        = useState("");
   const [selected,     setSelected]     = useState(0);
   const [response,     setResponse]     = useState(null);
-  const [convoHistory, setConvoHistory] = useState([]);
   const [cmdCount,     setCmdCount]     = useState(0);
   const [mounted,      setMounted]      = useState(false);
   const [fabBurst,     setFabBurst]     = useState(false);
@@ -650,39 +668,49 @@ export default function CommandPalette({ setDark }) {
   useEffect(() => { setSelected(0); setUsedArrowNav(false); }, [query]);
 
   const sendToAI = useCallback(async (question) => {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    const q = normalizeQuery(question);
+    const fallbackMessage = `I don't have that info — reach me at ${PORTFOLIO.email}`;
 
-    // Try local custom responses first — they're instant and zero cost
-    const localAnswer = localAIResponse(normalizeQuery(question));
+    if (!q) return;
 
-    if (!apiKey) {
-      // No Gemini key — use local answer or show a decent fallback
-      const answer = localAnswer ?? `Hmm, I don't have a specific answer for that. Try: who are you · skills · projects · why hire · journey. Or reach me at ${PORTFOLIO.email}`;
-      const newH = [...convoHistory, { role: "user", content: question }, { role: "assistant", content: answer }];
-      setConvoHistory(newH);
+    if (cache.has(q)) {
+      setResponse({ type: "prose", title: "Answer", text: cache.get(q) });
+      setCmdCount(c => c + 1);
+      return;
+    }
+
+    const intent = matchIntent(q);
+    if (intent) {
+      const answer = getIntentResponse(intent) || fallbackMessage;
+      cache.set(q, answer);
       setResponse({ type: "prose", title: "Answer", text: answer });
       setCmdCount(c => c + 1);
       return;
     }
 
-    // If local answered it — use that, no API call needed
-    if (localAnswer) {
-      const newH = [...convoHistory, { role: "user", content: question }, { role: "assistant", content: localAnswer }];
-      setConvoHistory(newH);
-      setResponse({ type: "prose", title: "Answer", text: localAnswer });
+    const local = localAIResponse(q);
+    if (local && local.length > 20) {
+      cache.set(q, local);
+      setResponse({ type: "prose", title: "Answer", text: local });
       setCmdCount(c => c + 1);
       return;
     }
 
-    // Local didn't match — send to Gemini
+    if (!shouldUseAI(q)) {
+      const answer = local || fallbackMessage;
+      cache.set(q, answer);
+      setResponse({ type: "prose", title: "Answer", text: answer });
+      setCmdCount(c => c + 1);
+      return;
+    }
+
     setResponse({ type: "loading" });
-    const newHistory = [...convoHistory, { role: "user", content: question }];
-    setConvoHistory(newHistory);
-    const answer = await askGemini(newHistory);
-    setConvoHistory([...newHistory, { role: "assistant", content: answer }]);
-    setResponse({ type: "prose", title: "Yuvraj's AI", text: answer });
+    const answer = await askGemini([{ role: "user", content: q }]);
+    const finalAnswer = answer?.trim() || local || fallbackMessage;
+    cache.set(q, finalAnswer);
+    setResponse({ type: "prose", title: "Yuvraj's AI", text: finalAnswer });
     setCmdCount(c => c + 1);
-  }, [convoHistory]);
+  }, []);
 
   const executeCommand = useCallback(async (cmd) => {
     const { action } = cmd;
@@ -695,7 +723,7 @@ export default function CommandPalette({ setDark }) {
     if (action.startsWith("open:"))   { window.open(action.replace("open:", ""), "_blank"); return; }
     if (action.startsWith("copy:"))   { navigator.clipboard.writeText(action.replace("copy:", "")); setResponse({ type: "terminal", title: "Clipboard", lines: ["  ✓ Email copied to clipboard."] }); return; }
     if (action === "theme")           { if (setDark) setDark(d => !d); else document.documentElement.classList.toggle("dark", !document.documentElement.classList.contains("dark")); return; }
-    if (action === "terminal:clear")  { setConvoHistory([]); setResponse(null); setQuery(""); return; }
+    if (action === "terminal:clear")  { setResponse(null); setQuery(""); return; }
 
     // Allow help to toggle closed when clicked again.
     if (action === "terminal:help" && response?.type === "terminal" && response?.title === "help") {
@@ -904,9 +932,9 @@ export default function CommandPalette({ setDark }) {
             <span><kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 3, padding: "1px 5px", fontFamily: "'DM Mono', monospace", fontSize: 9, color: ktx, marginRight: 4 }}>↵</kbd>Select</span>
             <span><kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 3, padding: "1px 5px", fontFamily: "'DM Mono', monospace", fontSize: 9, color: ktx, marginRight: 4 }}>Esc</kbd>Close</span>
             <span style={{ marginLeft: "auto" }}>
-              {convoHistory.length > 0
-                ? `${Math.floor(convoHistory.length / 2)} exchange${convoHistory.length > 2 ? "s" : ""} · context active`
-                : cmdCount > 0 ? `${cmdCount} run` : import.meta.env.VITE_GEMINI_API_KEY ? "Powered by Gemini" : "AI ready · add key to enable"}
+              {cmdCount > 0
+                ? `${cmdCount} run`
+                : import.meta.env.VITE_GEMINI_API_KEY ? "Local-first · Gemini fallback" : "Local-first AI ready"}
             </span>
           </div>
 

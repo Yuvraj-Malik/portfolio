@@ -91,7 +91,7 @@ export default function Footer() {
   const dark = useDarkMode();
 
   const c = {
-    bg: dark ? "#060606" : "#f5f5f5",
+    bg: dark ? "#060606" : "#f8f6f0",
     heading: dark ? "#ffffff" : "#080808",
     body: dark ? "#959595" : "#888888",
     label: dark ? "#aaaaaa" : "#494949",
@@ -258,7 +258,6 @@ export default function Footer() {
                 <span
                   style={{
                     fontFamily: "'DM Mono', monospace",
-                    fontSize: 10,
                     color: dark ? "#4ade80" : "#1a7a3a",
                     letterSpacing: "0.08em",
                   }}
@@ -391,11 +390,9 @@ export default function Footer() {
                     padding: "9px 18px",
                     letterSpacing: "0.05em",
                     textAlign: "center",
-                    transition: "opacity 0.15s ease",
+                    transition: "color 0.15s ease",
                     display: "block",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
-                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                 >
                   Email Me →
                 </a>
@@ -415,8 +412,14 @@ export default function Footer() {
                     transition: "opacity 0.15s ease",
                     display: "block",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
-                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = "0.7";
+                    e.currentTarget.style.color = dark ? c.mutedBtnText : "#000";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = "1";
+                    e.currentTarget.style.color = c.mutedBtnText;
+                  }}
                 >
                   View Resume ↓
                 </a>

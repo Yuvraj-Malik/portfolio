@@ -54,7 +54,7 @@ export default function Navbar({ dark, setDark }) {
   }, []);
 
   const c = {
-    bg: dark ? "rgba(10,10,10,0.60)" : "rgba(255,255,255,0.65)",
+    bg: dark ? "rgba(10,10,10,0.60)" : "rgba(255,253,249,0.88)",
     border: dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.08)",
     text: dark ? "#e8e8e8" : "#141414",
     muted: dark ? "#9a9a9a" : "#1f1f1f",
@@ -184,7 +184,7 @@ export default function Navbar({ dark, setDark }) {
         }
         .nb-overlay {
           position: fixed; inset: 0; z-index: 55;
-          background: ${dark ? "rgba(6,6,6,0.97)" : "rgba(255,255,255,0.97)"};
+          background: ${dark ? "rgba(6,6,6,0.97)" : "rgba(255,253,249,0.97)"};
           backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
           display: flex; flex-direction: column;
           align-items: center; justify-content: center;

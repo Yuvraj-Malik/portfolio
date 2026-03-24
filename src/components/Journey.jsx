@@ -226,7 +226,7 @@ export default function Journey() {
             pointerEvents: "none",
             backgroundImage: dark
               ? "radial-gradient(circle, rgba(255,255,255,0.18) 1px, transparent 1px)"
-              : "radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px)",
+              : "radial-gradient(circle, rgba(0,0,0,0.18) 1px, transparent 1px)",
             backgroundSize: "32px 32px",
           }}
         />

@@ -125,7 +125,7 @@ export default function NotFound() {
     subtext: dark ? "#8b8b8b" : "#4a4a4a",
     ctaBg: dark ? "#ffffff" : "#0a0a0a",
     ctaTxt: dark ? "#0a0a0a" : "#ffffff",
-    grid: dark ? "rgba(255,255,255,0.035)" : "rgba(0,0,0,0.045)",
+    grid: dark ? "rgba(255,255,255,0.035)" : "rgba(0,0,0,0.035)",
     gold: "#c9a84c",
   };
 

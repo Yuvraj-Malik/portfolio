@@ -32,7 +32,7 @@ export default function App() {
   }, [dark]);
 
   return (
-    <div className="bg-white dark:bg-[#0b0f14] text-black dark:text-white min-h-screen transition-colors duration-300">
+    <div className="bg-[#fffdf9] dark:bg-[#0b0f14] text-black dark:text-white min-h-screen transition-colors duration-300">
 
       {/* Preloader — shows only on first visit */}
       {!preloaderDone && <Preloader onDone={() => setPreloaderDone(true)} />}

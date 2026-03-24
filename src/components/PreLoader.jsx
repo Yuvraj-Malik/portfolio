@@ -124,7 +124,7 @@ export default function Preloader({ onDone = () => {} }) {
   const dim = dark ? "rgba(232,232,232,0.18)" : "rgba(10,10,10,0.18)";
   const dim2 = dark ? "rgba(232,232,232,0.35)" : "rgba(10,10,10,0.35)";
   const tagTone = dark ? "rgba(232,232,232,0.78)" : "rgba(10,10,10,0.68)";
-  const grid = dark ? "rgba(255,255,255,0.035)" : "rgba(0,0,0,0.04)";
+  const grid = dark ? "rgba(255,255,255,0.035)" : "rgba(0,0,0,0.035)";
   const line = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
   const brak = dark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)";
 
