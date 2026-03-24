@@ -3,19 +3,32 @@ import { useState, useEffect, useRef } from "react";
 const BOOT_LINES = [
   { text: "$ whoami", cls: "dim", delay: 400 },
   { text: "yuvraj malik", cls: "", delay: 900 },
+
   { text: null, cls: "gap", delay: 1200 },
+
   { text: "$ ls projects/", cls: "dim", delay: 1400 },
   { text: "pdf-to-3d/        jarvis-ai/", cls: "", delay: 1850 },
   { text: "gesture-arch/     event-mgr/", cls: "", delay: 1950 },
+
   { text: null, cls: "gap", delay: 2200 },
+
   { text: "$ ./status.sh", cls: "dim", delay: 2400 },
   { text: "[OK] jarvis       initialized", cls: "green", delay: 2800 },
   { text: "[BUILDING] pdf-to-3d", cls: "green", delay: 3050 },
   { text: "[ITERATING] gesture-arch", cls: "green", delay: 3300 },
-  { text: "~ boundaries breaking", cls: "green", delay: 3300 },
-  { text: null, cls: "gap", delay: 3500 },
-  { text: "$ echo $STATUS", cls: "dim", delay: 3700 },
-  { text: "building things that shouldn't exist.", cls: "accent", delay: 4100 },
+  { text: "~ boundaries breaking", cls: "green", delay: 3400 },
+
+  { text: null, cls: "gap", delay: 3600 },
+
+  { text: "$ echo $STATUS", cls: "dim", delay: 3800 },
+  { text: "building things that shouldn't exist.", cls: "accent", delay: 4200 },
+
+  // 👇 NEW COMMAND INTERFACE SECTION
+  { text: null, cls: "gap", delay: 4700 },
+  { text: "$ ./launch", cls: "dim", delay: 5000 },
+  { text: "initializing command interface...", cls: "", delay: 5400 },
+  { text: "[system] ready", cls: "green", delay: 5800 },
+  { text: "[hint] press Ctrl + K", cls: "dim", delay: 6200 },
 ];
 
 const SOCIAL_LINKS = [
