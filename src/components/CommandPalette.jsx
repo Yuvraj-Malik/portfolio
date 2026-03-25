@@ -506,7 +506,25 @@ function useDarkMode() {
 // RESPONSE PANEL
 // ─────────────────────────────────────────────────────────────────────────────
 function ResponsePanel({ response, dark }) {
-  const [hackChars, setHackChars] = useState([]);
+  const [hackFeedLines, setHackFeedLines] = useState([]);
+  const [hackTyping, setHackTyping] = useState("");
+  const [hackScramble, setHackScramble] = useState("");
+
+  const HACK_FEED = useMemo(() => [
+    ">> TARGET FINGERPRINT CAPTURED",
+    ">> PORT SWEEP :: 443/8080",
+    ">> HANDSHAKE SPOOF ATTEMPTED",
+    ">> FIREWALL CHECKSUM REJECTED",
+    ">> TOKEN FORGE FAILED",
+    ">> PRIVILEGE ESCALATION BLOCKED",
+    ">> INTRUSION TRACE BOUND",
+    ">> ACTIVE DEFENSE TRIGGERED",
+    ">> LOCKDOWN SEQUENCE CONFIRMED",
+  ], []);
+
+  const HACK_FINAL = "ACCESS DENIED :: NICE TRY, OPERATOR.";
+  const HACK_SCRAMBLE_LENGTH = 100;
+  const HACK_SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}<>?";
 
   const dim    = dark ? "rgba(255,255,255,0.3)"  : "rgba(0,0,0,0.86)";
   const body   = dark ? "rgba(255,255,255,0.72)" : "rgba(0,0,0,1)";
@@ -517,11 +535,58 @@ function ResponsePanel({ response, dark }) {
 
   useEffect(() => {
     if (response?.type !== "hack") return;
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-    const id = setInterval(() => setHackChars(Array.from({ length: 80 }, () => chars[Math.floor(Math.random() * chars.length)])), 60);
-    setTimeout(() => { clearInterval(id); setHackChars([]); }, 2500);
-    return () => { clearInterval(id); setHackChars([]); };
-  }, [response]);
+
+    let lineIdx = 0;
+    let charIdx = 0;
+    const startedAt = Date.now();
+
+    const resetId = setTimeout(() => {
+      setHackFeedLines([]);
+      setHackTyping("");
+      setHackScramble("");
+    }, 0);
+
+    const typeId = setInterval(() => {
+      const elapsed = Date.now() - startedAt;
+      if (elapsed >= 2000) {
+        clearInterval(typeId);
+        setHackFeedLines((prev) => [
+          ...prev,
+          ">> BREACH ATTEMPT LOGGED",
+          ">> SESSION TERMINATED",
+        ]);
+        setHackScramble("");
+        setHackTyping(HACK_FINAL);
+        return;
+      }
+
+      if (lineIdx >= HACK_FEED.length) {
+        setHackTyping("");
+        setHackScramble(
+          Array.from({ length: HACK_SCRAMBLE_LENGTH }, () => HACK_SCRAMBLE_CHARS[Math.floor(Math.random() * HACK_SCRAMBLE_CHARS.length)]).join("")
+        );
+        return;
+      }
+
+      const line = HACK_FEED[lineIdx];
+      if (charIdx < line.length) {
+        setHackTyping(line.slice(0, charIdx + 4));
+        charIdx += 4;
+        return;
+      }
+
+      setHackFeedLines((prev) => [...prev.slice(-10), line]);
+      setHackTyping("");
+      setHackScramble("");
+      lineIdx += 1;
+      charIdx = 0;
+    }, 16);
+
+    return () => {
+      clearTimeout(resetId);
+      clearInterval(typeId);
+    };
+  }, [HACK_FEED, HACK_FINAL, response]);
 
   if (!response) return null;
 
@@ -537,10 +602,24 @@ function ResponsePanel({ response, dark }) {
   }
 
   if (response.type === "hack") {
+    const showCursor = hackTyping !== HACK_FINAL;
+    const showScramble = !!hackScramble && showCursor;
+
     return (
-      <div style={{ padding: "20px", fontFamily: "'DM Mono', monospace", fontSize: 11, lineHeight: 1.7, color: "#00ff41", letterSpacing: "0.05em", wordBreak: "break-all", maxHeight: 180, overflow: "hidden", borderTop: `1px solid ${bdr}` }}>
-        <div style={{ marginBottom: 8, opacity: 0.5, fontSize: 9, letterSpacing: "0.15em" }}>SYSTEM BREACH DETECTED — INITIATING COUNTERMEASURES</div>
-        {hackChars.length > 0 ? hackChars.join("") : "ACCESS DENIED. Nice try. — Yuvraj"}
+      <div style={{ padding: "20px", fontFamily: "'DM Mono', monospace", fontSize: 10, lineHeight: 1.56, color: "#43ff7a", letterSpacing: "0.04em", maxHeight: 240, overflow: "hidden", borderTop: `1px solid ${bdr}`, background: "linear-gradient(180deg, rgba(2,20,9,0.68), rgba(2,10,6,0.82))" }}>
+        <div style={{ marginBottom: 8, opacity: 0.72, fontSize: 8, letterSpacing: "0.13em" }}>SYSTEM BREACH DETECTED :: LIVE TRACE</div>
+        {hackFeedLines.map((line, i) => (
+          <div key={`${line}-${i}`} style={{ opacity: 0.82 }}>{line}</div>
+        ))}
+        {showScramble && (
+          <div style={{ opacity: 0.8, color: "#43ff7a", wordBreak: "break-all" }}>
+            {hackScramble}
+          </div>
+        )}
+        <div style={{ color: "#8dffaf", fontWeight: showCursor ? 400 : 500 }}>
+          {hackTyping}
+          {showCursor && <span style={{ marginLeft: 2, opacity: 0.85 }} className="cp-cursor">_</span>}
+        </div>
       </div>
     );
   }
@@ -660,6 +739,27 @@ export default function CommandPalette({ setDark }) {
     return g;
   }, [filtered]);
 
+  const isHackMode = response?.type === "hack";
+
+  const hackRainDrops = useMemo(() => {
+    if (!isHackMode) return [];
+    const tokens = [
+      "sudo", "root", "matrix", "cipher", "node", "packet", "trace", "stack",
+      "kernel", "null", "0x7f", "inject", "bypass", "exec", "daemon", "signal",
+      "payload", "entropy", "quantum", "grid", "port", "vector", "protocol", "binary",
+    ];
+
+    return Array.from({ length: 38 }, (_, i) => ({
+      id: `drop-${i}`,
+      text: tokens[Math.floor(Math.random() * tokens.length)],
+      left: Math.random() * 100,
+      duration: 5 + Math.random() * 8,
+      delay: Math.random() * 6,
+      size: 10 + Math.random() * 5,
+      opacity: 0.2 + Math.random() * 0.45,
+    }));
+  }, [isHackMode]);
+
   // ── FIX: Arrow keys always work — even when response is showing ──────────
   // We track "listLength" separately so ArrowDown/Up always have a valid range
   const listLength = filtered.length;
@@ -773,18 +873,23 @@ export default function CommandPalette({ setDark }) {
     setOpen(o => !o);
   };
 
-  const bg   = dark ? "#080808"                : "#ffffff";
-  const bdr  = dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.32)";
-  const inp  = dark ? "rgba(255,255,255,0.85)" : "rgba(0,0,0,0.85)";
-  const ph   = dark ? "rgba(255,255,255,0.2)"  : "rgba(0,0,0,0.72)";
-  const cat  = dark ? "rgba(255,255,255,0.2)"  : "rgba(0,0,0,0.82)";
-  const lbl  = dark ? "rgba(255,255,255,0.75)" : "rgba(0,0,0,0.9)";
-  const dsc  = dark ? "rgba(255,255,255,0.3)"  : "rgba(0,0,0,0.9)";
-  const sel  = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
-  const ico  = dark ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.88)";
-  const icoS = dark ? "rgba(255,255,255,0.62)" : "rgba(0,0,0,0.58)";
-  const kbg  = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
-  const ktx  = dark ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.88)";
+  const bg   = isHackMode ? "linear-gradient(165deg, #000f06 0%, #020702 55%, #000000 100%)" : (dark ? "linear-gradient(180deg, #161b22 0%, #10151c 100%)" : "#ffffff");
+  const bdr  = isHackMode ? "rgba(67,255,122,0.38)" : (dark ? "rgba(170,190,220,0.34)" : "rgba(0,0,0,0.32)");
+  const inp  = isHackMode ? "rgba(141,255,175,0.96)" : (dark ? "rgba(255,255,255,0.85)" : "rgba(0,0,0,0.85)");
+  const ph   = isHackMode ? "rgba(91,212,127,0.72)" : (dark ? "rgba(255,255,255,0.34)" : "rgba(0,0,0,0.72)");
+  const cat  = isHackMode ? "rgba(86,235,134,0.7)" : (dark ? "rgb(255, 255, 255)" : "rgba(0,0,0,0.82)");
+  const lbl  = isHackMode ? "rgba(177,255,200,0.92)" : (dark ? "rgba(255,255,255,0.75)" : "rgba(0,0,0,0.9)");
+  const dsc  = isHackMode ? "rgba(104,221,138,0.86)" : (dark ? "rgba(255, 255, 255, 0.58)" : "rgba(0,0,0,0.9)");
+  const sel  = isHackMode ? "rgba(39,128,71,0.24)" : (dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)");
+  const ico  = isHackMode ? "rgba(77,238,123,0.84)" : (dark ? "rgba(215, 215, 215, 0.87)" : "rgba(0,0,0,0.88)");
+  const icoS = isHackMode ? "rgba(190,255,210,0.98)" : (dark ? "rgba(255,255,255,0.62)" : "rgba(0,0,0,0.58)");
+  const kbg  = isHackMode ? "rgba(42,106,64,0.34)" : (dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)");
+  const ktx  = isHackMode ? "rgba(167,255,195,0.94)" : (dark ? "rgba(255, 255, 255, 0.78)" : "rgba(0,0,0,0.88)");
+  const panelShadow = isHackMode
+    ? "0 28px 84px rgba(0,0,0,0.82), 0 0 0 1px rgba(88,245,132,0.16) inset, 0 0 26px rgba(64,255,118,0.16)"
+    : (dark
+        ? "0 32px 96px rgba(0,0,0,0.72), 0 10px 28px rgba(0,0,0,0.58), 0 0 0 1px rgba(190,210,235,0.14) inset"
+        : "0 24px 80px rgba(0,0,0,0.16), 0 4px 16px rgba(0,0,0,0.07)");
 
   let gi = 0;
 
@@ -792,7 +897,7 @@ export default function CommandPalette({ setDark }) {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap');
-        .cp-overlay { position:fixed;inset:0;z-index:9998;background:${dark?"rgba(0,0,0,0.58)":"rgba(0,0,0,0.22)"};backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding-top:14vh;animation:cp-bg-in 0.15s ease both; }
+        .cp-overlay { position:fixed;inset:0;z-index:9998;background:${isHackMode ? "radial-gradient(circle at 20% 12%, rgba(22,74,42,0.28), transparent 42%), radial-gradient(circle at 80% 0%, rgba(9,120,54,0.2), transparent 36%), rgba(0,0,0,0.88)" : (dark?"rgba(4,8,14,0.68)":"rgba(0,0,0,0.22)")};backdrop-filter:${isHackMode ? "blur(2px) contrast(1.06)" : "blur(3px)"};display:flex;align-items:flex-start;justify-content:center;padding-top:14vh;animation:cp-bg-in 0.15s ease both; }
         @keyframes cp-bg-in    { from{opacity:0} to{opacity:1} }
         @keyframes cp-dot      { 0%,80%,100%{opacity:.3;transform:scale(.8)} 40%{opacity:1;transform:scale(1.2)} }
         @keyframes cp-panel-in { from{opacity:0;transform:scale(.97) translateY(-8px)} to{opacity:1;transform:scale(1) translateY(0)} }
@@ -800,7 +905,10 @@ export default function CommandPalette({ setDark }) {
         @keyframes cp-fab-pulse { 0%{ transform: translate(-50%, -50%) scale(0.9); opacity: 0.35; } 70%{ transform: translate(-50%, -50%) scale(1.22); opacity: 0; } 100%{ transform: translate(-50%, -50%) scale(1.22); opacity: 0; } }
         @keyframes cp-fab-click { 0%{ transform: scale(1); } 45%{ transform: scale(0.93); } 100%{ transform: scale(1); } }
         @keyframes cp-cursor-blink { 0%,44%{ opacity: 1; } 45%,100%{ opacity: 0.2; } }
-        .cp-panel { width:100%;max-width:600px;background:${bg};border:1px solid ${bdr};border-radius:10px;overflow:hidden;box-shadow:0 24px 80px ${dark?"rgba(0,0,0,0.8)":"rgba(0,0,0,0.16)"},0 4px 16px ${dark?"rgba(0,0,0,0.5)":"rgba(0,0,0,0.07)"};animation:cp-panel-in 0.18s cubic-bezier(0.16,1,0.3,1) both; }
+        @keyframes cp-hack-fall { 0%{transform:translateY(-18vh);opacity:0;} 10%{opacity:0.95;} 85%{opacity:0.65;} 100%{transform:translateY(115vh);opacity:0;} }
+        .cp-hack-rain { position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:0; }
+        .cp-hack-drop { position:absolute; top:-20vh; font-family:'DM Mono', monospace; letter-spacing:0.08em; text-transform:uppercase; animation-name:cp-hack-fall; animation-timing-function:linear; animation-iteration-count:infinite; text-shadow:0 0 12px rgba(55,255,120,0.72); }
+        .cp-panel { position:relative; z-index:1; width:100%;max-width:600px;background:${bg};border:1px solid ${bdr};border-radius:10px;overflow:hidden;box-shadow:${panelShadow};animation:cp-panel-in 0.18s cubic-bezier(0.16,1,0.3,1) both; }
         .cp-input { width:100%;background:transparent;border:none;outline:none;font-family:'DM Mono',monospace;font-size:14px;color:${inp};caret-color:${inp};letter-spacing:0.02em;padding:0; }
         .cp-input::placeholder { color:${ph}; }
         .cp-list { max-height:260px;overflow-y:auto;scrollbar-width:none;padding:6px 0; }
@@ -813,9 +921,9 @@ export default function CommandPalette({ setDark }) {
         .cp-footer { padding:8px 16px;border-top:1px solid ${bdr};display:flex;align-items:center;gap:14px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:${ktx}; }
         .cp-fab-wrap { position: fixed; right: 24px; bottom: 24px; z-index: 10020; display: flex; align-items: center; justify-content: center; }
         .cp-fab-pulse { position: absolute; width: 78px; height: 78px; border-radius: 50%; background: radial-gradient(circle, rgba(56,189,248,0.28) 0%, rgba(99,102,241,0.2) 40%, rgba(139,92,246,0) 72%); animation: cp-fab-pulse 3.6s ease-out infinite; pointer-events: none; left: 50%; top: 50%; }
-        .cp-fab { position: relative; width: 56px; height: 56px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.28); background: ${dark ? "linear-gradient(160deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08))" : "linear-gradient(160deg, rgba(255,255,255,0.12), rgba(148,163,184,0.24))"}; color: ${dark ? "#ffffff" : "#050505"}; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transform: translateY(0) scale(1) rotate(0deg); transition: transform 240ms cubic-bezier(0.22,1,0.36,1), border-color 240ms ease, box-shadow 240ms ease, background 240ms ease; box-shadow: 0 12px 34px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.03) inset, 0 0 24px rgba(79,70,229,0.35), 0 0 42px rgba(59,130,246,0.2); animation: cp-fab-breathe 4.5s ease-in-out infinite; overflow: hidden; }
+        .cp-fab { position: relative; width: 56px; height: 56px; border-radius: 999px; border: 1px solid rgba(238, 16, 16, 0.28); background: ${dark ? "linear-gradient(160deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08))" : "linear-gradient(160deg, rgba(255,255,255,0.12), rgba(148,163,184,0.24))"}; color: ${dark ? "#ffffff" : "#050505"}; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transform: translateY(0) scale(1) rotate(0deg); transition: transform 240ms cubic-bezier(0.22,1,0.36,1), border-color 240ms ease, box-shadow 240ms ease, background 240ms ease; box-shadow: 0 12px 34px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.03) inset, 0 0 24px rgba(79,70,229,0.35), 0 0 42px rgba(59,130,246,0.2); animation: cp-fab-breathe 4.5s ease-in-out infinite; overflow: hidden; }
         .cp-fab::before { content: ""; position: absolute; inset: -2px; border-radius: inherit; background: conic-gradient(from 210deg, rgba(56,189,248,0.0), rgba(56,189,248,0.55), rgba(99,102,241,0.55), rgba(168,85,247,0.55), rgba(56,189,248,0.0)); filter: blur(8px); opacity: 0.32; transition: opacity 240ms ease; z-index: 0; }
-        .cp-fab::after { content: ""; position: absolute; inset: 1px; border-radius: inherit; background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.02) 36%); opacity: 0.65; pointer-events: none; z-index: 1; }
+        .cp-fab::after { content: ""; position: absolute; inset: 1px; border-radius: inherit; background: linear-gradient(180deg, rgba(201, 11, 11, 0.28), rgba(255,255,255,0.02) 36%); opacity: 0.65; pointer-events: none; z-index: 1; }
         .cp-fab:hover, .cp-fab:focus-visible { transform: translateY(-2px) scale(1.08) rotate(-2deg); border-color: rgba(255,255,255,0.48); box-shadow: 0 18px 42px rgba(0,0,0,0.34), 0 0 0 1px rgba(255,255,255,0.1) inset, 0 0 36px rgba(59,130,246,0.4), 0 0 66px rgba(139,92,246,0.34); }
         .cp-fab:hover::before, .cp-fab:focus-visible::before { opacity: 0.7; }
         .cp-fab:focus-visible { outline: none; }
@@ -845,6 +953,25 @@ export default function CommandPalette({ setDark }) {
       {/* ── Palette overlay — only when open ── */}
       {(open || mounted) && (
       <div className="cp-overlay" onClick={() => setOpen(false)}>
+        {isHackMode && (
+          <div className="cp-hack-rain" aria-hidden="true">
+            {hackRainDrops.map((drop) => (
+              <span
+                key={drop.id}
+                className="cp-hack-drop"
+                style={{
+                  left: `${drop.left}%`,
+                  animationDuration: `${drop.duration}s`,
+                  animationDelay: `${drop.delay}s`,
+                  fontSize: `${drop.size}px`,
+                  color: `rgba(74, 255, 122, ${drop.opacity})`,
+                }}
+              >
+                {drop.text}
+              </span>
+            ))}
+          </div>
+        )}
         <div className="cp-panel" onClick={e => e.stopPropagation()}>
 
           {/* Top bar — back + close */}

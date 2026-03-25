@@ -117,7 +117,7 @@ function TerminalCard({ dark }) {
   }, [lines]);
 
   const lineStyle = (cls) => {
-    if (cls === "dim") return { color: dark ? "#666" : "#bbb" };
+    if (cls === "dim") return { color: dark ? "#cdcdcd" : "#464646" };
     if (cls === "green") return { color: dark ? "#4ade80" : "#16a34a" };
     if (cls === "accent")
       return { color: dark ? "#ffffff" : "#111111", fontWeight: 500 };
@@ -187,7 +187,7 @@ function TerminalCard({ dark }) {
               fontFamily: "'DM Mono', monospace",
               fontSize: "11px",
               letterSpacing: "0.06em",
-              color: dark ? "#777" : "#bbb",
+              color: dark ? "#777" : "#202020",
               marginLeft: "8px",
             }}
           >
@@ -532,7 +532,7 @@ export default function Hero() {
                       fontSize: "10px",
                       textTransform: "uppercase",
                       letterSpacing: "0.14em",
-                      color: dark ? "#666" : "#999",
+                      color: dark ? "#b4b4b4" : "#999",
                       fontWeight: 500,
                     }}
                   >

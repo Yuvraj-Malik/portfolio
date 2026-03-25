@@ -93,10 +93,10 @@ export default function Footer() {
   const c = {
     bg: dark ? "#060606" : "#f8f6f0",
     heading: dark ? "#ffffff" : "#080808",
-    body: dark ? "#959595" : "#888888",
-    label: dark ? "#aaaaaa" : "#494949",
+    body: dark ? "#cacaca" : "#888888",
+    label: dark ? "#c9c9c9" : "#494949",
     divider: dark ? "#141414" : "#e8e8e8",
-    link: dark ? "#9d9d9d" : "#5b5b5b",
+    link: dark ? "#bdbdbd" : "#5b5b5b",
     linkHover: dark ? "#ffffff" : "#000000",
     iconBg: dark ? "#111111" : "#eeeeee",
     iconHover: dark ? "#1e1e1e" : "#e0e0e0",
@@ -105,7 +105,7 @@ export default function Footer() {
     btnBg: dark ? "#ffffff" : "#111111",
     btnText: dark ? "#111111" : "#ffffff",
     mutedBtnBg: dark ? "#111111" : "#eeeeee",
-    mutedBtnText: dark ? "#a7a7a7" : "#888888",
+    mutedBtnText: dark ? "#bdbdbd" : "#888888",
     dot: "#4ade80",
   };
 
@@ -161,7 +161,7 @@ export default function Footer() {
                   fontFamily: "'Instrument Serif', Georgia, serif",
                   fontSize: 22,
                   fontWeight: 400,
-                  letterSpacing: "-0.02em",
+                  letterSpacing: "0.02em",
                   color: c.heading,
                   margin: "0 0 10px 0",
                 }}
@@ -358,7 +358,7 @@ export default function Footer() {
                   fontFamily: "'Instrument Serif', Georgia, serif",
                   fontSize: 17,
                   color: c.heading,
-                  letterSpacing: "-0.02em",
+                  letterSpacing: "0.02em",
                   lineHeight: 1.2,
                   margin: "0 0 8px 0",
                 }}
@@ -406,19 +406,22 @@ export default function Footer() {
                     background: c.mutedBtnBg,
                     textDecoration: "none",
                     borderRadius: 100,
+                    border: `1px solid ${dark ? "#2b2b2b" : "#d6d6d6"}`,
                     padding: "9px 18px",
                     letterSpacing: "0.05em",
                     textAlign: "center",
-                    transition: "opacity 0.15s ease",
+                    transition: "opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease",
                     display: "block",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.opacity = "0.7";
-                    e.currentTarget.style.color = dark ? c.mutedBtnText : "#000";
+                    e.currentTarget.style.color = "#ffffff";
+                    e.currentTarget.style.borderColor = "#ffffff";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.opacity = "1";
                     e.currentTarget.style.color = c.mutedBtnText;
+                    e.currentTarget.style.borderColor = dark ? "#2b2b2b" : "#d6d6d6";
                   }}
                 >
                   View Resume ↓

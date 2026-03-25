@@ -96,12 +96,12 @@ export default function Contact() {
 
   const c = {
     heading: dark ? "#ffffff" : "#080808",
-    body: dark ? "#888888" : "#666666",
+    body: dark ? "#ababab" : "#666666",
     label: dark ? "#cfcfcf" : "#1d1d1d",
     divider: dark ? "#1a1a1a" : "#eeeeee",
     cardBg: dark ? "rgba(255,255,255,0.025)" : "rgba(0,0,0,0.015)",
     cardBorder: dark ? "#1e1e1e" : "#e8e8e8",
-    cardHover: dark ? "#2a2a2a" : "#d4d4d4",
+    cardHover: dark ? "rgba(255,255,255,0.38)" : "#d4d4d4",
     inputBg: dark ? "rgba(255,255,255,0.04)" : "#ffffff",
     inputBorder: dark ? "#282828" : "#e4e4e4",
     inputFocus: dark ? "#505050" : "#323232",
@@ -267,7 +267,7 @@ export default function Contact() {
               <em
                 style={{
                   fontStyle: "italic",
-                  color: dark ? "#747474" : "#878787",
+                  color: dark ? "#a5a5a5" : "#878787",
                 }}
               >
                 real.
@@ -472,7 +472,7 @@ export default function Contact() {
                   fontFamily: "'Instrument Serif', Georgia, serif",
                   fontSize: 21,
                   color: c.heading,
-                  letterSpacing: "-0.02em",
+                  letterSpacing: "0.02em",
                   lineHeight: 1.2,
                   marginBottom: 8,
                 }}

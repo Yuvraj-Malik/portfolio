@@ -178,14 +178,14 @@ export default function Journey() {
   const c = {
     heading: dark ? "#ffffff" : "#080808",
     subtext: dark ? "#cccccc" : "#444444",
-    body: dark ? "#b8b8b8" : "#333333",
+    body: dark ? "#e0e0e0" : "#333333",
     label: dark ? "#cfcfcf" : "#1d1d1d",
     divider: dark ? "#222222" : "#e8e8e8",
-    line: dark ? "#2a2a2a" : "#dedede",
+    line: dark ? "rgba(255,255,255,0.28)" : "#dedede",
     cardBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.015)",
     cardBorder: dark ? "#1e1e1e" : "#e0e0e0",
-    cardHover: dark ? "#303030" : "#c8c8c8",
-    yearColor: dark ? "#a3a3a3" : "#444444",
+    cardHover: dark ? "#6d6d6d" : "#c8c8c8",
+    yearColor: dark ? "#d1d1d1" : "#444444",
     bullet: dark ? "#909090" : "#aaaaaa",
     bulletText: dark ? "#aaaaaa" : "#444444",
     roleTitle: dark ? "#ffffff" : "#111111",
@@ -450,7 +450,7 @@ export default function Journey() {
                                     : c.body,
                                   letterSpacing:
                                     item.type === "project"
-                                      ? "-0.01em"
+                                      ? "0.02em"
                                       : "0.02em",
                                   lineHeight: 1.3,
                                   transition: "color 0.15s ease",

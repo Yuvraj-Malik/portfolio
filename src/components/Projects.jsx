@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect} from "react";
 
 // ─── Dark mode hook ───────────────────────────────────────────────────────────
 function useDarkMode() {
@@ -434,20 +434,20 @@ const PROJECTS = [
 
 const ENGINEERING_DECISIONS = [
   {
-    title: "Why I prefer REST over GraphQL for most projects",
-    body: "GraphQL's flexibility becomes overhead when your data relationships are stable. REST with well-designed endpoints is easier to cache, debug, and monitor. I reach for GraphQL only when client-driven query flexibility genuinely matters.",
+    title: "Why I avoid overengineering",
+    body: "Most problems don’t need complex architectures. Adding layers too early slows development and makes systems harder to maintain. I start simple, and only introduce complexity when there’s a clear need for it.",
   },
   {
-    title: "Why I containerize even small applications",
-    body: "Environment parity eliminates a whole class of bugs. The cost of writing a Dockerfile is always lower than debugging 'works on my machine' issues. It also forces you to think about dependencies explicitly.",
+    title: "Why I build for failure, not perfection",
+    body: "Systems will fail — that’s a guarantee. Instead of chasing perfect code, I focus on graceful fallbacks, error handling, and recoverability. Resilient systems matter more than ideal ones.",
   },
   {
-    title: "Performance over feature count",
-    body: "A slow feature is a broken feature. I'd rather ship one thing that runs at 60fps than three things that stutter. Users feel performance before they notice features.",
+    title: "Why developer experience matters",
+    body: "Good tooling, clear structure, and fast feedback loops make teams exponentially more productive. If the codebase is hard to work with, everything slows down — including innovation.",
   },
   {
-    title: "When AI is the wrong tool",
-    body: "Not every problem needs a model. If deterministic logic solves it cleanly — use that. AI adds latency, cost, and unpredictability. I only reach for it when the problem is genuinely ambiguous or requires learned patterns.",
+    title: "Why consistency beats cleverness",
+    body: "Clever code might feel impressive, but it’s often hard to read and maintain. I prefer predictable patterns and consistency so that anyone can understand and extend the system.",
   },
 ];
 
@@ -464,7 +464,7 @@ function StatusBadge({ status, dark }) {
         fontSize: 9,
         letterSpacing: "0.08em",
         textTransform: "uppercase",
-        color: dark ? "#888" : "#777",
+        color: dark ? "#b7b7b7" : "#777",
         border: `1px solid ${dark ? "#444" : "#ccc"}`,
         borderRadius: 4,
         padding: "2px 6px",
@@ -482,7 +482,7 @@ function TechPill({ label, dark }) {
       style={{
         fontFamily: "'DM Mono', monospace",
         fontSize: 10,
-        color: dark ? "#c0c0c0" : "#444",
+        color: dark ? "#ffffff" : "#444",
         border: `1px solid ${dark ? "#333" : "#ddd"}`,
         borderRadius: 4,
         padding: "3px 9px",
@@ -495,7 +495,7 @@ function TechPill({ label, dark }) {
   );
 }
 
-function ProjectTabContent({ project, tab, dark, c }) {
+function ProjectTabContent({ project, tab, dark}) {
   if (tab === "Overview") {
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -672,7 +672,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
                 style={{
                   fontFamily: "'DM Mono', monospace",
                   fontSize: 10,
-                  color: dark ? "#888" : "#999",
+                  color: dark ? "#bcbcbc" : "#999",
                   marginLeft: 8,
                   letterSpacing: "0.04em",
                 }}
@@ -700,7 +700,7 @@ function ProjectTabContent({ project, tab, dark, c }) {
 }
 
 // Card tile — sits in the 2-column grid
-function ProjectCard({ project, dark, c, mode, isExpanded, onToggle, index }) {
+function ProjectCard({ project, dark, mode, isExpanded, onToggle, index }) {
   const isShowcase = mode === "showcase";
 
   return (
@@ -770,7 +770,7 @@ function ProjectCard({ project, dark, c, mode, isExpanded, onToggle, index }) {
                 : dark
                   ? "#c0c0c0"
                   : "#333",
-              letterSpacing: isShowcase ? "-0.01em" : "0.02em",
+              letterSpacing: isShowcase ? "0.01em" : "0.02em",
               transition: "color 0.15s ease",
             }}
           >
@@ -800,7 +800,7 @@ function ProjectCard({ project, dark, c, mode, isExpanded, onToggle, index }) {
             margin: "0 0 12px 0",
             fontFamily: "'DM Mono', monospace",
             fontSize: 11,
-            color: dark ? "#aaa" : "#555",
+            color: dark ? "#b3b3b3" : "#555",
             letterSpacing: "0.02em",
             lineHeight: 1.5,
           }}
@@ -819,11 +819,8 @@ function ProjectCard({ project, dark, c, mode, isExpanded, onToggle, index }) {
 }
 
 // Expanded detail panel — two completely different layouts per mode
-function ProjectExpanded({ project, dark, c, mode, onClose }) {
-  const [activeTab, setActiveTab] = useState("Overview");
-  const isShowcase = mode === "showcase";
-
-  const BackBtn = () => (
+function ProjectBackButton({ dark, onClose }) {
+  return (
     <button
       onClick={onClose}
       style={{
@@ -832,7 +829,7 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
         cursor: "pointer",
         fontFamily: "'DM Mono', monospace",
         fontSize: 11,
-        color: dark ? "#888" : "#888",
+        color: dark ? "#cecece" : "#888",
         letterSpacing: "0.08em",
         padding: "0 0 28px 0",
         display: "inline-flex",
@@ -850,6 +847,11 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
       ← All Projects
     </button>
   );
+}
+
+function ProjectExpanded({ project, dark, c, mode, onClose }) {
+  const [activeTab, setActiveTab] = useState("Overview");
+  const isShowcase = mode === "showcase";
 
   // ── SHOWCASE LAYOUT — visual, spacious, impression-first ──
   if (isShowcase) {
@@ -859,7 +861,7 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
           animation: "proj-fade-up 0.25s cubic-bezier(0.16,1,0.3,1) both",
         }}
       >
-        <BackBtn />
+        <ProjectBackButton dark={dark} onClose={onClose} />
 
         {/* Large preview */}
         <div
@@ -1137,7 +1139,7 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
         animation: "proj-fade-up 0.25s cubic-bezier(0.16,1,0.3,1) both",
       }}
     >
-      <BackBtn />
+      <ProjectBackButton dark={dark} onClose={onClose} />
 
       <div
         style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 48 }}
@@ -1171,7 +1173,7 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
             style={{
               fontFamily: "'DM Mono', monospace",
               fontSize: 12,
-              color: dark ? "#aaa" : "#555",
+              color: dark ? "#c6c6c6" : "#555",
               lineHeight: 1.65,
               letterSpacing: "0.02em",
               marginBottom: 20,
@@ -1205,7 +1207,7 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
                   style={{
                     fontFamily: "'DM Mono', monospace",
                     fontSize: 12,
-                    color: dark ? "#c0c0c0" : "#444",
+                    color: dark ? "#dcdcdc" : "#444",
                     lineHeight: 1.55,
                     letterSpacing: "0.02em",
                   }}
@@ -1669,7 +1671,7 @@ export default function Projects() {
                           ? "#e0e0e0"
                           : "#111"
                         : dark
-                          ? "#8a8a8a"
+                          ? "#a0a0a0"
                           : "#aaa",
                     transition: "all 0.15s ease",
                   }}
@@ -1758,7 +1760,7 @@ export default function Projects() {
                 fontFamily: "'Instrument Serif', Georgia, serif",
                 fontSize: "clamp(1.4rem, 2.5vw, 1.9rem)",
                 fontWeight: 400,
-                color: dark ? "#888" : "#aaa",
+                color: dark ? "#dcdcdc" : "#aaa",
                 marginBottom: 40,
                 letterSpacing: "-0.02em",
                 fontStyle: "italic",
@@ -1802,7 +1804,7 @@ export default function Projects() {
                       fontSize: 16,
                       fontWeight: 400,
                       color: c.heading,
-                      letterSpacing: "-0.01em",
+                      letterSpacing: "0.01em",
                       lineHeight: 1.3,
                     }}
                   >
@@ -1813,7 +1815,7 @@ export default function Projects() {
                       margin: 0,
                       fontFamily: "'DM Mono', monospace",
                       fontSize: 11.5,
-                      color: dark ? "#777" : "#888",
+                      color: dark ? "#d2d2d2" : "#888",
                       lineHeight: 1.7,
                       letterSpacing: "0.02em",
                     }}

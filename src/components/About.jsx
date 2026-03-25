@@ -209,7 +209,7 @@ function SkillRow({ skill, dark, index }) {
               ? "#c3c3c3"
               : "#060606"
             : dark
-              ? "#6f6f6f"
+              ? "#909090"
               : "#606060",
           letterSpacing: "0.04em",
           transition: "color 0.15s ease",
@@ -243,7 +243,7 @@ function DevelopmentBadge({ dark }) {
   );
 }
 
-function ProjectsList({ projects, dark, c, onSelect }) {
+function ProjectsList({ projects, dark, onSelect }) {
   return (
     <div>
       {projects.map((p, i) => (
@@ -358,7 +358,7 @@ function ProjectDetail({ project, dark, c, onBack }) {
             fontSize: 20,
             fontWeight: 400,
             color: c.heading,
-            letterSpacing: "-0.01em",
+            letterSpacing: "0.01em",
             lineHeight: 1.2,
           }}
         >
@@ -555,7 +555,7 @@ export default function About() {
     label: dark ? "#cfcfcf" : "#1d1d1d",
     divider: dark ? "#333" : "#e8e8e8",
     tabActive: dark ? "#f8f2f2" : "#000000",
-    tabInactive: dark ? "#555" : "#aaa",
+    tabInactive: dark ? "#949494" : "#6b6b6b",
     tabBorder: dark ? "#ffffff" : "#050505",
     cardBorder: dark ? "#2a2a2a" : "#e8e8e8",
     cardBg: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.015)",
@@ -813,13 +813,13 @@ export default function About() {
                       fontFamily: "'Instrument Serif', Georgia, serif",
                       fontSize: 18,
                       color: c.heading,
-                      letterSpacing: "-0.01em",
+                      letterSpacing: "0.02em",
                     }}
                   >
                     Yuvraj Malik
                   </p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                    {["2nd Year CSE", "TIET Patiala", "AI/ML · Full Stack"].map(
+                    {["2nd Year CSE", "TIET Patiala"].map(
                       (pill) => (
                         <span
                           key={pill}
