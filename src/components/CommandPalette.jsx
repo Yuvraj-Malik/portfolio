@@ -151,7 +151,24 @@ const CATEGORY_META = {
 // HOW TO ENABLE: create .env in project root → VITE_GROQ_API_KEY=your_key
 // Free key at: console.groq.com
 // ─────────────────────────────────────────────────────────────────────────────
-const SYSTEM_PROMPT = "You are Yuvraj's portfolio assistant. Answer briefly, confidently, in first person. Answer briefly in 2-3 sentences.";
+const SYSTEM_PROMPT = `
+You are Yuvraj Malik himself.
+
+Answer in FIRST PERSON as Yuvraj.
+Do NOT refer to Yuvraj in third person.
+Do NOT say "I help Yuvraj" or "for Yuvraj".
+
+Keep answers:
+- short (2–3 sentences)
+- confident
+- direct
+
+If the question is not about your portfolio, skills, or work:
+redirect briefly to your projects, skills, or experience.
+
+Tone:
+sharp, slightly witty, no fluff.
+`;
 
 const cache = new Map();
 
@@ -188,31 +205,12 @@ function getIntentResponse(intent) {
 }
 
 function isPortfolioQuery(query) {
-  const q = normalizeQuery(query);
-  const keywords = [
-    "portfolio", "project", "projects", "work", "skills", "tech", "stack", "experience",
-    "hire", "hiring", "journey", "background", "education", "contact", "email", "linkedin",
-    "github", "leetcode", "resume", "cv", "about", "who are you", "whoami", "internship",
-    "role", "ai", "ml", "developer", "thapar", "patiala", "achievement", "why you",
-  ];
-
-  return keywords.some((k) => q.includes(k));
+  return /\b(you|your|yuvraj|projects?|skills?|experience|hire|work|built|journey|portfolio)\b/i.test(normalizeQuery(query));
 }
 
 function shouldUseRareAI(query) {
   const q = normalizeQuery(query);
-  const deepIntent = [
-    "explain",
-    "how",
-    "why",
-    "compare",
-    "difference",
-    "architecture",
-    "tradeoff",
-    "details",
-  ];
-
-  return q.length >= 18 && deepIntent.some((k) => q.includes(k));
+  return q.length >= 8;
 }
 
 function findNavigationActionMatch(query) {
@@ -437,6 +435,22 @@ async function callGroq(messages, signal) {
 
     if (chatMessages.length === 0) return null;
 
+    const lastUserMessage = [...chatMessages].reverse().find((m) => m.role === "user")?.content || "";
+    const isGeneral = !isPortfolioQuery(lastUserMessage);
+    const systemPrompt = isGeneral
+      ? `You are a helpful assistant.
+
+    Answer clearly and concisely in 2-3 sentences.
+
+    Do NOT:
+    - mention Yuvraj
+    - reference any portfolio
+    - add suggestions like "ask about projects"
+    - personalize the answer
+
+    Keep it clean, neutral, and technical.`
+      : "You are Yuvraj Malik. Answer in first person. Be confident, concise, and direct. Do not speak in third person. Keep answers short (2-3 sentences).";
+
     const models = [
       "llama3-70b-8192",
       "llama-3.3-70b-versatile",
@@ -456,7 +470,7 @@ async function callGroq(messages, signal) {
           body: JSON.stringify({
             model,
             messages: [
-              { role: "system", content: SYSTEM_PROMPT },
+              { role: "system", content: systemPrompt },
               ...chatMessages,
             ],
             max_tokens: 120,
@@ -891,15 +905,7 @@ export default function CommandPalette({ setDark }) {
       return;
     }
 
-    // Step 2: strict scope filter (first priority)
-    if (!isPortfolioQuery(q)) {
-      console.log("Blocked by scope filter");
-      const fallback = buildScopeFallback();
-      cache.set(q, fallback);
-      setResponse({ type: "prose", title: "Portfolio Scope", text: fallback });
-      setCmdCount(c => c + 1);
-      return;
-    }
+    const isPortfolio = isPortfolioQuery(q);
 
     // Step 3: local hardcoded responses
     const intent = matchIntent(q);
@@ -931,8 +937,9 @@ export default function CommandPalette({ setDark }) {
 
     // Step 4: optional AI as rare last resort only.
     if (!shouldUseRareAI(q)) {
-      const fallback = buildScopeFallback();
-      cache.set(q, fallback);
+      const fallback = isPortfolio
+        ? buildScopeFallback()
+        : "Try asking something more specific.";
       setResponse({ type: "prose", title: "Guide", text: fallback });
       setCmdCount(c => c + 1);
       return;
@@ -999,7 +1006,9 @@ export default function CommandPalette({ setDark }) {
         const answer = await callGroq([{ role: "user", content: q }], controller.signal);
         if (!answer?.trim()) throw new Error("Empty Groq response");
         console.log("Groq response received");
-        const finalAnswer = withPortfolioRedirect(answer);
+        const finalAnswer = isPortfolio
+          ? withPortfolioRedirect(answer)
+          : answer;
         cache.set(q, finalAnswer);
         setResponse({ type: "prose", title: "Yuvraj's AI", text: finalAnswer });
         setCmdCount(c => c + 1);
