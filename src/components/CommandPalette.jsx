@@ -60,7 +60,9 @@ function normalizeQuery(q) {
     .toLowerCase()
     .trim()
     .replace(/[?!.]+$/, "")
-    .replace(/\s+/g, " ");
+    .replace(/\s+/g, " ")
+    .replace(/\s*([+*/%=()])\s*/g, "$1")
+    .replace(/\s*-\s*/g, "-");
 }
 
 function fuzzyScore(query, target) {
@@ -145,11 +147,11 @@ const CATEGORY_META = {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// AI — Gemini with smart local fallback
-// HOW TO ENABLE: create .env in project root → VITE_GEMINI_API_KEY=your_key
-// Free key at: aistudio.google.com
+// AI — Groq with smart local fallback
+// HOW TO ENABLE: create .env in project root → VITE_GROQ_API_KEY=your_key
+// Free key at: console.groq.com
 // ─────────────────────────────────────────────────────────────────────────────
-const SYSTEM_PROMPT = "You are Yuvraj's portfolio assistant. Answer briefly, confidently, in first person.";
+const SYSTEM_PROMPT = "You are Yuvraj's portfolio assistant. Answer briefly, confidently, in first person. Answer briefly in 2-3 sentences.";
 
 const cache = new Map();
 
@@ -185,14 +187,74 @@ function getIntentResponse(intent) {
   }
 }
 
-function shouldUseAI(query) {
-  const triggers = ["why", "how", "explain", "describe", "tell me more"];
-  return triggers.some((trigger) => query.includes(trigger));
+function isPortfolioQuery(query) {
+  const q = normalizeQuery(query);
+  const keywords = [
+    "portfolio", "project", "projects", "work", "skills", "tech", "stack", "experience",
+    "hire", "hiring", "journey", "background", "education", "contact", "email", "linkedin",
+    "github", "leetcode", "resume", "cv", "about", "who are you", "whoami", "internship",
+    "role", "ai", "ml", "developer", "thapar", "patiala", "achievement", "why you",
+  ];
+
+  return keywords.some((k) => q.includes(k));
+}
+
+function shouldUseRareAI(query) {
+  const q = normalizeQuery(query);
+  const deepIntent = [
+    "explain",
+    "how",
+    "why",
+    "compare",
+    "difference",
+    "architecture",
+    "tradeoff",
+    "details",
+  ];
+
+  return q.length >= 18 && deepIntent.some((k) => q.includes(k));
+}
+
+function findNavigationActionMatch(query) {
+  const q = normalizeQuery(query);
+  if (!q) return null;
+
+  const commandPool = COMMANDS.filter(
+    (cmd) => cmd.category === "navigate" || cmd.category === "action",
+  );
+
+  for (const cmd of commandPool) {
+    const exact = [cmd.label, ...cmd.aliases]
+      .map((v) => normalizeQuery(v))
+      .includes(q);
+    if (exact) return cmd;
+  }
+
+  const scored = commandPool
+    .map((cmd) => ({ cmd, score: scoreCommand(cmd, q) }))
+    .sort((a, b) => b.score - a.score)[0];
+
+  if (scored?.score >= 86) return scored.cmd;
+  return null;
+}
+
+function buildSmartFallback(query) {
+  const hint = query ? `for "${query}"` : "right now";
+  return `I couldn't fully process your request ${hint}, but I can help you explore my work. Try asking about: • projects • skills • experience • why hire me`;
+}
+
+function buildScopeFallback() {
+  return "I focus on my work, projects, and experience. Try asking about: • projects • skills • experience • why hire me";
+}
+
+function withPortfolioRedirect(text) {
+  const redirect = "If you're exploring my work, feel free to ask about my projects, skills, or experience.";
+  return `${text.trim()} ${redirect}`.trim();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // LOCAL AI — custom answers for every predictable question
-// Returns null if nothing matches → Gemini handles it
+// Returns null if nothing matches → Groq handles it
 // ─────────────────────────────────────────────────────────────────────────────
 function localAIResponse(q) {
   const t = normalizeQuery(q);
@@ -200,7 +262,7 @@ function localAIResponse(q) {
   // ── RUDE / OFFENSIVE ─────────────────────────────────────────────────────
   const rudeWords = ["fuck","shit","bitch","cunt","bastard","idiot","stupid","dumb","loser","moron","chutiya","bc","mc","bkl","lodu","gandu","bakwas","bekar","faltu","worthless","useless","trash","garbage","pathetic"];
   if (rudeWords.some(w => t.includes(w)))
-    return `Bold of you to open a portfolio and start here. Anyway — I've built gesture-controlled 3D environments and AI systems from scratch. Stick around, it gets interesting.`;
+    return `Bold of you to open a portfolio and start here.`;
 
   // ── GREETINGS ─────────────────────────────────────────────────────────────
   if (/^(hi+|hello+|hey+|yo|sup|hiya|heya|howdy|greetings|wassup|what.?s up|namaste|hola|bonjour|salut|ciao|oi|aight|aayo)$/.test(t))
@@ -212,7 +274,7 @@ function localAIResponse(q) {
 
   // ── RELATIONSHIP / GF ─────────────────────────────────────────────────────
   if (t.match(/girlfriend|\bgf\b|\bbf\b|boyfriend|relationship|dating|\bsingle\b|married|wife|husband|partner|crush|love life|love interest|does he like|is he taken|available|\bbae\b|\bboo\b|pyaar|ladki/))
-    return `Currently in a committed relationship — with my code editor. She never crashes (unlike my last React app). My GitHub streak is the only streak I'm maintaining right now.`;
+    return `Yes,currently in a committed relationship — with my code editor. She never crashes (unlike my last React app).`;
 
   // ── AGE / DOB ─────────────────────────────────────────────────────────────
   if (t.match(/how old|\bage\b|\bborn\b|birthday|\bdob\b|birth date|year of birth|kitne saal|umar/))
@@ -236,7 +298,7 @@ function localAIResponse(q) {
 
   // ── HOBBIES / FREE TIME ──────────────────────────────────────────────────
   if (t.match(/hobby|hobbies|free time|outside.?work|passion|\binterest\b|pastime|weekend|spare time|kya karta|timepass|fun karta/))
-    return `Chess — district-level gold medalist. And building things that don't need to exist yet. The line between hobby and work disappeared a while ago.`;
+    return `Chess — district-level gold medalist.The line between hobby and work disappeared a while ago.`;
 
   // ── FOOD ─────────────────────────────────────────────────────────────────
   if (t.match(/\bfood\b|\beat\b|\bdish\b|cuisine|khana|favourite food|kya khata|cook|cooking|kitchen|chef|\bbake\b|maggi|chai|\bcoffee\b/))
@@ -248,7 +310,7 @@ function localAIResponse(q) {
 
   // ── MUSIC ────────────────────────────────────────────────────────────────
   if (t.match(/music|\bsong\b|playlist|\blisten\b|singer|band|artist|favourite song|kya sunta/))
-    return `Lofi when coding. Something loud when debugging. Silence when actually thinking.`;
+    return `Lofi when coding.Sidhu when debugging. Silence when actually thinking.`;
 
   // ── ANIME ────────────────────────────────────────────────────────────────
   if (t.match(/\banime\b|manga|weeb|otaku|favourite anime|which anime/))
@@ -256,7 +318,7 @@ function localAIResponse(q) {
 
   // ── GAMING ───────────────────────────────────────────────────────────────
   if (t.match(/\bgame\b|gaming|\bplay\b|gamer|favourite game|khelna|video game/))
-    return `Chess, mostly. And occasionally I build the games instead of playing them — see: Anime Clash, Bomb Difuse.`;
+    return `Game depends on the mood like cricket, chess or among us.`;
 
   // ── FAVOURITE LANGUAGE/TECH ──────────────────────────────────────────────
   if (t.match(/fav(ou?rite)? (language|tech|framework|tool|stack)|best language|prefer (to )?(code|use|work)/))
@@ -279,12 +341,12 @@ function localAIResponse(q) {
     return `Online. All systems nominal. Ask me anything.`;
 
   // ── AI / THIS CHATBOT ─────────────────────────────────────────────────────
-  if (t.match(/are you (an? )?ai|are you (a )?bot|are you real|are you human|who built you|how do you work|what are you|are you chatgpt|are you gemini|tu bot hai|real hai/))
-    return `I'm an AI assistant built into Yuvraj's portfolio — powered by Gemini and his portfolio data. I answer as him. For anything I miss, he's at ${PORTFOLIO.email}`;
+  if (t.match(/are you (an? )?ai|are you (a )?bot|are you real|are you human|who built you|how do you work|what are you|are you chatgpt|are you gemini|are you groq|tu bot hai|real hai/))
+    return `I'm an AI assistant built into Yuvraj's portfolio — powered by Groq and his portfolio data. I answer as him. For anything I miss, he's at ${PORTFOLIO.email}`;
 
   // ── COMPARISON ───────────────────────────────────────────────────────────
   if (t.match(/pratham|compare|better than|\bvs\b|versus|competition|other developer|kisise better/))
-    return `I'll let the work speak. Eight shipped projects, cross-stack depth from AI pipelines to hardware, and a portfolio that doubles as a command center. Make your own call.`;
+    return `I'll let the work speak.Cross-stack depth from AI pipelines to hardware, and a portfolio that doubles as a command center. Make your own call.`;
 
   // ── EXISTENTIAL / RANDOM ─────────────────────────────────────────────────
   if (t.match(/meaning of life|\b42\b|universe|\bgod\b|exist|consciousness|philosophy|\bdeep\b|zindagi ka matlab|sab moh maya/))
@@ -356,43 +418,77 @@ function localAIResponse(q) {
   if (t.match(/where (are you|do you live|from|based)|\blocation\b|\bcity\b|india|patiala|punjab|kahan rehta/))
     return `Based in ${PORTFOLIO.location}.`;
 
-  // No local match → Gemini handles it
+  // No local match → Groq handles it
   return null;
 }
 
 
-async function askGemini(messages) {
-  const lastQuestion = normalizeQuery(messages[messages.length - 1]?.content || "");
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-  if (!apiKey) return localAIResponse(lastQuestion) || `I don't have that info — reach me at ${PORTFOLIO.email}`;
+async function callGroq(messages, signal) {
+  const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+  if (!apiKey) return null;
 
   try {
-    const contents = messages
+    const chatMessages = messages
       .filter(m => m?.content)
       .map(m => ({
-        role: m.role === "assistant" ? "model" : "user",
-        parts: [{ text: m.content }],
+        role: m.role,
+        content: String(m.content).trim(),
       }));
 
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents,
-          generationConfig: { temperature: 0.7, maxOutputTokens: 400 },
-        }),
+    if (chatMessages.length === 0) return null;
+
+    const models = [
+      "llama3-70b-8192",
+      "llama-3.3-70b-versatile",
+      "llama-3.1-8b-instant",
+    ];
+
+    for (const model of models) {
+      const res = await fetch(
+        "https://api.groq.com/openai/v1/chat/completions",
+        {
+          method: "POST",
+          signal,
+          headers: {
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model,
+            messages: [
+              { role: "system", content: SYSTEM_PROMPT },
+              ...chatMessages,
+            ],
+            max_tokens: 120,
+            temperature: 0.7,
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        if (res.status === 429) {
+          const err = new Error("RATE_LIMIT");
+          err.name = "RateLimitError";
+          throw err;
+        }
+
+        // 400 often means invalid/unavailable model for current key/project.
+        if (res.status === 400) {
+          continue;
+        }
+
+        return null;
       }
-    );
-    if (!res.ok) return localAIResponse(lastQuestion) || `I don't have that info — reach me at ${PORTFOLIO.email}`;
-    const data = await res.json();
-    const text = data?.candidates?.[0]?.content?.parts?.map(p => p?.text || "").join("").trim();
-    if (text) return text;
-    return localAIResponse(lastQuestion) || `I don't have that info — reach me at ${PORTFOLIO.email}`;
-  } catch {
-    return localAIResponse(lastQuestion) || `I don't have that info — reach me at ${PORTFOLIO.email}`;
+
+      const data = await res.json();
+      const text = data?.choices?.[0]?.message?.content?.trim();
+      if (text) return text;
+    }
+
+    return null;
+  } catch (error) {
+    if (error?.message === "RATE_LIMIT" || error?.name === "AbortError") throw error;
+    return null;
   }
 }
 
@@ -596,7 +692,7 @@ function ResponsePanel({ response, dark }) {
         {[0, 1, 2].map(i => (
           <span key={i} style={{ width: 4, height: 4, borderRadius: "50%", background: btn, display: "inline-block", animation: `cp-dot 1.2s ease-in-out ${i * 0.2}s infinite` }} />
         ))}
-        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: dim, marginLeft: 6 }}>Thinking...</span>
+        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: dim, marginLeft: 6 }}>thinking...</span>
       </div>
     );
   }
@@ -695,6 +791,13 @@ export default function CommandPalette({ setDark }) {
   const inputRef    = useRef(null);
   const itemRefs    = useRef([]);
   const fabBurstRef = useRef(null);
+  const aiLockRef = useRef(false);
+  const aiDebounceRef = useRef(null);
+  const aiAbortRef = useRef(null);
+  const lastGroqCallRef = useRef(0);
+  const rateLimitUntilRef = useRef(0);
+  const aiCallsRef = useRef(0);
+  const MAX_AI_CALLS = 6;
 
   // Ctrl+K / Cmd+K
   useEffect(() => {
@@ -765,23 +868,44 @@ export default function CommandPalette({ setDark }) {
   const listLength = filtered.length;
 
   useEffect(() => { itemRefs.current[selected]?.scrollIntoView({ block: "nearest" }); }, [selected]);
-  useEffect(() => { setSelected(0); setUsedArrowNav(false); }, [query]);
+  useEffect(() => {
+    setSelected(0);
+    setUsedArrowNav(false);
+
+    if (aiDebounceRef.current) {
+      clearTimeout(aiDebounceRef.current);
+      aiDebounceRef.current = null;
+    }
+    if (aiAbortRef.current) {
+      aiAbortRef.current.abort();
+      aiAbortRef.current = null;
+      aiLockRef.current = false;
+    }
+  }, [query]);
 
   const sendToAI = useCallback(async (question) => {
     const q = normalizeQuery(question);
-    const fallbackMessage = `I don't have that info — reach me at ${PORTFOLIO.email}`;
-
-    if (!q) return;
-
-    if (cache.has(q)) {
-      setResponse({ type: "prose", title: "Answer", text: cache.get(q) });
+    if (!q) {
+      setResponse({ type: "prose", title: "Guide", text: buildSmartFallback("") });
       setCmdCount(c => c + 1);
       return;
     }
 
+    // Step 2: strict scope filter (first priority)
+    if (!isPortfolioQuery(q)) {
+      console.log("Blocked by scope filter");
+      const fallback = buildScopeFallback();
+      cache.set(q, fallback);
+      setResponse({ type: "prose", title: "Portfolio Scope", text: fallback });
+      setCmdCount(c => c + 1);
+      return;
+    }
+
+    // Step 3: local hardcoded responses
     const intent = matchIntent(q);
     if (intent) {
-      const answer = getIntentResponse(intent) || fallbackMessage;
+      console.log("Local match found");
+      const answer = getIntentResponse(intent) || buildSmartFallback(q);
       cache.set(q, answer);
       setResponse({ type: "prose", title: "Answer", text: answer });
       setCmdCount(c => c + 1);
@@ -789,27 +913,118 @@ export default function CommandPalette({ setDark }) {
     }
 
     const local = localAIResponse(q);
-    if (local && local.length > 20) {
+    if (local) {
+      console.log("Local match found");
       cache.set(q, local);
       setResponse({ type: "prose", title: "Answer", text: local });
       setCmdCount(c => c + 1);
       return;
     }
 
-    if (!shouldUseAI(q)) {
-      const answer = local || fallbackMessage;
-      cache.set(q, answer);
-      setResponse({ type: "prose", title: "Answer", text: answer });
+    // Step 3b: cache
+    if (cache.has(q)) {
+      console.log("Returning cached response");
+      setResponse({ type: "prose", title: "Answer", text: cache.get(q) });
       setCmdCount(c => c + 1);
       return;
     }
 
-    setResponse({ type: "loading" });
-    const answer = await askGemini([{ role: "user", content: q }]);
-    const finalAnswer = answer?.trim() || local || fallbackMessage;
-    cache.set(q, finalAnswer);
-    setResponse({ type: "prose", title: "Yuvraj's AI", text: finalAnswer });
-    setCmdCount(c => c + 1);
+    // Step 4: optional AI as rare last resort only.
+    if (!shouldUseRareAI(q)) {
+      const fallback = buildScopeFallback();
+      cache.set(q, fallback);
+      setResponse({ type: "prose", title: "Guide", text: fallback });
+      setCmdCount(c => c + 1);
+      return;
+    }
+
+    // Step 7: AI usage budget
+    if (aiCallsRef.current >= MAX_AI_CALLS) {
+      console.log("Blocked by budget");
+      const budgetMessage = "I've reached my AI usage limit for now. I can still help with my projects, skills, or experience.";
+      setResponse({ type: "prose", title: "AI Budget", text: budgetMessage });
+      setCmdCount(c => c + 1);
+      return;
+    }
+
+    // Step 8: rate limit window
+    if (Date.now() < rateLimitUntilRef.current) {
+      console.log("Blocked by cooldown");
+      setResponse({
+        type: "prose",
+        title: "Rate limited",
+        text: "I'm currently rate-limited by the AI service. Give me a moment and try again. Meanwhile, ask about projects, skills, or experience.",
+      });
+      setCmdCount(c => c + 1);
+      return;
+    }
+
+    // Prevent parallel or pending calls
+    if (aiLockRef.current || aiDebounceRef.current) {
+      console.log("Blocked by AI lock");
+      setResponse({
+        type: "prose",
+        title: "Busy",
+        text: "Processing previous request...",
+      });
+      setCmdCount(c => c + 1);
+      return;
+    }
+
+    // Stronger cooldown
+    if (Date.now() - lastGroqCallRef.current < 4000) {
+      console.log("Blocked by cooldown");
+      setResponse({
+        type: "prose",
+        title: "Cooldown",
+        text: "Give me a moment...",
+      });
+      setCmdCount(c => c + 1);
+      return;
+    }
+
+    setResponse({ type: "loading", title: "thinking..." });
+
+    aiDebounceRef.current = setTimeout(async () => {
+      aiDebounceRef.current = null;
+      aiLockRef.current = true;
+
+      console.log("Calling Groq API");
+      const controller = new AbortController();
+      aiAbortRef.current = controller;
+      lastGroqCallRef.current = Date.now();
+      aiCallsRef.current += 1;
+
+      try {
+        const answer = await callGroq([{ role: "user", content: q }], controller.signal);
+        if (!answer?.trim()) throw new Error("Empty Groq response");
+        console.log("Groq response received");
+        const finalAnswer = withPortfolioRedirect(answer);
+        cache.set(q, finalAnswer);
+        setResponse({ type: "prose", title: "Yuvraj's AI", text: finalAnswer });
+        setCmdCount(c => c + 1);
+      } catch (error) {
+        if (error?.name === "AbortError") return;
+
+        if (error?.message === "RATE_LIMIT") {
+          rateLimitUntilRef.current = Date.now() + 30000;
+          console.log("Groq failed");
+          const rateLimitedMessage = "I'm hitting rate limits right now (429). Give me a few seconds and try again. I can still help immediately with projects, skills, journey, or why hire me.";
+          setResponse({ type: "prose", title: "Rate limited", text: rateLimitedMessage });
+          setCmdCount(c => c + 1);
+          return;
+        }
+
+        console.log("Groq failed");
+        const fallback = buildScopeFallback();
+        cache.set(q, fallback);
+        setResponse({ type: "prose", title: "Guide", text: fallback });
+        setCmdCount(c => c + 1);
+      } finally {
+        aiLockRef.current = false;
+        if (aiAbortRef.current === controller) aiAbortRef.current = null;
+      }
+    }, 1300);
   }, []);
 
   const executeCommand = useCallback(async (cmd) => {
@@ -846,6 +1061,19 @@ export default function CommandPalette({ setDark }) {
     if (e.key === "Enter") {
       e.preventDefault();
       const norm = normalizeQuery(query);
+
+      // Step 1: command match (navigation/actions) before AI flow
+      if (norm) {
+        const commandMatch = findNavigationActionMatch(norm);
+        if (commandMatch) {
+          console.log("Local match found");
+          setResponse(null);
+          executeCommand(commandMatch);
+          setUsedArrowNav(false);
+          return;
+        }
+      }
+
       if (norm && filtered[selected]) {
         const selectedCmd = filtered[selected];
         const matchScore = scoreCommand(selectedCmd, norm);
@@ -1061,7 +1289,7 @@ export default function CommandPalette({ setDark }) {
             <span style={{ marginLeft: "auto" }}>
               {cmdCount > 0
                 ? `${cmdCount} run`
-                : import.meta.env.VITE_GEMINI_API_KEY ? "Local-first · Gemini fallback" : "Local-first AI ready"}
+                : import.meta.env.VITE_GROQ_API_KEY ? "Local-first · Groq fallback" : "Local-first AI ready"}
             </span>
           </div>
 
