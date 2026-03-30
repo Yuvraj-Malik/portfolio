@@ -453,6 +453,200 @@ const ENGINEERING_DECISIONS = [
 
 const TABS = ["Overview", "Architecture", "Challenges", "Metrics"];
 
+function getProjectImagePaths(projectId) {
+  return [1, 2, 3, 4].map((n) => `/images/projects/${projectId}-${n}.jpg`);
+}
+
+function ProjectImageBox({
+  projectId,
+  dark,
+  height,
+  borderRadius,
+  marginBottom,
+  fallbackBg,
+}) {
+  const images = getProjectImagePaths(projectId);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [fullscreenIndex, setFullscreenIndex] = useState(null);
+  const [imageFailed, setImageFailed] = useState(false);
+
+  const activeImage = images[activeIndex];
+
+  const goNext = () => {
+    setActiveIndex((prev) => (prev + 1) % images.length);
+    setImageFailed(false);
+  };
+
+  const goPrev = () => {
+    setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
+    setImageFailed(false);
+  };
+
+  return (
+    <>
+      <div
+        style={{
+          width: "100%",
+          height,
+          borderRadius,
+          border: `1px solid ${dark ? "#1e1e1e" : "#e8e8e8"}`,
+          overflow: "hidden",
+          position: "relative",
+          marginBottom,
+          background: fallbackBg,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {!imageFailed ? (
+          <img
+            src={activeImage}
+            alt={`Project preview ${activeIndex + 1}`}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+              cursor: "zoom-in",
+            }}
+            onClick={() => setFullscreenIndex(activeIndex)}
+            onError={() => setImageFailed(true)}
+          />
+        ) : (
+          <span
+            style={{
+              fontFamily: "'DM Mono', monospace",
+              fontSize: 9,
+              color: dark ? "#a1a1a1" : "#3b3b3b",
+              letterSpacing: "0.11em",
+              textTransform: "uppercase",
+            }}
+          >
+            Missing image: {projectId}-{activeIndex + 1}.jpg
+          </span>
+        )}
+
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            goPrev();
+          }}
+          aria-label="Previous preview image"
+          style={{
+            position: "absolute",
+            left: 10,
+            top: "50%",
+            transform: "translateY(-50%)",
+            border: "none",
+            borderRadius: "50%",
+            width: 34,
+            height: 34,
+            cursor: "pointer",
+            fontSize: 18,
+            lineHeight: 1,
+            color: dark ? "#fff" : "#111",
+            background: dark
+              ? "rgba(0,0,0,0.52)"
+              : "rgba(255,255,255,0.72)",
+            backdropFilter: "blur(2px)",
+          }}
+        >
+          ‹
+        </button>
+
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            goNext();
+          }}
+          aria-label="Next preview image"
+          style={{
+            position: "absolute",
+            right: 10,
+            top: "50%",
+            transform: "translateY(-50%)",
+            border: "none",
+            borderRadius: "50%",
+            width: 34,
+            height: 34,
+            cursor: "pointer",
+            fontSize: 18,
+            lineHeight: 1,
+            color: dark ? "#fff" : "#111",
+            background: dark
+              ? "rgba(0,0,0,0.52)"
+              : "rgba(255,255,255,0.72)",
+            backdropFilter: "blur(2px)",
+          }}
+        >
+          ›
+        </button>
+
+        <div
+          style={{
+            position: "absolute",
+            left: 10,
+            bottom: 10,
+            padding: "4px 8px",
+            borderRadius: 99,
+            fontFamily: "'DM Mono', monospace",
+            fontSize: 9,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: dark ? "#f2f2f2" : "#232323",
+            background: dark
+              ? "rgba(0,0,0,0.55)"
+              : "rgba(255,255,255,0.75)",
+            backdropFilter: "blur(2px)",
+          }}
+        >
+          {activeIndex + 1} / {images.length}
+        </div>
+      </div>
+
+      {fullscreenIndex !== null && (
+        <div
+          onClick={() => setFullscreenIndex(null)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setFullscreenIndex(null);
+          }}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 999,
+            background: dark ? "rgba(0,0,0,0.55)" : "rgba(0,0,0,0.4)",
+            backdropFilter: "blur(9px)",
+            WebkitBackdropFilter: "blur(9px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 20,
+          }}
+        >
+          <img
+            src={images[fullscreenIndex]}
+            alt={`Fullscreen project preview ${fullscreenIndex + 1}`}
+            style={{
+              width: "min(1100px, 92vw)",
+              maxHeight: "88vh",
+              objectFit: "contain",
+              borderRadius: 12,
+              border: `1px solid ${dark ? "#444" : "rgba(255,255,255,0.8)"}`,
+              boxShadow: "0 28px 80px rgba(0,0,0,0.45)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+    </>
+  );
+}
+
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function StatusBadge({ status, dark }) {
@@ -864,31 +1058,15 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
         <ProjectBackButton dark={dark} onClose={onClose} />
 
         {/* Large preview */}
-        <div
-          style={{
-            width: "100%",
-            height: 260,
-            borderRadius: 10,
-            background: dark ? "#0a0a0a" : "#f0f0f0",
-            border: `1px solid ${dark ? "#1e1e1e" : "#e8e8e8"}`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: 36,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 9,
-              color: dark ? "#a1a1a1" : "#3b3b3b",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-            }}
-          >
-            Demo / Preview
-          </span>
-        </div>
+        <ProjectImageBox
+          key={`${project.id}-showcase-image-box`}
+          projectId={project.id}
+          dark={dark}
+          height={260}
+          borderRadius={10}
+          marginBottom={36}
+          fallbackBg={dark ? "#0a0a0a" : "#f0f0f0"}
+        />
 
         {/* Title + hook + CTA row */}
         <div
@@ -1316,31 +1494,15 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
 
         {/* Right — smaller preview + full tabbed deep-dive */}
         <div>
-          <div
-            style={{
-              width: "100%",
-              height: 160,
-              borderRadius: 8,
-              background: dark ? "#0e0e0e" : "#f5f5f5",
-              border: `1px solid ${dark ? "#1e1e1e" : "#ebebeb"}`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: 20,
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 9,
-                color: dark ? "#2e2e2e" : "#424242",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-              }}
-            >
-              Preview placeholder
-            </span>
-          </div>
+          <ProjectImageBox
+            key={`${project.id}-engineer-image-box`}
+            projectId={project.id}
+            dark={dark}
+            height={160}
+            borderRadius={8}
+            marginBottom={20}
+            fallbackBg={dark ? "#0e0e0e" : "#f5f5f5"}
+          />
 
           <div
             style={{
