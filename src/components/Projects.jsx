@@ -1,4 +1,4 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 
 // ─── Dark mode hook ───────────────────────────────────────────────────────────
 function useDarkMode() {
@@ -508,6 +508,21 @@ function getProjectImagePaths(projectId) {
   return [1, 2, 3, 4].map((n) => `/images/projects/${projectId}-${n}.jpg`);
 }
 
+function toWebpPath(src) {
+  return src.replace(/\.(png|jpe?g)$/i, ".webp");
+}
+
+function preloadImage(src) {
+  if (!src) return;
+  const img = new Image();
+  img.src = src;
+}
+
+function preloadImagePair(src) {
+  preloadImage(src);
+  preloadImage(toWebpPath(src));
+}
+
 function ProjectImageBox({
   projectId,
   dark,
@@ -516,10 +531,27 @@ function ProjectImageBox({
   marginBottom,
   fallbackBg,
 }) {
-  const images = getProjectImagePaths(projectId);
+  const images = useMemo(() => getProjectImagePaths(projectId), [projectId]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [fullscreenIndex, setFullscreenIndex] = useState(null);
   const [imageFailed, setImageFailed] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isFading, setIsFading] = useState(false);
+  const swapTimerRef = useRef(null);
+
+  useEffect(() => {
+    if (images.length === 0) return;
+    preloadImagePair(images[activeIndex]);
+    preloadImagePair(images[(activeIndex + 1) % images.length]);
+  }, [activeIndex, images]);
+
+  useEffect(() => {
+    return () => {
+      if (swapTimerRef.current) {
+        window.clearTimeout(swapTimerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (fullscreenIndex === null) return;
@@ -536,14 +568,29 @@ function ProjectImageBox({
 
   const activeImage = images[activeIndex];
 
+  const queueImageSwap = (targetIndex) => {
+    if (images.length < 2 || targetIndex === activeIndex) return;
+
+    if (swapTimerRef.current) {
+      window.clearTimeout(swapTimerRef.current);
+    }
+
+    setIsFading(true);
+    swapTimerRef.current = window.setTimeout(() => {
+      setActiveIndex(targetIndex);
+      setImageFailed(false);
+      setIsLoaded(false);
+      setIsFading(false);
+      swapTimerRef.current = null;
+    }, 200);
+  };
+
   const goNext = () => {
-    setActiveIndex((prev) => (prev + 1) % images.length);
-    setImageFailed(false);
+    queueImageSwap((activeIndex + 1) % images.length);
   };
 
   const goPrev = () => {
-    setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
-    setImageFailed(false);
+    queueImageSwap((activeIndex - 1 + images.length) % images.length);
   };
 
   return (
@@ -564,23 +611,40 @@ function ProjectImageBox({
         }}
       >
         {!imageFailed ? (
-          <img
-            src={activeImage}
-            alt={`Project preview ${activeIndex + 1}`}
+          <picture
             style={{
               width: "100%",
               height: "100%",
-              objectFit: "cover",
-              objectPosition: "top",
               display: "block",
-              cursor: "zoom-in",
-              filter: "saturate(0.9) contrast(0.95)",
-              transform: "scale(0.98)",
-              transformOrigin: "center",
             }}
-            onClick={() => setFullscreenIndex(activeIndex)}
-            onError={() => setImageFailed(true)}
-          />
+          >
+            <source srcSet={toWebpPath(activeImage)} type="image/webp" />
+            <img
+              src={activeImage}
+              alt={`Project preview ${activeIndex + 1}`}
+              decoding="async"
+              loading="eager"
+              fetchPriority="high"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "top",
+                display: "block",
+                cursor: "zoom-in",
+                transition: "opacity 0.4s ease-in-out, filter 0.3s ease",
+                opacity: isFading ? 0 : 1,
+                filter: isLoaded
+                  ? "saturate(0.9) contrast(0.95)"
+                  : "blur(10px) saturate(0.8) contrast(0.9)",
+                transform: "scale(0.98)",
+                transformOrigin: "center",
+              }}
+              onClick={() => setFullscreenIndex(activeIndex)}
+              onLoad={() => setIsLoaded(true)}
+              onError={() => setImageFailed(true)}
+            />
+          </picture>
         ) : (
           <span
             style={{
@@ -622,63 +686,67 @@ function ProjectImageBox({
           </>
         )}
 
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            goPrev();
-          }}
-          aria-label="Previous preview image"
-          style={{
-            position: "absolute",
-            left: 10,
-            top: "50%",
-            transform: "translateY(-50%)",
-            border: "none",
-            borderRadius: "50%",
-            width: 34,
-            height: 34,
-            cursor: "pointer",
-            fontSize: 18,
-            lineHeight: 1,
-            color: dark ? "#fff" : "#111",
-            background: dark
-              ? "rgba(0,0,0,0.52)"
-              : "rgba(255,255,255,0.72)",
-            backdropFilter: "blur(2px)",
-          }}
-        >
-          ‹
-        </button>
+        {images.length > 1 && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              goPrev();
+            }}
+            aria-label="Previous preview image"
+            style={{
+              position: "absolute",
+              left: 10,
+              top: "50%",
+              transform: "translateY(-50%)",
+              border: "none",
+              borderRadius: "50%",
+              width: 34,
+              height: 34,
+              cursor: "pointer",
+              fontSize: 18,
+              lineHeight: 1,
+              color: dark ? "#fff" : "#111",
+              background: dark
+                ? "rgba(0,0,0,0.52)"
+                : "rgba(255,255,255,0.72)",
+              backdropFilter: "blur(2px)",
+            }}
+          >
+            ‹
+          </button>
+        )}
 
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            goNext();
-          }}
-          aria-label="Next preview image"
-          style={{
-            position: "absolute",
-            right: 10,
-            top: "50%",
-            transform: "translateY(-50%)",
-            border: "none",
-            borderRadius: "50%",
-            width: 34,
-            height: 34,
-            cursor: "pointer",
-            fontSize: 18,
-            lineHeight: 1,
-            color: dark ? "#fff" : "#111",
-            background: dark
-              ? "rgba(0,0,0,0.52)"
-              : "rgba(255,255,255,0.72)",
-            backdropFilter: "blur(2px)",
-          }}
-        >
-          ›
-        </button>
+        {images.length > 1 && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              goNext();
+            }}
+            aria-label="Next preview image"
+            style={{
+              position: "absolute",
+              right: 10,
+              top: "50%",
+              transform: "translateY(-50%)",
+              border: "none",
+              borderRadius: "50%",
+              width: 34,
+              height: 34,
+              cursor: "pointer",
+              fontSize: 18,
+              lineHeight: 1,
+              color: dark ? "#fff" : "#111",
+              background: dark
+                ? "rgba(0,0,0,0.52)"
+                : "rgba(255,255,255,0.72)",
+              backdropFilter: "blur(2px)",
+            }}
+          >
+            ›
+          </button>
+        )}
 
         <div
           style={{
@@ -725,19 +793,27 @@ function ProjectImageBox({
             cursor: "zoom-out",
           }}
         >
-          <img
-            src={images[fullscreenIndex]}
-            alt={`Fullscreen project preview ${fullscreenIndex + 1}`}
-            style={{
-              width: "min(1100px, 92vw)",
-              maxHeight: "88vh",
-              objectFit: "contain",
-              borderRadius: 12,
-              border: `1px solid ${dark ? "#444" : "rgba(255,255,255,0.8)"}`,
-              boxShadow: "0 28px 80px rgba(0,0,0,0.45)",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          />
+          <picture style={{ display: "block" }}>
+            <source
+              srcSet={toWebpPath(images[fullscreenIndex])}
+              type="image/webp"
+            />
+            <img
+              src={images[fullscreenIndex]}
+              alt={`Fullscreen project preview ${fullscreenIndex + 1}`}
+              loading="lazy"
+              decoding="async"
+              style={{
+                width: "min(1100px, 92vw)",
+                maxHeight: "88vh",
+                objectFit: "contain",
+                borderRadius: 12,
+                border: `1px solid ${dark ? "#444" : "rgba(255,255,255,0.8)"}`,
+                boxShadow: "0 28px 80px rgba(0,0,0,0.45)",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </picture>
         </div>
       )}
     </>
