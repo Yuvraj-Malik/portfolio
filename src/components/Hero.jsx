@@ -355,7 +355,7 @@ export default function Hero() {
             position: "relative",
             zIndex: 1,
             paddingTop: "96px",
-            paddingBottom: "20px",
+            paddingBottom: "8px",
           }}
         >
           {/* ── LEFT ── */}

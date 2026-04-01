@@ -542,6 +542,20 @@ export default function About() {
   const [activeView, setActiveView] = useState("skills");
   const [filterType, setFilterType] = useState("all");
   const [selectedProject, setSelectedProject] = useState(null);
+  const [photoOpen, setPhotoOpen] = useState(false);
+
+  useEffect(() => {
+    if (!photoOpen) return;
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setPhotoOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [photoOpen]);
 
   const group = skillGroups.find((g) => g.id === tab);
   const filteredProjects = PROJECTS.filter(
@@ -628,7 +642,7 @@ export default function About() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
-          padding: "4rem 3rem 2rem 3rem",
+          padding: "3rem 3rem 2rem 3rem",
           scrollMarginTop: "25px",
           boxSizing: "border-box",
           position: "relative",
@@ -775,9 +789,10 @@ export default function About() {
               >
                 <div
                   className="photo-card"
+                  onClick={() => setPhotoOpen(true)}
                   style={{
-                    width: 72,
-                    height: 88,
+                    width: 188,
+                    height: 228,
                     borderRadius: 10,
                     background: c.photoBg,
                     border: `1px solid ${c.photoBorder}`,
@@ -790,19 +805,21 @@ export default function About() {
                       ? "4px 4px 16px rgba(0,0,0,0.4)"
                       : "4px 4px 16px rgba(0,0,0,0.08)",
                     overflow: "hidden",
-                    cursor: "default",
+                    cursor: "zoom-in",
                   }}
                 >
-                  <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
-                    <circle cx="20" cy="15" r="8" fill={c.photoIcon} />
-                    <ellipse
-                      cx="20"
-                      cy="34"
-                      rx="13"
-                      ry="8"
-                      fill={c.photoIcon}
-                    />
-                  </svg>
+                  <img
+                    src="/images/Profile.jpeg"
+                    alt="Yuvraj Malik"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      objectPosition: "top",
+                      display: "block",
+                      filter: "saturate(0.95) contrast(0.98)",
+                    }}
+                  />
                 </div>
                 <div
                   style={{ display: "flex", flexDirection: "column", gap: 8 }}
@@ -1039,6 +1056,7 @@ export default function About() {
                   borderRadius: 10,
                   padding: "20px 20px",
                   background: c.stripBg,
+                  marginBottom: 8,
                 }}
               >
                 <p
@@ -1070,6 +1088,46 @@ export default function About() {
             </div>
           </div>
         </div>
+
+        {photoOpen && (
+          <div
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setPhotoOpen(false);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 999,
+              background: dark ? "rgba(0,0,0,0.72)" : "rgba(0,0,0,0.58)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 24,
+              cursor: "zoom-out",
+            }}
+          >
+            <img
+              src="/images/Profile.jpeg"
+              alt="Yuvraj Malik"
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                width: "min(520px, 90vw)",
+                maxHeight: "88vh",
+                objectFit: "contain",
+                borderRadius: 16,
+                border: `1px solid ${dark ? "#555" : "rgba(255,255,255,0.8)"}`,
+                boxShadow: "0 28px 80px rgba(0,0,0,0.45)",
+                background: dark ? "#101010" : "#f5f1ea",
+              }}
+            />
+          </div>
+        )}
       </section>
     </>
   );

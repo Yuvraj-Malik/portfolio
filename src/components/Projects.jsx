@@ -454,6 +454,57 @@ const ENGINEERING_DECISIONS = [
 const TABS = ["Overview", "Architecture", "Challenges", "Metrics"];
 
 function getProjectImagePaths(projectId) {
+  if (projectId === "spatial-console") {
+    return [
+      "/images/projects/Spatial-Console-1.png",
+      "/images/projects/Spatial-Console-2.png",
+      "/images/projects/Spatial-Console-3.png",
+      "/images/projects/Spatial-Console-4.png",
+    ];
+  }
+
+  if (projectId === "jarvis") {
+    return ["/images/projects/Jarvis-1.png", "/images/projects/Jarvis-2.png"];
+  }
+
+  if (projectId === "stark-paper-analyzer") {
+    return [
+      "/images/projects/Stark-1.png",
+      "/images/projects/Stark-2.png",
+      "/images/projects/Stark-3.png",
+      "/images/projects/Stark-4.png",
+    ];
+  }
+
+  if (projectId === "anime-clash") {
+    return [
+      "/images/projects/HL-1.png",
+      "/images/projects/HL-2.png",
+      "/images/projects/HL-3.png",
+    ];
+  }
+
+  if (projectId === "code-vault") {
+    return [
+      "/images/projects/Vault-1.png",
+      "/images/projects/Vault-2.png",
+      "/images/projects/Vault-3.png",
+      "/images/projects/Vault-4.png",
+    ];
+  }
+
+  if (projectId === "bomb-difuse") {
+    return ["/images/projects/Bomb-1.png", "/images/projects/Bomb-2.png"];
+  }
+
+  if (projectId === "air-canvas") {
+    return ["/images/projects/Canvas-1.png", "/images/projects/Canvas-2.png"];
+  }
+
+  if (projectId === "pose-detection") {
+    return ["/images/projects/Pose.png"];
+  }
+
   return [1, 2, 3, 4].map((n) => `/images/projects/${projectId}-${n}.jpg`);
 }
 
@@ -469,6 +520,19 @@ function ProjectImageBox({
   const [activeIndex, setActiveIndex] = useState(0);
   const [fullscreenIndex, setFullscreenIndex] = useState(null);
   const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => {
+    if (fullscreenIndex === null) return;
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setFullscreenIndex(null);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [fullscreenIndex]);
 
   const activeImage = images[activeIndex];
 
@@ -507,8 +571,12 @@ function ProjectImageBox({
               width: "100%",
               height: "100%",
               objectFit: "cover",
+              objectPosition: "top",
               display: "block",
               cursor: "zoom-in",
+              filter: "saturate(0.9) contrast(0.95)",
+              transform: "scale(0.98)",
+              transformOrigin: "center",
             }}
             onClick={() => setFullscreenIndex(activeIndex)}
             onError={() => setImageFailed(true)}
@@ -525,6 +593,33 @@ function ProjectImageBox({
           >
             Missing image: {projectId}-{activeIndex + 1}.jpg
           </span>
+        )}
+
+        {!imageFailed && (
+          <>
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: dark
+                  ? "rgba(245, 233, 220, 0.12)"
+                  : "rgba(245, 233, 220, 0.12)",
+                pointerEvents: "none",
+              }}
+            />
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: dark
+                  ? "radial-gradient(circle, transparent 58%, rgba(245, 233, 220, 0.12) 100%)"
+                  : "radial-gradient(circle, transparent 60%, rgba(245, 233, 220, 0.12) 100%)",
+                pointerEvents: "none",
+              }}
+            />
+          </>
         )}
 
         <button
@@ -609,12 +704,13 @@ function ProjectImageBox({
 
       {fullscreenIndex !== null && (
         <div
-          onClick={() => setFullscreenIndex(null)}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setFullscreenIndex(null);
+            }
+          }}
           role="button"
           tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Escape") setFullscreenIndex(null);
-          }}
           style={{
             position: "fixed",
             inset: 0,
@@ -626,6 +722,7 @@ function ProjectImageBox({
             alignItems: "center",
             justifyContent: "center",
             padding: 20,
+            cursor: "zoom-out",
           }}
         >
           <img
@@ -942,7 +1039,7 @@ function ProjectCard({ project, dark, mode, isExpanded, onToggle, index }) {
               style={{
                 fontFamily: "'DM Mono', monospace",
                 fontSize: 10,
-                color: dark ? "#444" : "#ccc",
+                color: dark ? "#b4b4b4" : "#1b1b1b",
                 letterSpacing: "0.06em",
               }}
             >
@@ -1062,9 +1159,9 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
           key={`${project.id}-showcase-image-box`}
           projectId={project.id}
           dark={dark}
-          height={260}
+          height={340}
           borderRadius={10}
-          marginBottom={36}
+          marginBottom={28}
           fallbackBg={dark ? "#0a0a0a" : "#f0f0f0"}
         />
 
@@ -1498,9 +1595,9 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
             key={`${project.id}-engineer-image-box`}
             projectId={project.id}
             dark={dark}
-            height={160}
+            height={220}
             borderRadius={8}
-            marginBottom={20}
+            marginBottom={16}
             fallbackBg={dark ? "#0e0e0e" : "#f5f5f5"}
           />
 
@@ -1639,7 +1736,7 @@ export default function Projects() {
       <section
         id="projects"
         style={{
-          padding: "4.5rem 3rem 2.5rem 3rem",
+          padding: "3.5rem 3rem 1.75rem 3rem",
           boxSizing: "border-box",
           position: "relative",
         }}

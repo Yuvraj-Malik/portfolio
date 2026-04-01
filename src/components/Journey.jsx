@@ -212,7 +212,7 @@ export default function Journey() {
       <section
         id="journey"
         style={{
-          padding: "4.5rem 3rem 2.5rem 3rem",
+          padding: "3.25rem 3rem 2rem 3rem",
           boxSizing: "border-box",
           position: "relative",
         }}
