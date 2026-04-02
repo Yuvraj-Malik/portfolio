@@ -184,15 +184,36 @@ export default function Navbar({ dark, setDark }) {
         }
         .nb-overlay {
           position: fixed; inset: 0; z-index: 55;
-          background: ${dark ? "rgba(6,6,6,0.97)" : "rgba(255,253,249,0.97)"};
-          backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-          display: flex; flex-direction: column;
-          align-items: center; justify-content: center;
+          display: flex;
+          justify-content: flex-end;
           animation: nb-overlay-in 0.2s ease both;
+        }
+        .nb-overlay-backdrop {
+          position: absolute;
+          inset: 0;
+          background: ${dark ? "rgba(6,6,6,0.42)" : "rgba(255,253,249,0.42)"};
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        }
+        .nb-mob-panel {
+          position: relative;
+          width: 50vw;
+          max-width: 380px;
+          min-width: 240px;
+          height: 100%;
+          background: ${dark ? "rgba(10,10,10,0.92)" : "rgba(255,253,249,0.94)"};
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-left: 1px solid ${c.border};
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+          padding: 72px 20px 24px;
         }
         .nb-mob-link {
           font-family: 'Instrument Serif', Georgia, serif;
-          font-size: clamp(38px, 10vw, 58px); font-weight: 400;
+          font-size: clamp(30px, 7vw, 46px); font-weight: 400;
           letter-spacing: -0.025em; color: ${c.link};
           text-decoration: none; padding: 8px 0; line-height: 1.1;
           transition: color 0.15s ease;
@@ -246,7 +267,7 @@ export default function Navbar({ dark, setDark }) {
           style={{
             display: "flex",
             alignItems: "center",
-            padding: "0 0 0 3rem",
+            padding: "0 0 0 clamp(0.9rem, 4vw, 3rem)",
             gap: 10,
             flexShrink: 0,
           }}
@@ -304,7 +325,7 @@ export default function Navbar({ dark, setDark }) {
           style={{
             display: "flex",
             alignItems: "center",
-            padding: "0 3rem 0 0",
+            padding: "0 clamp(0.9rem, 4vw, 3rem) 0 0",
             gap: 16,
             flexShrink: 0,
             marginLeft: "auto",
@@ -386,12 +407,17 @@ export default function Navbar({ dark, setDark }) {
       {/* ── Mobile full-screen overlay ── */}
       {mobileOpen && (
         <div className="nb-overlay">
+          <div
+            className="nb-overlay-backdrop"
+            onClick={() => setMobileOpen(false)}
+          />
+          <div className="nb-mob-panel">
           <button
             onClick={() => setMobileOpen(false)}
             style={{
               position: "absolute",
               top: 20,
-              right: "3rem",
+              right: 16,
               background: "none",
               border: "none",
               cursor: "pointer",
@@ -465,6 +491,7 @@ export default function Navbar({ dark, setDark }) {
             style={{
               position: "absolute",
               bottom: 24,
+              left: 20,
               display: "flex",
               alignItems: "center",
               gap: 16,
@@ -488,6 +515,7 @@ export default function Navbar({ dark, setDark }) {
             >
               {dark ? "☀ Light" : "☽ Dark"}
             </button>
+          </div>
           </div>
         </div>
       )}

@@ -290,7 +290,7 @@ function ProjectsList({ projects, dark, onSelect }) {
                 color: dark ? "#c0c0c0" : "#333",
                 letterSpacing: "0.02em",
                 transition: "color 0.15s ease",
-                whiteSpace: "nowrap",
+                whiteSpace: "normal",
               }}
             >
               {p.title}
@@ -476,10 +476,10 @@ function ProjectDetail({ project, dark, c, onBack }) {
 
 function ProblemsView({ dark, c }) {
   const stats = [
-    { label: "Total Solved", value: "200+", context: "across all platforms" },
-    { label: "Easy", value: "90+", context: "foundation & patterns" },
-    { label: "Medium", value: "100+", context: "core problem solving" },
-    { label: "Hard", value: "10+", context: "advanced techniques" },
+    { label: "Total Solved", value: "300+", context: "across all platforms" },
+    { label: "Easy", value: "130+", context: "foundation & patterns" },
+    { label: "Medium", value: "150+", context: "core problem solving" },
+    { label: "Hard", value: "20+", context: "advanced techniques" },
   ];
   return (
     <div>
@@ -543,6 +543,8 @@ export default function About() {
   const [filterType, setFilterType] = useState("all");
   const [selectedProject, setSelectedProject] = useState(null);
   const [photoOpen, setPhotoOpen] = useState(false);
+  const [isNarrow, setIsNarrow] = useState(() => window.innerWidth < 1024);
+  const [isPhone, setIsPhone] = useState(() => window.innerWidth < 680);
 
   useEffect(() => {
     if (!photoOpen) return;
@@ -556,6 +558,16 @@ export default function About() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [photoOpen]);
+
+  useEffect(() => {
+    const onResize = () => {
+      setIsNarrow(window.innerWidth < 1024);
+      setIsPhone(window.innerWidth < 680);
+    };
+
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const group = skillGroups.find((g) => g.id === tab);
   const filteredProjects = PROJECTS.filter(
@@ -591,7 +603,7 @@ export default function About() {
     },
     {
       label: "Algorithmic Problems",
-      value: "200+",
+      value: "300+",
       view: "problems",
       filter: null,
     },
@@ -642,7 +654,7 @@ export default function About() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
-          padding: "3rem 3rem 2rem 3rem",
+          padding: "clamp(2rem, 6vw, 3rem) clamp(1rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2rem)",
           scrollMarginTop: "25px",
           boxSizing: "border-box",
           position: "relative",
@@ -706,8 +718,8 @@ export default function About() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 64,
+              gridTemplateColumns: isNarrow ? "1fr" : "1fr 1fr",
+              gap: isNarrow ? 40 : 64,
               alignItems: "start",
             }}
           >
@@ -783,7 +795,8 @@ export default function About() {
                   paddingTop: 28,
                   borderTop: `1px solid ${c.divider}`,
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: isNarrow ? "flex-start" : "center",
+                  flexDirection: isPhone ? "column" : "row",
                   gap: 20,
                 }}
               >
@@ -913,7 +926,7 @@ export default function About() {
               <div
                 className="panel-fade"
                 key={activeView + filterType + (selectedProject?.id || "")}
-                style={{ minHeight: "320px" }}
+                style={{ minHeight: isNarrow ? "auto" : "320px" }}
               >
                 {activeView === "skills" && (
                   <>
@@ -985,7 +998,7 @@ export default function About() {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "1fr 1fr 1fr",
+                  gridTemplateColumns: isPhone ? "1fr" : "1fr 1fr 1fr",
                   gap: 10,
                   marginTop: 24,
                 }}

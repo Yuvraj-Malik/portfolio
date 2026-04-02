@@ -174,6 +174,18 @@ const TYPE_BADGE = {
 export default function Journey() {
   const dark = useDarkMode();
   const [hoveredIdx, setHoveredIdx] = useState(null);
+  const [isNarrow, setIsNarrow] = useState(() => window.innerWidth < 980);
+  const [isPhone, setIsPhone] = useState(() => window.innerWidth < 700);
+
+  useEffect(() => {
+    const onResize = () => {
+      setIsNarrow(window.innerWidth < 980);
+      setIsPhone(window.innerWidth < 700);
+    };
+
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const c = {
     heading: dark ? "#ffffff" : "#080808",
@@ -212,7 +224,7 @@ export default function Journey() {
       <section
         id="journey"
         style={{
-          padding: "3.25rem 3rem 2rem 3rem",
+          padding: "clamp(2rem, 5vw, 3.25rem) clamp(1rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2rem)",
           boxSizing: "border-box",
           position: "relative",
         }}
@@ -313,8 +325,8 @@ export default function Journey() {
             className="jx-a3"
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 52,
+              gridTemplateColumns: isNarrow ? "1fr" : "1fr 1fr",
+              gap: isNarrow ? 32 : 52,
               alignItems: "start",
             }}
           >
@@ -404,7 +416,7 @@ export default function Journey() {
                               gap: 10,
                               marginBottom: ii < items.length - 1 ? 6 : 0,
                               cursor: "default",
-                              width: "fit-content",
+                              width: isNarrow ? "100%" : "fit-content",
                             }}
                             onMouseEnter={() => setHoveredIdx(key)}
                             onMouseLeave={() => setHoveredIdx(null)}
@@ -460,7 +472,7 @@ export default function Journey() {
                               </span>
 
                               {/* Tooltip */}
-                              {isHovered && (
+                              {isHovered && !isNarrow && (
                                 <div
                                   style={{
                                     position: "absolute",
@@ -571,7 +583,7 @@ export default function Journey() {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
+                  gridTemplateColumns: isPhone ? "1fr" : "1fr 1fr",
                   gap: 10,
                 }}
               >

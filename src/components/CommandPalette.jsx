@@ -795,6 +795,7 @@ function ResponsePanel({ response, dark }) {
 export default function CommandPalette({ setDark }) {
   const dark = useDarkMode();
   const [open,         setOpen]         = useState(false);
+  const [isMobile,     setIsMobile]     = useState(() => window.innerWidth <= 640);
   const [query,        setQuery]        = useState("");
   const [selected,     setSelected]     = useState(0);
   const [response,     setResponse]     = useState(null);
@@ -837,6 +838,12 @@ export default function CommandPalette({ setDark }) {
     return () => {
       if (fabBurstRef.current) clearTimeout(fabBurstRef.current);
     };
+  }, []);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth <= 640);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   const filtered = useMemo(() => {
@@ -1175,7 +1182,14 @@ export default function CommandPalette({ setDark }) {
       `}</style>
 
       {/* ── Floating terminal button — ALWAYS visible ── */}
-      <div className="cp-fab-wrap">
+      <div
+        className="cp-fab-wrap"
+        style={{
+          opacity: open && isMobile ? 0 : 1,
+          pointerEvents: open && isMobile ? "none" : "auto",
+          transition: "opacity 0.15s ease",
+        }}
+      >
         <div className="cp-fab-pulse" aria-hidden="true" />
         <button
           onClick={handleFabClick}

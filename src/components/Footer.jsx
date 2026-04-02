@@ -89,6 +89,18 @@ function openProject(id) {
 
 export default function Footer() {
   const dark = useDarkMode();
+  const [isNarrow, setIsNarrow] = useState(() => window.innerWidth < 1100);
+  const [isPhone, setIsPhone] = useState(() => window.innerWidth < 700);
+
+  useEffect(() => {
+    const onResize = () => {
+      setIsNarrow(window.innerWidth < 1100);
+      setIsPhone(window.innerWidth < 700);
+    };
+
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const c = {
     bg: dark ? "#060606" : "#f8f6f0",
@@ -139,7 +151,7 @@ export default function Footer() {
         style={{
           background: c.bg,
           borderTop: `1px solid ${c.divider}`,
-          padding: "60px 3rem 0 3rem",
+          padding: "clamp(2.5rem, 6vw, 60px) clamp(1rem, 5vw, 3rem) 0",
           boxSizing: "border-box",
         }}
       >
@@ -148,8 +160,12 @@ export default function Footer() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1.8fr 1fr 1fr 1.4fr",
-              gap: 48,
+              gridTemplateColumns: isPhone
+                ? "1fr"
+                : isNarrow
+                  ? "1fr 1fr"
+                  : "1.8fr 1fr 1fr 1.4fr",
+              gap: isPhone ? 24 : isNarrow ? 28 : 48,
               paddingBottom: 48,
               borderBottom: `1px solid ${c.divider}`,
             }}
@@ -434,8 +450,9 @@ export default function Footer() {
           <div
             style={{
               display: "flex",
-              alignItems: "center",
+              alignItems: isPhone ? "flex-start" : "center",
               justifyContent: "space-between",
+              flexDirection: isPhone ? "column" : "row",
               padding: "18px 0",
               flexWrap: "wrap",
               gap: 12,

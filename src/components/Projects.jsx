@@ -1216,7 +1216,7 @@ function ProjectBackButton({ dark, onClose }) {
   );
 }
 
-function ProjectExpanded({ project, dark, c, mode, onClose }) {
+function ProjectExpanded({ project, dark, c, mode, onClose, isNarrow }) {
   const [activeTab, setActiveTab] = useState("Overview");
   const isShowcase = mode === "showcase";
 
@@ -1235,7 +1235,7 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
           key={`${project.id}-showcase-image-box`}
           projectId={project.id}
           dark={dark}
-          height={340}
+          height={isNarrow ? 240 : 340}
           borderRadius={10}
           marginBottom={28}
           fallbackBg={dark ? "#0a0a0a" : "#f0f0f0"}
@@ -1245,10 +1245,11 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
         <div
           style={{
             display: "flex",
-            alignItems: "flex-start",
+            alignItems: isNarrow ? "stretch" : "flex-start",
             justifyContent: "space-between",
             marginBottom: 14,
             gap: 24,
+            flexDirection: isNarrow ? "column" : "row",
           }}
         >
           <div>
@@ -1288,7 +1289,13 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
             </p>
           </div>
           <div
-            style={{ display: "flex", gap: 8, flexShrink: 0, paddingTop: 4 }}
+            style={{
+              display: "flex",
+              gap: 8,
+              flexShrink: 0,
+              paddingTop: 4,
+              flexWrap: "wrap",
+            }}
           >
             {project.github && (
               <a
@@ -1368,7 +1375,11 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
 
         {/* Two-column: features left, tech + feel right */}
         <div
-          style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 48 }}
+          style={{
+            display: "grid",
+            gridTemplateColumns: isNarrow ? "1fr" : "1.6fr 1fr",
+            gap: isNarrow ? 24 : 48,
+          }}
         >
           <div>
             <p
@@ -1493,7 +1504,11 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
       <ProjectBackButton dark={dark} onClose={onClose} />
 
       <div
-        style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 48 }}
+        style={{
+          display: "grid",
+          gridTemplateColumns: isNarrow ? "1fr" : "1fr 1.6fr",
+          gap: isNarrow ? 24 : 48,
+        }}
       >
         {/* Left — problem statement, highlights, tech, authority, buttons */}
         <div>
@@ -1595,7 +1610,7 @@ function ProjectExpanded({ project, dark, c, mode, onClose }) {
             ↳ {project.authoritySignal}
           </p>
 
-          <div style={{ display: "flex", gap: 8 }}>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {project.github && (
               <a
                 href={project.github}
@@ -1735,6 +1750,8 @@ export default function Projects() {
   const dark = useDarkMode();
   const [mode, setMode] = useState("showcase");
   const [filter, setFilter] = useState("all");
+  const [isNarrow, setIsNarrow] = useState(() => window.innerWidth < 1024);
+  const [isPhone, setIsPhone] = useState(() => window.innerWidth < 720);
 
   // URL anchor support — open project from hash on load
   const [expandedId, setExpandedId] = useState(() => {
@@ -1755,6 +1772,16 @@ export default function Projects() {
     };
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  useEffect(() => {
+    const onResize = () => {
+      setIsNarrow(window.innerWidth < 1024);
+      setIsPhone(window.innerWidth < 720);
+    };
+
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   // Sync URL hash when expanded project changes
@@ -1812,7 +1839,7 @@ export default function Projects() {
       <section
         id="projects"
         style={{
-          padding: "3.5rem 3rem 1.75rem 3rem",
+          padding: "clamp(2rem, 6vw, 3.5rem) clamp(1rem, 5vw, 3rem) clamp(1.25rem, 4vw, 1.75rem)",
           boxSizing: "border-box",
           position: "relative",
         }}
@@ -1920,7 +1947,7 @@ export default function Projects() {
             }}
           >
             {/* Filter pills */}
-            <div style={{ display: "flex", gap: 8 }}>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {[
                 { id: "all", label: "All" },
                 { id: "ai", label: "AI Systems" },
@@ -2023,7 +2050,7 @@ export default function Projects() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "1fr 1fr",
+                gridTemplateColumns: isPhone ? "1fr" : "1fr 1fr",
                 gap: 12,
                 opacity: expandedId ? 0 : 1,
                 pointerEvents: expandedId ? "none" : "auto",
@@ -2060,6 +2087,7 @@ export default function Projects() {
                     dark={dark}
                     c={c}
                     mode={mode}
+                    isNarrow={isNarrow}
                     onClose={() => setExpandedId(null)}
                   />
                 );
@@ -2107,7 +2135,7 @@ export default function Projects() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "1fr 1fr",
+                gridTemplateColumns: isPhone ? "1fr" : "1fr 1fr",
                 gap: 16,
               }}
             >

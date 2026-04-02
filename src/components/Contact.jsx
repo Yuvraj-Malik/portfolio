@@ -85,6 +85,8 @@ const LINKS = [
 export default function Contact() {
   const dark = useDarkMode();
   const [open, setOpen] = useState(false);
+  const [isNarrow, setIsNarrow] = useState(() => window.innerWidth < 980);
+  const [isPhone, setIsPhone] = useState(() => window.innerWidth < 700);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -93,6 +95,16 @@ export default function Contact() {
   });
   const [status, setStatus] = useState("idle");
   const [focused, setFocused] = useState(null);
+
+  useEffect(() => {
+    const onResize = () => {
+      setIsNarrow(window.innerWidth < 980);
+      setIsPhone(window.innerWidth < 700);
+    };
+
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const c = {
     heading: dark ? "#ffffff" : "#080808",
@@ -191,7 +203,7 @@ export default function Contact() {
       <section
         id="contact"
         style={{
-          padding: "3rem 3rem 3rem 3rem",
+          padding: "clamp(2rem, 5vw, 3rem) clamp(1rem, 5vw, 3rem)",
           boxSizing: "border-box",
           position: "relative",
         }}
@@ -294,23 +306,23 @@ export default function Contact() {
             className="ct-a3"
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 0,
+              gridTemplateColumns: isNarrow ? "1fr" : "1fr 1fr",
+              gap: isNarrow ? 32 : 0,
               alignItems: "start",
             }}
           >
             {/* LEFT */}
             <div
               style={{
-                paddingRight: 60,
-                borderRight: `1px solid ${c.divider}`,
+                paddingRight: isNarrow ? 0 : 60,
+                borderRight: isNarrow ? "none" : `1px solid ${c.divider}`,
               }}
             >
               {/* 2×2 contact cards */}
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
+                  gridTemplateColumns: isPhone ? "1fr" : "1fr 1fr",
                   gap: 14,
                   marginBottom: 14,
                 }}
@@ -454,7 +466,7 @@ export default function Contact() {
             </div>
 
             {/* RIGHT */}
-            <div style={{ paddingLeft: 60 }}>
+            <div style={{ paddingLeft: isNarrow ? 0 : 60 }}>
               <p
                 style={{
                   fontFamily: "'DM Mono', monospace",
@@ -600,7 +612,7 @@ export default function Contact() {
                       <div
                         style={{
                           display: "grid",
-                          gridTemplateColumns: "1fr 1fr",
+                          gridTemplateColumns: isPhone ? "1fr" : "1fr 1fr",
                           gap: 10,
                         }}
                       >
@@ -744,6 +756,7 @@ export default function Contact() {
                           style={{
                             display: "flex",
                             alignItems: "center",
+                            flexWrap: "wrap",
                             gap: 10,
                           }}
                         >
