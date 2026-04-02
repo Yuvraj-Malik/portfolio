@@ -382,8 +382,8 @@ const PROJECTS = [
     live: "https://anime-clash.netlify.app",
   },
   {
-    id: "bomb-difuse",
-    title: "Bomb Difuse",
+    id: "bomb-defuse",
+    title: "Bomb Defuse",
     thesis:
       "A physical reaction game built using microcontroller logic and real-time hardware feedback.",
     category: "Embedded",
@@ -427,7 +427,7 @@ const PROJECTS = [
       },
       { label: "Hardware Platform", value: "Arduino", context: "bare metal" },
     ],
-    github: "https://github.com/Yuvraj-Malik/Bomb-Difuse",
+    github: "https://github.com/Yuvraj-Malik/Bomb-Defuse",
     live: null,
   },
 ];
@@ -493,7 +493,7 @@ function getProjectImagePaths(projectId) {
     ];
   }
 
-  if (projectId === "bomb-difuse") {
+  if (projectId === "bomb-defuse") {
     return ["/images/projects/Bomb-1.png", "/images/projects/Bomb-2.png"];
   }
 
