@@ -172,7 +172,7 @@ const PROJECTS = [
       "Token budget management across variable-length papers — dynamic chunking strategy based on paper density",
     ],
     metrics: [
-      { label: "Average Processing Time", value: "<8s", context: "per paper" },
+      { label: "Average Processing Time", value: "<30s", context: "per paper" },
       {
         label: "Output Schema Compliance",
         value: "~97%",
