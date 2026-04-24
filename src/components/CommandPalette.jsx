@@ -1,18 +1,18 @@
-﻿import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 // PORTFOLIO DATA
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 const PORTFOLIO = {
   name: "Yuvraj Malik",
   role: "Full Stack Developer & AI Engineer",
   tagline: "I build software that feels like science fiction.",
   email: "yuvraj.malik003@gmail.com",
   location: "Patiala, Punjab, India",
-  education: "B.E. Computer Engineering · Thapar Institute of Engineering & Technology (2024–2028)",
+  education: "B.E. Computer Engineering � Thapar Institute of Engineering & Technology (2024�2028)",
   links: {
     github:   "https://github.com/Yuvraj-Malik",
-    linkedin: "https://www.linkedin.com/in/yuvraj-malik-b00005303/",
+    linkedin: "https://www.linkedin.com/in/yuvraj-malik27",
     leetcode: "https://leetcode.com/u/Yuvraj-Malik/",
   },
   skills: {
@@ -29,16 +29,16 @@ const PORTFOLIO = {
     { name: "Jarvis",               tech: ["Python", "LLM APIs", "Edge-TTS"],             desc: "Fault-tolerant multi-LLM voice assistant with real desktop automation." },
     { name: "Stark Paper Analyzer", tech: ["FastAPI", "Gemini 2.5", "React"],             desc: "Transforms research PDFs into structured intelligence-ready outputs." },
     { name: "Code Vault",           tech: ["React 19", "Node.js", "MongoDB"],             desc: "Team-based live coding arena. Hosted 30-team campus competition." },
-    { name: "Air Canvas",           tech: ["Python", "OpenCV", "MediaPipe"],              desc: "Touchless drawing interface on a 5000×5000 canvas using hand gestures." },
+    { name: "Air Canvas",           tech: ["Python", "OpenCV", "MediaPipe"],              desc: "Touchless drawing interface on a 5000�5000 canvas using hand gestures." },
     { name: "AI Pose Detection",    tech: ["TensorFlow Lite", "MoveNet", "OpenCV"],       desc: "Real-time exercise form scoring using biomechanical state machines." },
     { name: "Anime Clash",          tech: ["Vanilla JS", "Netlify Functions"],            desc: "Deterministic daily anime popularity game with multiple game modes." },
     { name: "Bomb Difuse",          tech: ["Arduino C++"],                               desc: "Physical reaction game on bare-metal microcontroller hardware." },
   ],
   experience: [
-    { role: "AI-ML Intern — Auraflo",     org: "Thapar Institute", year: "2025", desc: "Developed AI-powered solutions for real-world applications." },
-    { role: "Core Member — LEAD Society", org: "Thapar Institute", year: "2025", desc: "Technical workshops, events, and mentoring junior developers." },
-    { role: "Executive Member — LEAD",    org: "Thapar Institute", year: "2024", desc: "Organized events and attended workshops." },
-    { role: "Member — OWASP TIET",        org: "Thapar Institute", year: "2024", desc: "Security-focused technical society at TIET." },
+    { role: "AI-ML Intern � Auraflo",     org: "Thapar Institute", year: "2025", desc: "Developed AI-powered solutions for real-world applications." },
+    { role: "Core Member � LEAD Society", org: "Thapar Institute", year: "2025", desc: "Technical workshops, events, and mentoring junior developers." },
+    { role: "Executive Member � LEAD",    org: "Thapar Institute", year: "2024", desc: "Organized events and attended workshops." },
+    { role: "Member � OWASP TIET",        org: "Thapar Institute", year: "2024", desc: "Security-focused technical society at TIET." },
   ],
   achievements: [
     "District Level Chess gold medalist",
@@ -47,14 +47,14 @@ const PORTFOLIO = {
     "Built a touchless drawing app with real-time gesture recognition",
     "Designed biomechanical exercise scoring with ~90% accuracy",
   ],
-  why_hire: "I don't just build features — I build systems that actually hold up in the real world. Most people optimize for demos; I optimize for execution under pressure. I've built gesture-controlled 3D interfaces, offline AI systems, and real-time platforms from scratch. I think in systems, move fast across the stack, and I ship things that feel a step ahead of what's expected.",
-  what_makes_different: "Most developers think in features. I think in systems. Before I write code, I think about architecture, scale, and experience. What sets me apart is range — I can go from AI pipelines in Python to full-stack applications to hardware-level Arduino systems, all within the same project. That combination lets me build things most people wouldn't even attempt.",
-  journey: "I started with curiosity about how things work, and that turned into building things that probably shouldn't exist yet. From simple Python scripts to creating Jarvis — a desktop voice assistant — to real-time gesture systems running in the browser. Right now, I'm studying Computer Engineering at Thapar Institute while consistently shipping projects that push the limits of what the web can do.",
+  why_hire: "I don't just build features � I build systems that actually hold up in the real world. Most people optimize for demos; I optimize for execution under pressure. I've built gesture-controlled 3D interfaces, offline AI systems, and real-time platforms from scratch. I think in systems, move fast across the stack, and I ship things that feel a step ahead of what's expected.",
+  what_makes_different: "Most developers think in features. I think in systems. Before I write code, I think about architecture, scale, and experience. What sets me apart is range � I can go from AI pipelines in Python to full-stack applications to hardware-level Arduino systems, all within the same project. That combination lets me build things most people wouldn't even attempt.",
+  journey: "I started with curiosity about how things work, and that turned into building things that probably shouldn't exist yet. From simple Python scripts to creating Jarvis � a desktop voice assistant � to real-time gesture systems running in the browser. Right now, I'm studying Computer Engineering at Thapar Institute while consistently shipping projects that push the limits of what the web can do.",
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 // HELPERS
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 function normalizeQuery(q) {
   return q
     .toLowerCase()
@@ -109,33 +109,33 @@ function highlightMatch(text, query) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 // COMMAND REGISTRY
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 const COMMANDS = [
-  { id: "nav-home",     category: "navigate", icon: "⌂", label: "Go to Home",     desc: "Scroll to the top",            aliases: ["home","top","start","hero"],               action: "scroll:#hero" },
-  { id: "nav-about",    category: "navigate", icon: "◉", label: "Go to About",    desc: "Jump to the about section",    aliases: ["about","bio","who"],                       action: "scroll:#about" },
-  { id: "nav-projects", category: "navigate", icon: "◈", label: "Go to Projects", desc: "Browse all projects",          aliases: ["projects","work","portfolio","code"],      action: "scroll:#projects" },
-  { id: "nav-journey",  category: "navigate", icon: "◎", label: "Go to Journey",  desc: "Timeline & experience",        aliases: ["journey","timeline","experience"],         action: "scroll:#journey" },
-  { id: "nav-contact",  category: "navigate", icon: "◌", label: "Go to Contact",  desc: "Get in touch",                 aliases: ["contact","reach","message","hire"],        action: "scroll:#contact" },
-  { id: "act-resume",   category: "action",   icon: "↓", label: "Download Resume", desc: "Open resume PDF",             aliases: ["resume","cv","download","pdf"],            action: "open:/Resume_Yuvraj_Malik.pdf" },
-  { id: "act-github",   category: "action",   icon: "◆", label: "Open GitHub",    desc: "View source code and repos",   aliases: ["github","git","repos","source"],           action: `open:${PORTFOLIO.links.github}` },
-  { id: "act-linkedin", category: "action",   icon: "◇", label: "Open LinkedIn",  desc: "Connect professionally",       aliases: ["linkedin","connect","network"],            action: `open:${PORTFOLIO.links.linkedin}` },
-  { id: "act-leetcode", category: "action",   icon: "◑", label: "Open LeetCode",  desc: "View competitive programming", aliases: ["leetcode","dsa","competitive"],            action: `open:${PORTFOLIO.links.leetcode}` },
-  { id: "act-email",    category: "action",   icon: "✉", label: "Copy Email",     desc: "Copy email to clipboard",      aliases: ["email","copy email","mail","clipboard"],   action: "copy:yuvraj.malik003@gmail.com" },
-  { id: "act-theme",    category: "action",   icon: "◐", label: "Toggle Theme",   desc: "Switch dark / light mode",     aliases: ["theme","dark mode","light mode","toggle"], action: "theme" },
+  { id: "nav-home",     category: "navigate", icon: "�", label: "Go to Home",     desc: "Scroll to the top",            aliases: ["home","top","start","hero"],               action: "scroll:#hero" },
+  { id: "nav-about",    category: "navigate", icon: "?", label: "Go to About",    desc: "Jump to the about section",    aliases: ["about","bio","who"],                       action: "scroll:#about" },
+  { id: "nav-projects", category: "navigate", icon: "?", label: "Go to Projects", desc: "Browse all projects",          aliases: ["projects","work","portfolio","code"],      action: "scroll:#projects" },
+  { id: "nav-journey",  category: "navigate", icon: "?", label: "Go to Journey",  desc: "Timeline & experience",        aliases: ["journey","timeline","experience"],         action: "scroll:#journey" },
+  { id: "nav-contact",  category: "navigate", icon: "?", label: "Go to Contact",  desc: "Get in touch",                 aliases: ["contact","reach","message","hire"],        action: "scroll:#contact" },
+  { id: "act-resume",   category: "action",   icon: "?", label: "Download Resume", desc: "Open resume PDF",             aliases: ["resume","cv","download","pdf"],            action: "open:/Resume_Yuvraj_Malik.pdf" },
+  { id: "act-github",   category: "action",   icon: "?", label: "Open GitHub",    desc: "View source code and repos",   aliases: ["github","git","repos","source"],           action: `open:${PORTFOLIO.links.github}` },
+  { id: "act-linkedin", category: "action",   icon: "?", label: "Open LinkedIn",  desc: "Connect professionally",       aliases: ["linkedin","connect","network"],            action: `open:${PORTFOLIO.links.linkedin}` },
+  { id: "act-leetcode", category: "action",   icon: "?", label: "Open LeetCode",  desc: "View competitive programming", aliases: ["leetcode","dsa","competitive"],            action: `open:${PORTFOLIO.links.leetcode}` },
+  { id: "act-email",    category: "action",   icon: "?", label: "Copy Email",     desc: "Copy email to clipboard",      aliases: ["email","copy email","mail","clipboard"],   action: "copy:yuvraj.malik003@gmail.com" },
+  { id: "act-theme",    category: "action",   icon: "?", label: "Toggle Theme",   desc: "Switch dark / light mode",     aliases: ["theme","dark mode","light mode","toggle"], action: "theme" },
   { id: "term-help",     category: "terminal", icon: ">", label: "help",    desc: "List all available commands", aliases: ["help","commands","what can you do"],                        action: "terminal:help" },
   { id: "term-whoami",   category: "terminal", icon: ">", label: "whoami",  desc: "Who is Yuvraj Malik",         aliases: ["whoami","who are you","who is yuvraj","introduce yourself"], action: "terminal:whoami" },
   { id: "term-skills",   category: "terminal", icon: ">", label: "skills",  desc: "List technical skills",       aliases: ["skills","tech stack","technologies"],                       action: "terminal:skills" },
   { id: "term-projects", category: "terminal", icon: ">", label: "projects",desc: "List all projects",           aliases: ["list projects","all projects","project list"],              action: "terminal:projects" },
   { id: "term-clear",    category: "terminal", icon: ">", label: "clear",   desc: "Clear the palette history",   aliases: ["clear","reset","cls"],                                      action: "terminal:clear" },
-  { id: "ai-hire",      category: "ai", icon: "✦", label: "Why should we hire you?",     desc: "The honest pitch",        aliases: ["why hire","why you","pitch","convince me"],           action: "ai:hire" },
-  { id: "ai-different", category: "ai", icon: "✦", label: "What makes you different?",   desc: "What sets you apart",     aliases: ["what makes you different","what sets you apart"],    action: "ai:different" },
-  { id: "ai-journey",   category: "ai", icon: "✦", label: "Tell me your journey",        desc: "Background and story",    aliases: ["tell me your journey","your story","background"],    action: "ai:journey" },
-  { id: "ai-contact",   category: "ai", icon: "✦", label: "How can I contact you?",      desc: "Get in touch details",    aliases: ["contact info","how to contact","how to reach"],      action: "ai:contact" },
-  { id: "egg-surprise", category: "easter", icon: "★", label: "surprise me",     desc: "???", aliases: ["surprise","random","fun","lucky"],                   action: "easter:surprise" },
-  { id: "egg-hack",     category: "easter", icon: "★", label: "hack the system", desc: "...", aliases: ["hack","hacker","matrix","glitch","sudo"],            action: "easter:hack" },
-  { id: "egg-jarvis",   category: "easter", icon: "★", label: "jarvis",          desc: "...", aliases: ["jarvis","hey jarvis","iron man","tony stark"],       action: "easter:jarvis" },
+  { id: "ai-hire",      category: "ai", icon: "?", label: "Why should we hire you?",     desc: "The honest pitch",        aliases: ["why hire","why you","pitch","convince me"],           action: "ai:hire" },
+  { id: "ai-different", category: "ai", icon: "?", label: "What makes you different?",   desc: "What sets you apart",     aliases: ["what makes you different","what sets you apart"],    action: "ai:different" },
+  { id: "ai-journey",   category: "ai", icon: "?", label: "Tell me your journey",        desc: "Background and story",    aliases: ["tell me your journey","your story","background"],    action: "ai:journey" },
+  { id: "ai-contact",   category: "ai", icon: "?", label: "How can I contact you?",      desc: "Get in touch details",    aliases: ["contact info","how to contact","how to reach"],      action: "ai:contact" },
+  { id: "egg-surprise", category: "easter", icon: "?", label: "surprise me",     desc: "???", aliases: ["surprise","random","fun","lucky"],                   action: "easter:surprise" },
+  { id: "egg-hack",     category: "easter", icon: "?", label: "hack the system", desc: "...", aliases: ["hack","hacker","matrix","glitch","sudo"],            action: "easter:hack" },
+  { id: "egg-jarvis",   category: "easter", icon: "?", label: "jarvis",          desc: "...", aliases: ["jarvis","hey jarvis","iron man","tony stark"],       action: "easter:jarvis" },
 ];
 
 const CATEGORY_META = {
@@ -146,11 +146,11 @@ const CATEGORY_META = {
   easter:   { label: "Easter Eggs" },
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// AI — Groq with smart local fallback
-// HOW TO ENABLE: create .env in project root → VITE_GROQ_API_KEY=your_key
+// -----------------------------------------------------------------------------
+// AI � Groq with smart local fallback
+// HOW TO ENABLE: create .env in project root ? VITE_GROQ_API_KEY=your_key
 // Free key at: console.groq.com
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 const SYSTEM_PROMPT = `
 You are Yuvraj Malik himself.
 
@@ -159,7 +159,7 @@ Do NOT refer to Yuvraj in third person.
 Do NOT say "I help Yuvraj" or "for Yuvraj".
 
 Keep answers:
-- short (2–3 sentences)
+- short (2�3 sentences)
 - confident
 - direct
 
@@ -190,13 +190,13 @@ function matchIntent(query) {
 function getIntentResponse(intent) {
   switch (intent) {
     case "intro":
-      return `I'm ${PORTFOLIO.name} — ${PORTFOLIO.role} based in ${PORTFOLIO.location}. ${PORTFOLIO.tagline} I'm studying Computer Engineering at Thapar while building real-world AI and full-stack systems.`;
+      return `I'm ${PORTFOLIO.name} � ${PORTFOLIO.role} based in ${PORTFOLIO.location}. ${PORTFOLIO.tagline} I'm studying Computer Engineering at Thapar while building real-world AI and full-stack systems.`;
     case "skills":
-      return `My stack: ${PORTFOLIO.skills.languages.join(", ")} · ${PORTFOLIO.skills.frontend.join(", ")} · ${PORTFOLIO.skills.backend.join(", ")} · ${PORTFOLIO.skills.ai_ml.join(", ")}.`;
+      return `My stack: ${PORTFOLIO.skills.languages.join(", ")} � ${PORTFOLIO.skills.frontend.join(", ")} � ${PORTFOLIO.skills.backend.join(", ")} � ${PORTFOLIO.skills.ai_ml.join(", ")}.`;
     case "projects":
       return `${PORTFOLIO.projects.length} projects shipped: ${PORTFOLIO.projects.map((p) => p.name).join(", ")}.`;
     case "contact":
-      return `Email: ${PORTFOLIO.email} · GitHub: ${PORTFOLIO.links.github} · LinkedIn: ${PORTFOLIO.links.linkedin}`;
+      return `Email: ${PORTFOLIO.email} � GitHub: ${PORTFOLIO.links.github} � LinkedIn: ${PORTFOLIO.links.linkedin}`;
     case "hire":
       return PORTFOLIO.why_hire;
     default:
@@ -238,11 +238,11 @@ function findNavigationActionMatch(query) {
 
 function buildSmartFallback(query) {
   const hint = query ? `for "${query}"` : "right now";
-  return `I couldn't fully process your request ${hint}, but I can help you explore my work. Try asking about: • projects • skills • experience • why hire me`;
+  return `I couldn't fully process your request ${hint}, but I can help you explore my work. Try asking about: � projects � skills � experience � why hire me`;
 }
 
 function buildScopeFallback() {
-  return "I focus on my work, projects, and experience. Try asking about: • projects • skills • experience • why hire me";
+  return "I focus on my work, projects, and experience. Try asking about: � projects � skills � experience � why hire me";
 }
 
 function withPortfolioRedirect(text) {
@@ -250,173 +250,173 @@ function withPortfolioRedirect(text) {
   return `${text.trim()} ${redirect}`.trim();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// LOCAL AI — custom answers for every predictable question
-// Returns null if nothing matches → Groq handles it
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
+// LOCAL AI � custom answers for every predictable question
+// Returns null if nothing matches ? Groq handles it
+// -----------------------------------------------------------------------------
 function localAIResponse(q) {
   const t = normalizeQuery(q);
 
-  // ── RUDE / OFFENSIVE ─────────────────────────────────────────────────────
+  // -- RUDE / OFFENSIVE -----------------------------------------------------
   const rudeWords = ["fuck","shit","bitch","cunt","bastard","idiot","stupid","dumb","loser","moron","chutiya","bc","mc","bkl","lodu","gandu","bakwas","bekar","faltu","worthless","useless","trash","garbage","pathetic"];
   if (rudeWords.some(w => t.includes(w)))
     return `Bold of you to open a portfolio and start here.`;
 
-  // ── GREETINGS ─────────────────────────────────────────────────────────────
+  // -- GREETINGS -------------------------------------------------------------
   if (/^(hi+|hello+|hey+|yo|sup|hiya|heya|howdy|greetings|wassup|what.?s up|namaste|hola|bonjour|salut|ciao|oi|aight|aayo)$/.test(t))
-    return `Hey! I'm ${PORTFOLIO.name} — ${PORTFOLIO.role}. ${PORTFOLIO.tagline} Ask me anything.`;
+    return `Hey! I'm ${PORTFOLIO.name} � ${PORTFOLIO.role}. ${PORTFOLIO.tagline} Ask me anything.`;
 
-  // ── IDENTITY ──────────────────────────────────────────────────────────────
+  // -- IDENTITY --------------------------------------------------------------
   if (t.match(/who (is|are|r) (this|he|yuvraj|this dude|this guy|this person|u|you)|who made this|whose portfolio|introduce yourself|tell me about yourself|about yourself|who are you/))
-    return `I'm ${PORTFOLIO.name} — ${PORTFOLIO.role} based in ${PORTFOLIO.location}. ${PORTFOLIO.tagline} Currently studying Computer Engineering at Thapar Institute (2024–2028) while shipping real systems: gesture-controlled 3D, multi-LLM AI assistants, and full-stack platforms.`;
+    return `I'm ${PORTFOLIO.name} � ${PORTFOLIO.role} based in ${PORTFOLIO.location}. ${PORTFOLIO.tagline} Currently studying Computer Engineering at Thapar Institute (2024�2028) while shipping real systems: gesture-controlled 3D, multi-LLM AI assistants, and full-stack platforms.`;
 
-  // ── RELATIONSHIP / GF ─────────────────────────────────────────────────────
+  // -- RELATIONSHIP / GF -----------------------------------------------------
   if (t.match(/girlfriend|\bgf\b|\bbf\b|boyfriend|relationship|dating|\bsingle\b|married|wife|husband|partner|crush|love life|love interest|does he like|is he taken|available|\bbae\b|\bboo\b|pyaar|ladki/))
-    return `Yes,currently in a committed relationship — with my code editor. She never crashes (unlike my last React app).`;
+    return `Yes,currently in a committed relationship � with my code editor. She never crashes (unlike my last React app).`;
 
-  // ── AGE / DOB ─────────────────────────────────────────────────────────────
+  // -- AGE / DOB -------------------------------------------------------------
   if (t.match(/how old|\bage\b|\bborn\b|birthday|\bdob\b|birth date|year of birth|kitne saal|umar/))
-    return `Second-year Computer Engineering student at Thapar Institute, batch 2024–2028. Judge me by what I've shipped, not how old I am.`;
+    return `Second-year Computer Engineering student at Thapar Institute, batch 2024�2028. Judge me by what I've shipped, not how old I am.`;
 
-  // ── LOOKS / APPEARANCE ───────────────────────────────────────────────────
+  // -- LOOKS / APPEARANCE ---------------------------------------------------
   if (t.match(/handsome|good.?looking|cute|\bugly\b|\blooks\b|appearance|\bhot\b|attractive|pretty|\bface\b|\bheight\b|\btall\b|\bshort\b|weight|\bfat\b|\bthin\b|\bbody\b|sundar|kaisa dikhta/))
-    return `I'll let the code speak for itself. Though "dangerously overloaded" has been used to describe my skill set — make of that what you will.`;
+    return `I'll let the code speak for itself. Though "dangerously overloaded" has been used to describe my skill set � make of that what you will.`;
 
-  // ── PERSONALITY / VIBE ───────────────────────────────────────────────────
+  // -- PERSONALITY / VIBE ---------------------------------------------------
   if (t.match(/personality|\bvibe\b|\benergy\b|\baura\b|introvert|extrovert|\bshy\b|confident|arrogant|humble|attitude|\bego\b|\bchill\b|boring|\bnerd\b|\bgeek\b|kaisa insaan|swabhav/))
     return `Introvert who ships loud. I'd rather build something impressive than talk about building it. Chess player, systems thinker, occasional debugger at 2am.`;
 
-  // ── FRIENDS / SOCIAL LIFE ────────────────────────────────────────────────
+  // -- FRIENDS / SOCIAL LIFE ------------------------------------------------
   if (t.match(/\bfriends\b|social life|social media|instagram|twitter|snapchat|popular|\bcool\b|\bdost\b|\byaar\b|hang out|\bparty\b|going out|akela|lonely/))
     return `I exist. I have friends. Most conversations eventually turn into "have you seen this project I'm building?" They tolerate me.`;
 
-  // ── MONEY / SALARY ───────────────────────────────────────────────────────
+  // -- MONEY / SALARY -------------------------------------------------------
   if (t.match(/salary|\bpay\b|\bmoney\b|package|\bctc\b|compensation|stipend|\bearn\b|\brich\b|\bpoor\b|\bbroke\b|paise|rupee|lakh|crore|how much (do|does|will|would)/))
-    return `Open to conversations — but the right problem matters more than the number. If the work is interesting enough, we'll figure out the rest.`;
+    return `Open to conversations � but the right problem matters more than the number. If the work is interesting enough, we'll figure out the rest.`;
 
-  // ── HOBBIES / FREE TIME ──────────────────────────────────────────────────
+  // -- HOBBIES / FREE TIME --------------------------------------------------
   if (t.match(/hobby|hobbies|free time|outside.?work|passion|\binterest\b|pastime|weekend|spare time|kya karta|timepass|fun karta/))
-    return `Chess — district-level gold medalist.The line between hobby and work disappeared a while ago.`;
+    return `Chess � district-level gold medalist.The line between hobby and work disappeared a while ago.`;
 
-  // ── FOOD ─────────────────────────────────────────────────────────────────
+  // -- FOOD -----------------------------------------------------------------
   if (t.match(/\bfood\b|\beat\b|\bdish\b|cuisine|khana|favourite food|kya khata|cook|cooking|kitchen|chef|\bbake\b|maggi|chai|\bcoffee\b/))
-    return `Diet entirely fueled by unresolved bugs and chai. I've automated the question of what to eat — that counts as cooking, right?`;
+    return `Diet entirely fueled by unresolved bugs and chai. I've automated the question of what to eat � that counts as cooking, right?`;
 
-  // ── MOVIES / SHOWS ───────────────────────────────────────────────────────
+  // -- MOVIES / SHOWS -------------------------------------------------------
   if (t.match(/movie|film|show|series|\bwatch\b|netflix|favourite show|tv|web series|dekhta/))
     return `Interstellar, The Social Network, Mr. Robot. Anything with a well-designed system. I watch things that make me want to build.`;
 
-  // ── MUSIC ────────────────────────────────────────────────────────────────
+  // -- MUSIC ----------------------------------------------------------------
   if (t.match(/music|\bsong\b|playlist|\blisten\b|singer|band|artist|favourite song|kya sunta/))
     return `Lofi when coding.Sidhu when debugging. Silence when actually thinking.`;
 
-  // ── ANIME ────────────────────────────────────────────────────────────────
+  // -- ANIME ----------------------------------------------------------------
   if (t.match(/\banime\b|manga|weeb|otaku|favourite anime|which anime/))
     return `Let's not go there or we'll be here all day. But yes.`;
 
-  // ── GAMING ───────────────────────────────────────────────────────────────
+  // -- GAMING ---------------------------------------------------------------
   if (t.match(/\bgame\b|gaming|\bplay\b|gamer|favourite game|khelna|video game/))
     return `Game depends on the mood like cricket, chess or among us.`;
 
-  // ── FAVOURITE LANGUAGE/TECH ──────────────────────────────────────────────
+  // -- FAVOURITE LANGUAGE/TECH ----------------------------------------------
   if (t.match(/fav(ou?rite)? (language|tech|framework|tool|stack)|best language|prefer (to )?(code|use|work)/))
     return `Python for AI. JavaScript when it has to look good. C++ when there's no OS and everything is on fire. Depends what needs solving.`;
 
-  // ── JOKES / HUMOUR ───────────────────────────────────────────────────────
+  // -- JOKES / HUMOUR -------------------------------------------------------
   if (t.match(/\bjoke\b|\bfunny\b|\blaugh\b|humou?r|comedy|make me laugh|entertain|\broast\b|haha|\blol\b|lmao|ek joke|mazak/))
     return `Why do programmers prefer dark mode? Because light attracts bugs. That's the only one I know. I express humor through variable names.`;
 
-  // ── ROAST ────────────────────────────────────────────────────────────────
+  // -- ROAST ----------------------------------------------------------------
   if (t.match(/roast (me|him|yuvraj|yourself)|criticize|weakness|bad at|not good at|failure|\bflaws\b|kya nahi aata/))
     return `Fine. I sometimes over-engineer things that could be simple. I've rewritten Jarvis three times. I debug by adding more logs than a forest. But the output? Worth it.`;
 
-  // ── COMPLIMENTS ──────────────────────────────────────────────────────────
+  // -- COMPLIMENTS ----------------------------------------------------------
   if (t.match(/impressive|\bwow\b|amazing|\bgreat\b|awesome|\bcool\b|nice work|good job|well done|love (it|this|the)|\brespect\b|\bdope\b|\bfire\b|\blit\b|bahut accha|wah|ekdum/))
-    return `Appreciate it. Now hire me. 😄`;
+    return `Appreciate it. Now hire me. ??`;
 
-  // ── TESTING THE BOT ──────────────────────────────────────────────────────
+  // -- TESTING THE BOT ------------------------------------------------------
   if (t.match(/\btest\b|testing|\bcheck\b|hello world|\bping\b|are you (there|working|alive|on)|can you hear|kya tu sun|sun raha/))
     return `Online. All systems nominal. Ask me anything.`;
 
-  // ── AI / THIS CHATBOT ─────────────────────────────────────────────────────
+  // -- AI / THIS CHATBOT -----------------------------------------------------
   if (t.match(/are you (an? )?ai|are you (a )?bot|are you real|are you human|who built you|how do you work|what are you|are you chatgpt|are you gemini|are you groq|tu bot hai|real hai/))
-    return `I'm an AI assistant built into Yuvraj's portfolio — powered by Groq and his portfolio data. I answer as him. For anything I miss, he's at ${PORTFOLIO.email}`;
+    return `I'm an AI assistant built into Yuvraj's portfolio � powered by Groq and his portfolio data. I answer as him. For anything I miss, he's at ${PORTFOLIO.email}`;
 
-  // ── COMPARISON ───────────────────────────────────────────────────────────
+  // -- COMPARISON -----------------------------------------------------------
   if (t.match(/pratham|compare|better than|\bvs\b|versus|competition|other developer|kisise better/))
     return `I'll let the work speak.Cross-stack depth from AI pipelines to hardware, and a portfolio that doubles as a command center. Make your own call.`;
 
-  // ── EXISTENTIAL / RANDOM ─────────────────────────────────────────────────
+  // -- EXISTENTIAL / RANDOM -------------------------------------------------
   if (t.match(/meaning of life|\b42\b|universe|\bgod\b|exist|consciousness|philosophy|\bdeep\b|zindagi ka matlab|sab moh maya/))
     return `42. Also: ship things, think in systems, sleep occasionally. That's roughly my philosophy.`;
 
-  // ── AVAILABILITY / HIRING ────────────────────────────────────────────────
+  // -- AVAILABILITY / HIRING ------------------------------------------------
   if (t.match(/available|open to work|looking for (job|work|opportunity|role)|hire|internship|full.?time|freelance|remote|kaam chahiye/))
-    return `Yes — open to interesting opportunities. Full-time, internship, or freelance. The work has to be meaningful. Reach me at ${PORTFOLIO.email}`;
+    return `Yes � open to interesting opportunities. Full-time, internship, or freelance. The work has to be meaningful. Reach me at ${PORTFOLIO.email}`;
 
-  // ── FUTURE GOALS ─────────────────────────────────────────────────────────
+  // -- FUTURE GOALS ---------------------------------------------------------
   if (t.match(/goal|future|plan|dream|ambition|where do you see|5 years|aspiration|what do you want|aage kya/))
-    return `Build systems that feel like science fiction — and eventually, build the company around one of them. For now: ship things that matter, learn obsessively, stay ahead.`;
+    return `Build systems that feel like science fiction � and eventually, build the company around one of them. For now: ship things that matter, learn obsessively, stay ahead.`;
 
-  // ── COLLEGE / EDUCATION ──────────────────────────────────────────────────
+  // -- COLLEGE / EDUCATION --------------------------------------------------
   if (t.match(/college|university|thapar|\btiet\b|education|degree|\bcgpa\b|\bgpa\b|marks|percentage|10th|12th|school|padhai|parhna/))
-    return `Studying ${PORTFOLIO.education}. CGPA? Good enough to not worry about — I'm more focused on what I'm shipping.`;
+    return `Studying ${PORTFOLIO.education}. CGPA? Good enough to not worry about � I'm more focused on what I'm shipping.`;
 
-  // ── SKILLS ───────────────────────────────────────────────────────────────
+  // -- SKILLS ---------------------------------------------------------------
   if (t.match(/skill|\bstack\b|technolog|what do you know|what can you do|capabilities|languages|tools|framework/))
-    return `My stack: ${PORTFOLIO.skills.languages.join(", ")} · ${PORTFOLIO.skills.frontend.join(", ")} · ${PORTFOLIO.skills.backend.join(", ")} · ${PORTFOLIO.skills.ai_ml.join(", ")}. Also Flutter for mobile and Arduino for embedded.`;
+    return `My stack: ${PORTFOLIO.skills.languages.join(", ")} � ${PORTFOLIO.skills.frontend.join(", ")} � ${PORTFOLIO.skills.backend.join(", ")} � ${PORTFOLIO.skills.ai_ml.join(", ")}. Also Flutter for mobile and Arduino for embedded.`;
 
-  // ── PROJECTS ─────────────────────────────────────────────────────────────
+  // -- PROJECTS -------------------------------------------------------------
   if (t.match(/project|\bbuilt\b|what have you (made|built|created|done)|show me your work|your work|portfolio pieces/))
     return `${PORTFOLIO.projects.length} projects shipped: ${PORTFOLIO.projects.map(p => p.name).join(", ")}. Gesture-controlled 3D to multi-LLM AI systems.`;
 
-  // ── SPECIFIC PROJECTS ────────────────────────────────────────────────────
+  // -- SPECIFIC PROJECTS ----------------------------------------------------
   if (t.includes("jarvis"))
-    return `Jarvis — multi-LLM voice assistant controlling my desktop: WhatsApp, YouTube, email. Multi-provider fallback for 99%+ uptime. Built in Python.`;
+    return `Jarvis � multi-LLM voice assistant controlling my desktop: WhatsApp, YouTube, email. Multi-provider fallback for 99%+ uptime. Built in Python.`;
   if (t.match(/spatial|\b3d\b|gesture|hand tracking/))
-    return `Spatial Console — browser-based 3D builder controlled by hand gestures. No mouse, no keyboard. Just MediaPipe + React Three Fiber in your browser.`;
+    return `Spatial Console � browser-based 3D builder controlled by hand gestures. No mouse, no keyboard. Just MediaPipe + React Three Fiber in your browser.`;
   if (t.match(/stark|paper|analyzer|\bpdf\b|research/))
-    return `Stark Paper Analyzer — upload a research PDF, get structured intelligence. FastAPI + Gemini 2.5 + React. Turns dense papers into something readable.`;
+    return `Stark Paper Analyzer � upload a research PDF, get structured intelligence. FastAPI + Gemini 2.5 + React. Turns dense papers into something readable.`;
   if (t.match(/code vault|coding arena|competition/))
-    return `Code Vault — live team-based coding arena. Hosted a 30-team campus competition with zero downtime. React 19, Node.js, MongoDB.`;
+    return `Code Vault � live team-based coding arena. Hosted a 30-team campus competition with zero downtime. React 19, Node.js, MongoDB.`;
   if (t.match(/air canvas|drawing|touchless/))
-    return `Air Canvas — draw on a 5000×5000 canvas using just your hand. No touch needed. OpenCV + MediaPipe.`;
+    return `Air Canvas � draw on a 5000�5000 canvas using just your hand. No touch needed. OpenCV + MediaPipe.`;
   if (t.match(/pose|exercise|fitness|workout/))
-    return `AI Pose Detection — real-time exercise form scoring with ~90% accuracy. TensorFlow Lite + MoveNet.`;
+    return `AI Pose Detection � real-time exercise form scoring with ~90% accuracy. TensorFlow Lite + MoveNet.`;
   if (t.match(/anime clash|anime game/))
-    return `Anime Clash — deterministic daily anime popularity game. Think Wordle but for anime debates. Multiple game modes.`;
+    return `Anime Clash � deterministic daily anime popularity game. Think Wordle but for anime debates. Multiple game modes.`;
   if (t.match(/\bbomb\b|arduino|hardware/))
-    return `Bomb Difuse — physical reaction game on bare-metal Arduino. No OS, no libraries, raw C++ and a buzzer. Nobody asked. Built it anyway.`;
+    return `Bomb Difuse � physical reaction game on bare-metal Arduino. No OS, no libraries, raw C++ and a buzzer. Nobody asked. Built it anyway.`;
 
-  // ── WHY HIRE ─────────────────────────────────────────────────────────────
+  // -- WHY HIRE -------------------------------------------------------------
   if (t.match(/why hire|hire you|why you|why should (i|we)|pitch yourself|sell yourself|convince me|make your case|kyun rakhe/))
     return PORTFOLIO.why_hire;
 
-  // ── WHAT MAKES YOU DIFFERENT ─────────────────────────────────────────────
+  // -- WHAT MAKES YOU DIFFERENT ---------------------------------------------
   if (t.match(/different|unique|stand out|special|what sets you apart|why you over others|better than others|alag kya/))
     return PORTFOLIO.what_makes_different;
 
-  // ── JOURNEY / BACKGROUND ─────────────────────────────────────────────────
+  // -- JOURNEY / BACKGROUND -------------------------------------------------
   if (t.match(/journey|\bstory\b|background|how (did you start|you started|you got into|you began)|your path|shuru kaise|kaise start/))
     return PORTFOLIO.journey;
 
-  // ── EXPERIENCE / INTERNSHIP ──────────────────────────────────────────────
+  // -- EXPERIENCE / INTERNSHIP ----------------------------------------------
   if (t.match(/experience|internship|\bintern\b|work history|previous work|worked at|\bjob\b|kaam kiya/))
-    return `${PORTFOLIO.experience.map(e => `${e.role} at ${e.org} (${e.year})`).join(" · ")}.`;
+    return `${PORTFOLIO.experience.map(e => `${e.role} at ${e.org} (${e.year})`).join(" � ")}.`;
 
-  // ── ACHIEVEMENTS ─────────────────────────────────────────────────────────
+  // -- ACHIEVEMENTS ---------------------------------------------------------
   if (t.match(/achievement|accomplish|\baward\b|\bwin\b|\bwon\b|\bmedal\b|chess|proud of|highlight|kya jeeta/))
     return `Highlights: ${PORTFOLIO.achievements.join(". ")}.`;
 
-  // ── CONTACT ──────────────────────────────────────────────────────────────
+  // -- CONTACT --------------------------------------------------------------
   if (t.match(/contact|\breach\b|get in touch|how to (reach|contact|find)|connect with|(^|\s)email($|\s)/))
-    return `Email: ${PORTFOLIO.email} · GitHub: ${PORTFOLIO.links.github} · LinkedIn: ${PORTFOLIO.links.linkedin}`;
+    return `Email: ${PORTFOLIO.email} � GitHub: ${PORTFOLIO.links.github} � LinkedIn: ${PORTFOLIO.links.linkedin}`;
 
-  // ── LOCATION ─────────────────────────────────────────────────────────────
+  // -- LOCATION -------------------------------------------------------------
   if (t.match(/where (are you|do you live|from|based)|\blocation\b|\bcity\b|india|patiala|punjab|kahan rehta/))
     return `Based in ${PORTFOLIO.location}.`;
 
-  // No local match → Groq handles it
+  // No local match ? Groq handles it
   return null;
 }
 
@@ -506,9 +506,9 @@ async function callGroq(messages, signal) {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 // STATIC RESPONSES
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 function getStaticResponse(action) {
   switch (action) {
     case "terminal:skills":
@@ -532,22 +532,22 @@ function getStaticResponse(action) {
       return {
         type: "terminal", title: "whoami",
         lines: [
-          `  name     → ${PORTFOLIO.name}`,
-          `  role     → ${PORTFOLIO.role}`,
-          `  location → ${PORTFOLIO.location}`,
-          `  edu      → ${PORTFOLIO.education}`,
-          `  tagline  → "${PORTFOLIO.tagline}"`,
+          `  name     ? ${PORTFOLIO.name}`,
+          `  role     ? ${PORTFOLIO.role}`,
+          `  location ? ${PORTFOLIO.location}`,
+          `  edu      ? ${PORTFOLIO.education}`,
+          `  tagline  ? "${PORTFOLIO.tagline}"`,
         ],
       };
     case "terminal:help":
       return {
         type: "terminal", title: "help",
         lines: [
-          "  Navigation :  home · about · projects · journey · contact",
-          "  Actions    :  resume · github · linkedin · copy email · toggle theme",
-          "  Terminal   :  whoami · skills · projects · clear",
+          "  Navigation :  home � about � projects � journey � contact",
+          "  Actions    :  resume � github � linkedin � copy email � toggle theme",
+          "  Terminal   :  whoami � skills � projects � clear",
           "  Ask me     :  just type anything naturally",
-          "  Easter eggs:  surprise me · hack the system · jarvis",
+          "  Easter eggs:  surprise me � hack the system � jarvis",
         ],
       };
     case "ai:hire":
@@ -572,9 +572,9 @@ function getStaticResponse(action) {
         lines: [
           "  JARVIS ONLINE. All systems nominal.",
           "  Scanning Yuvraj's portfolio...",
-          "  ✓ Projects      8 deployed",
-          "  ✓ Skills        dangerously overloaded",
-          "  ✓ Ambition      off the charts",
+          "  ? Projects      8 deployed",
+          "  ? Skills        dangerously overloaded",
+          "  ? Ambition      off the charts",
           "  Shall I begin the usual diagnostics, sir?",
         ],
       };
@@ -583,15 +583,15 @@ function getStaticResponse(action) {
     case "easter:surprise": {
       const list = [
         { type: "prose", title: "Fun Fact",          text: "I built Jarvis before finishing my second year. Some call it reckless. I call it Tuesday." },
-        { type: "prose", title: "Unpopular Opinion", text: "The best code is the code you don't write. I've deleted more than I've shipped — and the projects got better every time." },
-        { type: "prose", title: "Secret",            text: "The 'science fiction' in my tagline isn't metaphor. Gesture-controlled 3D, multi-modal AI, real-time pose detection — all sci-fi ten years ago." },
+        { type: "prose", title: "Unpopular Opinion", text: "The best code is the code you don't write. I've deleted more than I've shipped � and the projects got better every time." },
+        { type: "prose", title: "Secret",            text: "The 'science fiction' in my tagline isn't metaphor. Gesture-controlled 3D, multi-modal AI, real-time pose detection � all sci-fi ten years ago." },
         { type: "prose", title: "Hot Take",          text: "Most portfolios are just resumes with animations. Mine is an argument. Every project exists to prove something people thought was too hard." },
-        { type: "prose", title: "Origin Story",      text: "I got into coding because I was too lazy to do repetitive tasks manually. Turns out automation is just organized laziness — and I'm very organized." },
-        { type: "prose", title: "Chess + Code",      text: "District-level chess gold medalist. Chess taught me to think 10 moves ahead. I apply the same logic to system design — always planning for what breaks next." },
+        { type: "prose", title: "Origin Story",      text: "I got into coding because I was too lazy to do repetitive tasks manually. Turns out automation is just organized laziness � and I'm very organized." },
+        { type: "prose", title: "Chess + Code",      text: "District-level chess gold medalist. Chess taught me to think 10 moves ahead. I apply the same logic to system design � always planning for what breaks next." },
         { type: "prose", title: "The Jarvis Story",  text: "Jarvis started as a voice command script and became a full desktop AI. It now manages WhatsApp, YouTube, and email. My laptop basically runs itself." },
-        { type: "prose", title: "Confession",        text: "I've rewritten Jarvis from scratch three times. Not because it broke — because I kept learning better ways to build it. Version 3 is the one I'm proud of." },
-        { type: "prose", title: "Weird Flex",        text: "I built a working bomb-defuse game on Arduino — no OS, no libraries, just raw C++ and a buzzer. Nobody asked for it. I did it anyway." },
-        { type: "prose", title: "Philosophy",        text: "I don't want to work at a company that wants a coder. I want somewhere that needs a builder — someone who sees a problem and can't sleep until it's solved." },
+        { type: "prose", title: "Confession",        text: "I've rewritten Jarvis from scratch three times. Not because it broke � because I kept learning better ways to build it. Version 3 is the one I'm proud of." },
+        { type: "prose", title: "Weird Flex",        text: "I built a working bomb-defuse game on Arduino � no OS, no libraries, just raw C++ and a buzzer. Nobody asked for it. I did it anyway." },
+        { type: "prose", title: "Philosophy",        text: "I don't want to work at a company that wants a coder. I want somewhere that needs a builder � someone who sees a problem and can't sleep until it's solved." },
       ];
       return list[Math.floor(Math.random() * list.length)];
     }
@@ -599,9 +599,9 @@ function getStaticResponse(action) {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 // DARK MODE HOOK
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 function useDarkMode() {
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
   useEffect(() => {
@@ -612,9 +612,9 @@ function useDarkMode() {
   return dark;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 // RESPONSE PANEL
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 function ResponsePanel({ response, dark }) {
   const [hackFeedLines, setHackFeedLines] = useState([]);
   const [hackTyping, setHackTyping] = useState("");
@@ -789,9 +789,9 @@ function ResponsePanel({ response, dark }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 // MAIN
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 export default function CommandPalette({ setDark }) {
   const dark = useDarkMode();
   const [open,         setOpen]         = useState(false);
@@ -884,7 +884,7 @@ export default function CommandPalette({ setDark }) {
     }));
   }, [isHackMode]);
 
-  // ── FIX: Arrow keys always work — even when response is showing ──────────
+  // -- FIX: Arrow keys always work � even when response is showing ----------
   // We track "listLength" separately so ArrowDown/Up always have a valid range
   const listLength = filtered.length;
 
@@ -1045,14 +1045,14 @@ export default function CommandPalette({ setDark }) {
 
   const executeCommand = useCallback(async (cmd) => {
     const { action } = cmd;
-    // Navigation → close palette after scrolling
+    // Navigation ? close palette after scrolling
     if (action.startsWith("scroll:")) {
       document.querySelector(action.replace("scroll:", ""))?.scrollIntoView({ behavior: "smooth" });
       setOpen(false); return;
     }
-    // External links → open in new tab, keep palette open
+    // External links ? open in new tab, keep palette open
     if (action.startsWith("open:"))   { window.open(action.replace("open:", ""), "_blank"); return; }
-    if (action.startsWith("copy:"))   { navigator.clipboard.writeText(action.replace("copy:", "")); setResponse({ type: "terminal", title: "Clipboard", lines: ["  ✓ Email copied to clipboard."] }); return; }
+    if (action.startsWith("copy:"))   { navigator.clipboard.writeText(action.replace("copy:", "")); setResponse({ type: "terminal", title: "Clipboard", lines: ["  ? Email copied to clipboard."] }); return; }
     if (action === "theme")           { if (setDark) setDark(d => !d); else document.documentElement.classList.toggle("dark", !document.documentElement.classList.contains("dark")); return; }
     if (action === "terminal:clear")  { setResponse(null); setQuery(""); return; }
 
@@ -1181,7 +1181,7 @@ export default function CommandPalette({ setDark }) {
         @media(max-width:640px){ .cp-overlay{padding-top:0;align-items:flex-end;} .cp-panel{border-radius:12px 12px 0 0;max-width:100%;} }
       `}</style>
 
-      {/* ── Floating terminal button — ALWAYS visible ── */}
+      {/* -- Floating terminal button � ALWAYS visible -- */}
       <div
         className="cp-fab-wrap"
         style={{
@@ -1201,7 +1201,7 @@ export default function CommandPalette({ setDark }) {
         <div className="cp-fab-tip">Press <kbd>Ctrl</kbd> + <kbd>K</kbd></div>
       </div>
 
-      {/* ── Palette overlay — only when open ── */}
+      {/* -- Palette overlay � only when open -- */}
       {(open || mounted) && (
       <div className="cp-overlay" onClick={() => setOpen(false)}>
         {isHackMode && (
@@ -1225,14 +1225,14 @@ export default function CommandPalette({ setDark }) {
         )}
         <div className="cp-panel" onClick={e => e.stopPropagation()}>
 
-          {/* Top bar — back + close */}
+          {/* Top bar � back + close */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 12px 0 16px", minHeight: 32 }}>
             {response && response.type !== "loading" ? (
               <button onClick={() => setResponse(null)}
                 style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 10, color: dsc, padding: "3px 6px", borderRadius: 4, transition: "color 0.15s" }}
                 onMouseEnter={e => (e.currentTarget.style.color = inp)}
                 onMouseLeave={e => (e.currentTarget.style.color = dsc)}
-              >← back</button>
+              >? back</button>
             ) : (
               <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase", color: dsc, paddingLeft: 2 }}>
                 {response?.title || ""}
@@ -1242,12 +1242,12 @@ export default function CommandPalette({ setDark }) {
               style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: dsc, padding: "0 4px", lineHeight: 1, borderRadius: 4, transition: "color 0.15s" }}
               onMouseEnter={e => (e.currentTarget.style.color = inp)}
               onMouseLeave={e => (e.currentTarget.style.color = dsc)}
-            >×</button>
+            >�</button>
           </div>
 
           {/* Input */}
           <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px 12px", borderBottom: `1px solid ${bdr}` }}>
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, color: ph, flexShrink: 0, lineHeight: 1 }}>›</span>
+            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, color: ph, flexShrink: 0, lineHeight: 1 }}>�</span>
             <input ref={inputRef} className="cp-input" value={query}
               onChange={e => { setQuery(e.target.value); if (!e.target.value) setResponse(null); }}
               onKeyDown={handleKeyDown}
@@ -1256,11 +1256,11 @@ export default function CommandPalette({ setDark }) {
             />
             {query && (
               <button onClick={() => { setQuery(""); setResponse(null); inputRef.current?.focus(); }}
-                style={{ background: "none", border: "none", cursor: "pointer", color: ph, fontSize: 14, padding: 0, lineHeight: 1, flexShrink: 0 }}>×</button>
+                style={{ background: "none", border: "none", cursor: "pointer", color: ph, fontSize: 14, padding: 0, lineHeight: 1, flexShrink: 0 }}>�</button>
             )}
           </div>
 
-          {/* Command list — always visible, response shows below it */}
+          {/* Command list � always visible, response shows below it */}
           {filtered.length > 0 && (
             <div className="cp-list">
               {Object.entries(grouped).map(([c, cmds]) => (
@@ -1285,7 +1285,7 @@ export default function CommandPalette({ setDark }) {
                           )}
                         </div>
                         {query && <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.12em", color: cat, textTransform: "uppercase", flexShrink: 0 }}>{CATEGORY_META[cmd.category]?.label}</span>}
-                        {isSel && <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: ktx, flexShrink: 0, marginLeft: 4 }}>↵</span>}
+                        {isSel && <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: ktx, flexShrink: 0, marginLeft: 4 }}>?</span>}
                       </div>
                     );
                   })}
@@ -1297,22 +1297,22 @@ export default function CommandPalette({ setDark }) {
           {/* No match */}
           {query.trim() && filtered.length === 0 && !response && (
             <div style={{ padding: "14px 16px", fontFamily: "'DM Mono', monospace", fontSize: 11, color: dsc, letterSpacing: "0.03em" }}>
-              Press <kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 2, padding: "1px 5px", fontSize: 9 }}>↵</kbd> to ask as a question
+              Press <kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 2, padding: "1px 5px", fontSize: 9 }}>?</kbd> to ask as a question
             </div>
           )}
 
-          {/* Response — sits below the command list */}
+          {/* Response � sits below the command list */}
           <ResponsePanel response={response} dark={dark} />
 
           {/* Footer */}
           <div className="cp-footer">
-            <span><kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 3, padding: "1px 5px", fontFamily: "'DM Mono', monospace", fontSize: 9, color: ktx, marginRight: 4 }}>↑↓</kbd>Navigate</span>
-            <span><kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 3, padding: "1px 5px", fontFamily: "'DM Mono', monospace", fontSize: 9, color: ktx, marginRight: 4 }}>↵</kbd>Select</span>
+            <span><kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 3, padding: "1px 5px", fontFamily: "'DM Mono', monospace", fontSize: 9, color: ktx, marginRight: 4 }}>??</kbd>Navigate</span>
+            <span><kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 3, padding: "1px 5px", fontFamily: "'DM Mono', monospace", fontSize: 9, color: ktx, marginRight: 4 }}>?</kbd>Select</span>
             <span><kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 3, padding: "1px 5px", fontFamily: "'DM Mono', monospace", fontSize: 9, color: ktx, marginRight: 4 }}>Esc</kbd>Close</span>
             <span style={{ marginLeft: "auto" }}>
               {cmdCount > 0
                 ? `${cmdCount} run`
-                : import.meta.env.VITE_GROQ_API_KEY ? "Local-first · Groq fallback" : "Local-first AI ready"}
+                : import.meta.env.VITE_GROQ_API_KEY ? "Local-first � Groq fallback" : "Local-first AI ready"}
             </span>
           </div>
 

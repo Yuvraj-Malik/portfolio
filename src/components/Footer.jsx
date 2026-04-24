@@ -209,7 +209,7 @@ export default function Footer() {
                   },
                   {
                     icon: <LinkedInIcon />,
-                    href: "https://www.linkedin.com/in/yuvraj-malik-b00005303/",
+                    href: "https://www.linkedin.com/in/yuvraj-malik27",
                     label: "LinkedIn",
                   },
                   {

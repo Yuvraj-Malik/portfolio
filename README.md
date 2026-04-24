@@ -184,6 +184,6 @@ npm run images:compress   # Compress project preview images
 Built from scratch by **[Yuvraj Malik](https://github.com/Yuvraj-Malik)**
 
 [![Email](https://img.shields.io/badge/Email-yuvraj.malik003%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:yuvraj.malik003@gmail.com)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Yuvraj%20Malik-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yuvraj-malik-b00005303/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Yuvraj%20Malik-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yuvraj-malik27)
 
 
