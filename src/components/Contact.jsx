@@ -405,7 +405,7 @@ export default function Contact() {
 
               {/* Resume card */}
               <a
-                href="/resume.pdf"
+                href="/Resume_Yuvraj_Malik.pdf"
                 download
                 className="ct-card"
                 style={{

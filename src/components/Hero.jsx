@@ -475,7 +475,7 @@ export default function Hero() {
                 View Work →
               </a>
               <a
-                href="/resume.pdf"
+                href="/Resume_Yuvraj_Malik.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

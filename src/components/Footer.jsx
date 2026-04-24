@@ -413,7 +413,7 @@ export default function Footer() {
                   Email Me →
                 </a>
                 <a
-                  href="/resume.pdf"
+                  href="/Resume_Yuvraj_Malik.pdf"
                   download
                   style={{
                     fontFamily: "'DM Mono', monospace",

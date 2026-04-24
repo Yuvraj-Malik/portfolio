@@ -160,7 +160,7 @@ service cloud.firestore {
 | Custom AI answers | `localAIResponse()` in `CommandPalette.jsx` |
 | Project content | `PROJECTS` array in `Projects.jsx` |
 | Social links | `Hero.jsx` · `Navbar.jsx` · `Footer.jsx` |
-| Resume | `public/resume.pdf` |
+| Resume | `public/Resume_Yuvraj_Malik.pdf` |
 | SEO | `public/robots.txt` · `public/sitemap.xml` — update domain before going live |
 
 ---
