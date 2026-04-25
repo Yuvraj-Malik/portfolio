@@ -20,6 +20,13 @@ function useDarkMode() {
 const TIMELINE = [
   {
     year: "2026",
+    title: "Technical Secretary — LEAD",
+    type: "leadership",
+    tip: "Promoted to technical secretary",
+    stack: "LEAD Society, TIET",
+  },
+  {
+    year: "2026",
     title: "Spatial Console",
     type: "project",
     tip: "Gesture-controlled 3D structural simulation",
@@ -113,14 +120,14 @@ const TIMELINE = [
 
 const ROLES = [
   {
-    role: "Core Member",
+    role: "Technical Secretary",
     org: "LEAD Society, TIET",
-    duration: "Oct 2024 — Present",
+    duration: "Apr 2026 — Present",
     type: "Leadership",
     bullets: [
+      "Promoted to Technical Secretary at LEAD Society",
       "Leading technical workshops on HTML, CSS, and Git",
       "Driving event development and technical initiatives",
-      "Mentoring junior developers across the society",
     ],
   },
   {
