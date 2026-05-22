@@ -603,7 +603,7 @@ export default function About() {
     },
     {
       label: "Algorithmic Problems",
-      value: "300+",
+      value: "500+",
       view: "problems",
       filter: null,
     },
