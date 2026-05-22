@@ -476,10 +476,10 @@ function ProjectDetail({ project, dark, c, onBack }) {
 
 function ProblemsView({ dark, c }) {
   const stats = [
-    { label: "Total Solved", value: "300+", context: "across all platforms" },
-    { label: "Easy", value: "130+", context: "foundation & patterns" },
-    { label: "Medium", value: "150+", context: "core problem solving" },
-    { label: "Hard", value: "20+", context: "advanced techniques" },
+    { label: "Total Solved", value: "500+", context: "across all platforms" },
+    { label: "Easy", value: "200+", context: "foundation & patterns" },
+    { label: "Medium", value: "350+", context: "core problem solving" },
+    { label: "Hard", value: "50+", context: "advanced techniques" },
   ];
   return (
     <div>
@@ -849,7 +849,7 @@ export default function About() {
                     Yuvraj Malik
                   </p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                    {["2nd Year CSE", "TIET Patiala"].map(
+                    {["2nd Year COE", "TIET Patiala"].map(
                       (pill) => (
                         <span
                           key={pill}
