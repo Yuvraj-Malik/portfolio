@@ -1,4 +1,23 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import {
+  ArrowUpDown,
+  Code2,
+  ContactRound,
+  CornerDownLeft,
+  Download,
+  FolderOpen,
+  Github,
+  Home,
+  Linkedin,
+  Mail,
+  MapPinned,
+  Search,
+  Sparkles,
+  Terminal,
+  UserRound,
+  WandSparkles,
+  X,
+} from "lucide-react";
 
 // -----------------------------------------------------------------------------
 // PORTFOLIO DATA
@@ -113,29 +132,29 @@ function highlightMatch(text, query) {
 // COMMAND REGISTRY
 // -----------------------------------------------------------------------------
 const COMMANDS = [
-  { id: "nav-home",     category: "navigate", icon: "�", label: "Go to Home",     desc: "Scroll to the top",            aliases: ["home","top","start","hero"],               action: "scroll:#hero" },
-  { id: "nav-about",    category: "navigate", icon: "?", label: "Go to About",    desc: "Jump to the about section",    aliases: ["about","bio","who"],                       action: "scroll:#about" },
-  { id: "nav-projects", category: "navigate", icon: "?", label: "Go to Projects", desc: "Browse all projects",          aliases: ["projects","work","portfolio","code"],      action: "scroll:#projects" },
-  { id: "nav-journey",  category: "navigate", icon: "?", label: "Go to Journey",  desc: "Timeline & experience",        aliases: ["journey","timeline","experience"],         action: "scroll:#journey" },
-  { id: "nav-contact",  category: "navigate", icon: "?", label: "Go to Contact",  desc: "Get in touch",                 aliases: ["contact","reach","message","hire"],        action: "scroll:#contact" },
-  { id: "act-resume",   category: "action",   icon: "?", label: "Download Resume", desc: "Open resume PDF",             aliases: ["resume","cv","download","pdf"],            action: "open:/Resume_Yuvraj_Malik.pdf" },
-  { id: "act-github",   category: "action",   icon: "?", label: "Open GitHub",    desc: "View source code and repos",   aliases: ["github","git","repos","source"],           action: `open:${PORTFOLIO.links.github}` },
-  { id: "act-linkedin", category: "action",   icon: "?", label: "Open LinkedIn",  desc: "Connect professionally",       aliases: ["linkedin","connect","network"],            action: `open:${PORTFOLIO.links.linkedin}` },
-  { id: "act-leetcode", category: "action",   icon: "?", label: "Open LeetCode",  desc: "View competitive programming", aliases: ["leetcode","dsa","competitive"],            action: `open:${PORTFOLIO.links.leetcode}` },
-  { id: "act-email",    category: "action",   icon: "?", label: "Copy Email",     desc: "Copy email to clipboard",      aliases: ["email","copy email","mail","clipboard"],   action: "copy:yuvraj.malik003@gmail.com" },
-  { id: "act-theme",    category: "action",   icon: "?", label: "Toggle Theme",   desc: "Switch dark / light mode",     aliases: ["theme","dark mode","light mode","toggle"], action: "theme" },
-  { id: "term-help",     category: "terminal", icon: ">", label: "help",    desc: "List all available commands", aliases: ["help","commands","what can you do"],                        action: "terminal:help" },
-  { id: "term-whoami",   category: "terminal", icon: ">", label: "whoami",  desc: "Who is Yuvraj Malik",         aliases: ["whoami","who are you","who is yuvraj","introduce yourself"], action: "terminal:whoami" },
-  { id: "term-skills",   category: "terminal", icon: ">", label: "skills",  desc: "List technical skills",       aliases: ["skills","tech stack","technologies"],                       action: "terminal:skills" },
-  { id: "term-projects", category: "terminal", icon: ">", label: "projects",desc: "List all projects",           aliases: ["list projects","all projects","project list"],              action: "terminal:projects" },
-  { id: "term-clear",    category: "terminal", icon: ">", label: "clear",   desc: "Clear the palette history",   aliases: ["clear","reset","cls"],                                      action: "terminal:clear" },
-  { id: "ai-hire",      category: "ai", icon: "?", label: "Why should we hire you?",     desc: "The honest pitch",        aliases: ["why hire","why you","pitch","convince me"],           action: "ai:hire" },
-  { id: "ai-different", category: "ai", icon: "?", label: "What makes you different?",   desc: "What sets you apart",     aliases: ["what makes you different","what sets you apart"],    action: "ai:different" },
-  { id: "ai-journey",   category: "ai", icon: "?", label: "Tell me your journey",        desc: "Background and story",    aliases: ["tell me your journey","your story","background"],    action: "ai:journey" },
-  { id: "ai-contact",   category: "ai", icon: "?", label: "How can I contact you?",      desc: "Get in touch details",    aliases: ["contact info","how to contact","how to reach"],      action: "ai:contact" },
-  { id: "egg-surprise", category: "easter", icon: "?", label: "surprise me",     desc: "???", aliases: ["surprise","random","fun","lucky"],                   action: "easter:surprise" },
-  { id: "egg-hack",     category: "easter", icon: "?", label: "hack the system", desc: "...", aliases: ["hack","hacker","matrix","glitch","sudo"],            action: "easter:hack" },
-  { id: "egg-jarvis",   category: "easter", icon: "?", label: "jarvis",          desc: "...", aliases: ["jarvis","hey jarvis","iron man","tony stark"],       action: "easter:jarvis" },
+  { id: "nav-home",     category: "navigate", icon: Home, label: "Go to Home",     desc: "Scroll to the top",            aliases: ["home","top","start","hero"],               action: "scroll:#hero" },
+  { id: "nav-about",    category: "navigate", icon: UserRound, label: "Go to About",    desc: "Jump to the about section",    aliases: ["about","bio","who"],                       action: "scroll:#about" },
+  { id: "nav-projects", category: "navigate", icon: FolderOpen, label: "Go to Projects", desc: "Browse all projects",          aliases: ["projects","work","portfolio","code"],      action: "scroll:#projects" },
+  { id: "nav-journey",  category: "navigate", icon: MapPinned, label: "Go to Journey",  desc: "Timeline & experience",        aliases: ["journey","timeline","experience"],         action: "scroll:#journey" },
+  { id: "nav-contact",  category: "navigate", icon: ContactRound, label: "Go to Contact",  desc: "Get in touch",                 aliases: ["contact","reach","message","hire"],        action: "scroll:#contact" },
+  { id: "act-resume",   category: "action",   icon: Download, label: "Download Resume", desc: "Open resume PDF",             aliases: ["resume","cv","download","pdf"],            action: "open:/Resume_Yuvraj_Malik.pdf" },
+  { id: "act-github",   category: "action",   icon: Github, label: "Open GitHub",    desc: "View source code and repos",   aliases: ["github","git","repos","source"],           action: `open:${PORTFOLIO.links.github}` },
+  { id: "act-linkedin", category: "action",   icon: Linkedin, label: "Open LinkedIn",  desc: "Connect professionally",       aliases: ["linkedin","connect","network"],            action: `open:${PORTFOLIO.links.linkedin}` },
+  { id: "act-leetcode", category: "action",   icon: Code2, label: "Open LeetCode",  desc: "View competitive programming", aliases: ["leetcode","dsa","competitive"],            action: `open:${PORTFOLIO.links.leetcode}` },
+  { id: "act-email",    category: "action",   icon: Mail, label: "Copy Email",     desc: "Copy email to clipboard",      aliases: ["email","copy email","mail","clipboard"],   action: "copy:yuvraj.malik003@gmail.com" },
+  { id: "act-theme",    category: "action",   icon: Sparkles, label: "Toggle Theme",   desc: "Switch dark / light mode",     aliases: ["theme","dark mode","light mode","toggle"], action: "theme" },
+  { id: "term-help",     category: "terminal", icon: Terminal, label: "help",    desc: "List all available commands", aliases: ["help","commands","what can you do"],                        action: "terminal:help" },
+  { id: "term-whoami",   category: "terminal", icon: Terminal, label: "whoami",  desc: "Who is Yuvraj Malik",         aliases: ["whoami","who are you","who is yuvraj","introduce yourself"], action: "terminal:whoami" },
+  { id: "term-skills",   category: "terminal", icon: Terminal, label: "skills",  desc: "List technical skills",       aliases: ["skills","tech stack","technologies"],                       action: "terminal:skills" },
+  { id: "term-projects", category: "terminal", icon: Terminal, label: "projects",desc: "List all projects",           aliases: ["list projects","all projects","project list"],              action: "terminal:projects" },
+  { id: "term-clear",    category: "terminal", icon: Terminal, label: "clear",   desc: "Clear the palette history",   aliases: ["clear","reset","cls"],                                      action: "terminal:clear" },
+  { id: "ai-hire",      category: "ai", icon: WandSparkles, label: "Why should we hire you?",     desc: "The honest pitch",        aliases: ["why hire","why you","pitch","convince me"],           action: "ai:hire" },
+  { id: "ai-different", category: "ai", icon: Sparkles, label: "What makes you different?",   desc: "What sets you apart",     aliases: ["what makes you different","what sets you apart"],    action: "ai:different" },
+  { id: "ai-journey",   category: "ai", icon: Sparkles, label: "Tell me your journey",        desc: "Background and story",    aliases: ["tell me your journey","your story","background"],    action: "ai:journey" },
+  { id: "ai-contact",   category: "ai", icon: Mail, label: "How can I contact you?",      desc: "Get in touch details",    aliases: ["contact info","how to contact","how to reach"],      action: "ai:contact" },
+  { id: "egg-surprise", category: "easter", icon: Sparkles, label: "surprise me",     desc: "???", aliases: ["surprise","random","fun","lucky"],                   action: "easter:surprise" },
+  { id: "egg-hack",     category: "easter", icon: Sparkles, label: "hack the system", desc: "...", aliases: ["hack","hacker","matrix","glitch","sudo"],            action: "easter:hack" },
+  { id: "egg-jarvis",   category: "easter", icon: Sparkles, label: "jarvis",          desc: "...", aliases: ["jarvis","hey jarvis","iron man","tony stark"],       action: "easter:jarvis" },
 ];
 
 const CATEGORY_META = {
@@ -1129,6 +1148,22 @@ export default function CommandPalette({ setDark }) {
   const icoS = isHackMode ? "rgba(190,255,210,0.98)" : (dark ? "rgba(255,255,255,0.62)" : "rgba(0,0,0,0.58)");
   const kbg  = isHackMode ? "rgba(42,106,64,0.34)" : (dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)");
   const ktx  = isHackMode ? "rgba(167,255,195,0.94)" : (dark ? "rgba(255, 255, 255, 0.78)" : "rgba(0,0,0,0.88)");
+  const keyBadgeStyle = {
+    background: kbg,
+    border: `1px solid ${bdr}`,
+    borderRadius: 3,
+    padding: "1px 5px",
+    fontFamily: "'DM Mono', monospace",
+    fontSize: 9,
+    color: ktx,
+    marginRight: 4,
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    verticalAlign: "middle",
+    lineHeight: 1,
+    minWidth: 18,
+  };
   const panelShadow = isHackMode
     ? "0 28px 84px rgba(0,0,0,0.82), 0 0 0 1px rgba(88,245,132,0.16) inset, 0 0 26px rgba(64,255,118,0.16)"
     : (dark
@@ -1232,7 +1267,7 @@ export default function CommandPalette({ setDark }) {
                 style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: 10, color: dsc, padding: "3px 6px", borderRadius: 4, transition: "color 0.15s" }}
                 onMouseEnter={e => (e.currentTarget.style.color = inp)}
                 onMouseLeave={e => (e.currentTarget.style.color = dsc)}
-              >? back</button>
+              >Back</button>
             ) : (
               <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase", color: dsc, paddingLeft: 2 }}>
                 {response?.title || ""}
@@ -1242,12 +1277,12 @@ export default function CommandPalette({ setDark }) {
               style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: dsc, padding: "0 4px", lineHeight: 1, borderRadius: 4, transition: "color 0.15s" }}
               onMouseEnter={e => (e.currentTarget.style.color = inp)}
               onMouseLeave={e => (e.currentTarget.style.color = dsc)}
-            >�</button>
+            ><X size={18} /></button>
           </div>
 
           {/* Input */}
           <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px 12px", borderBottom: `1px solid ${bdr}` }}>
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, color: ph, flexShrink: 0, lineHeight: 1 }}>�</span>
+            <Search size={14} strokeWidth={2.25} color={ph} style={{ flexShrink: 0 }} />
             <input ref={inputRef} className="cp-input" value={query}
               onChange={e => { setQuery(e.target.value); if (!e.target.value) setResponse(null); }}
               onKeyDown={handleKeyDown}
@@ -1256,7 +1291,7 @@ export default function CommandPalette({ setDark }) {
             />
             {query && (
               <button onClick={() => { setQuery(""); setResponse(null); inputRef.current?.focus(); }}
-                style={{ background: "none", border: "none", cursor: "pointer", color: ph, fontSize: 14, padding: 0, lineHeight: 1, flexShrink: 0 }}>�</button>
+                style={{ background: "none", border: "none", cursor: "pointer", color: ph, fontSize: 14, padding: 0, lineHeight: 1, flexShrink: 0 }}><X size={14} /></button>
             )}
           </div>
 
@@ -1275,7 +1310,7 @@ export default function CommandPalette({ setDark }) {
                         onClick={() => { setResponse(null); setUsedArrowNav(false); executeCommand(cmd); }}
                         onMouseEnter={() => setSelected(idx)}
                       >
-                        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: isSel ? icoS : ico, width: 16, textAlign: "center", flexShrink: 0, lineHeight: 1 }}>{cmd.icon}</span>
+                        <cmd.icon size={12} strokeWidth={2.25} color={isSel ? icoS : ico} style={{ width: 16, flexShrink: 0 }} />
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12.5, color: isSel ? (dark ? "rgba(255,255,255,0.95)" : "rgba(0,0,0,0.92)") : lbl, letterSpacing: "0.02em" }}>
                             {highlightMatch(cmd.label, query)}
@@ -1285,7 +1320,7 @@ export default function CommandPalette({ setDark }) {
                           )}
                         </div>
                         {query && <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.12em", color: cat, textTransform: "uppercase", flexShrink: 0 }}>{CATEGORY_META[cmd.category]?.label}</span>}
-                        {isSel && <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: ktx, flexShrink: 0, marginLeft: 4 }}>?</span>}
+                        {isSel && <ArrowUpDown size={11} strokeWidth={2.25} color={ktx} style={{ flexShrink: 0, marginLeft: 4 }} />}
                       </div>
                     );
                   })}
@@ -1297,7 +1332,7 @@ export default function CommandPalette({ setDark }) {
           {/* No match */}
           {query.trim() && filtered.length === 0 && !response && (
             <div style={{ padding: "14px 16px", fontFamily: "'DM Mono', monospace", fontSize: 11, color: dsc, letterSpacing: "0.03em" }}>
-              Press <kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 2, padding: "1px 5px", fontSize: 9 }}>?</kbd> to ask as a question
+              Press <kbd style={keyBadgeStyle}>?</kbd> to ask as a question
             </div>
           )}
 
@@ -1306,13 +1341,13 @@ export default function CommandPalette({ setDark }) {
 
           {/* Footer */}
           <div className="cp-footer">
-            <span><kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 3, padding: "1px 5px", fontFamily: "'DM Mono', monospace", fontSize: 9, color: ktx, marginRight: 4 }}>??</kbd>Navigate</span>
-            <span><kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 3, padding: "1px 5px", fontFamily: "'DM Mono', monospace", fontSize: 9, color: ktx, marginRight: 4 }}>?</kbd>Select</span>
-            <span><kbd style={{ background: kbg, border: `1px solid ${bdr}`, borderRadius: 3, padding: "1px 5px", fontFamily: "'DM Mono', monospace", fontSize: 9, color: ktx, marginRight: 4 }}>Esc</kbd>Close</span>
+            <span><kbd style={keyBadgeStyle}><ArrowUpDown size={10} strokeWidth={2.4} /></kbd>Navigate</span>
+            <span><kbd style={keyBadgeStyle}><CornerDownLeft size={10} strokeWidth={2.4} /></kbd>Select</span>
+            <span><kbd style={{ ...keyBadgeStyle, marginRight: 4 }}>Esc</kbd>Close</span>
             <span style={{ marginLeft: "auto" }}>
               {cmdCount > 0
                 ? `${cmdCount} run`
-                : import.meta.env.VITE_GROQ_API_KEY ? "Local-first � Groq fallback" : "Local-first AI ready"}
+                : import.meta.env.VITE_GROQ_API_KEY ? "Local-first / Groq fallback" : "Local-first AI ready"}
             </span>
           </div>
 
