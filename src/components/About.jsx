@@ -36,22 +36,6 @@ const PROJECTS = [
     status: "active",
   },
   {
-    id: "stark-paper-analyzer",
-    title: "Stark Paper Analyzer",
-    shortDescription:
-      "Structured LLM research analysis pipeline for academic PDFs.",
-    highlights: [
-      "Token-aware chunking strategy for LLM efficiency",
-      "Structured JSON-enforced output pipeline",
-      "Async backend processing with caching",
-      "Foundation for 3D knowledge graph visualization",
-    ],
-    tech: ["FastAPI", "Gemini 2.5", "React", "Three.js"],
-    type: "ai",
-    featured: true,
-    status: "active",
-  },
-  {
     id: "jarvis",
     title: "Jarvis",
     shortDescription: "Modular voice AI assistant for desktop automation.",

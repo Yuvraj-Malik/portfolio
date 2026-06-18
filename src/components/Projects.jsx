@@ -135,55 +135,6 @@ const PROJECTS = [
     live: null,
   },
   {
-    id: "stark-paper-analyzer",
-    title: "Stark Paper Analyzer",
-    thesis:
-      "Transforms unstructured research PDFs into structured, intelligence-ready outputs.",
-    category: "AI System",
-    status: "active",
-    type: "ai",
-    tech: ["FastAPI", "Gemini 2.5", "React", "Three.js"],
-    highlights: [
-      "JSON-first LLM summarization pipeline",
-      "Async processing + quota-aware fallback",
-      "Foundation for 3D knowledge graph visualization",
-    ],
-    authoritySignal: "Token-aware structured output enforcement",
-    overview: {
-      problem:
-        "Academic papers are dense, unstructured, and time-consuming to extract insight from — especially at scale.",
-      approach:
-        "Built a token-aware chunking pipeline that feeds structured prompts to Gemini 2.5, enforcing JSON output schemas to ensure consistent, parseable responses.",
-      outcome:
-        "A research analysis tool that processes academic PDFs into structured summaries, key claims, and methodology breakdowns in seconds.",
-    },
-    architecture: {
-      description:
-        "Async FastAPI backend handles PDF ingestion and chunking. Gemini 2.5 processes chunks with enforced JSON output. React frontend renders structured output with a foundation for 3D knowledge graph visualization.",
-      decisions: [
-        "Token-aware chunking prevents context window overflow while maintaining semantic coherence",
-        "JSON-enforced output schema eliminates post-processing ambiguity",
-        "Async processing with quota-aware fallback handles rate limits gracefully",
-      ],
-    },
-    challenges: [
-      "PDF parsing inconsistency across formats — built a preprocessing normalizer for layout extraction",
-      "LLM hallucination on citations — added a grounding verification layer against source text",
-      "Token budget management across variable-length papers — dynamic chunking strategy based on paper density",
-    ],
-    metrics: [
-      { label: "Average Processing Time", value: "<30s", context: "per paper" },
-      {
-        label: "Output Schema Compliance",
-        value: "~97%",
-        context: "JSON validity",
-      },
-      { label: "Cache Hit Rate", value: "~73%", context: "repeat queries" },
-    ],
-    github: "https://github.com/Yuvraj-Malik/Stark-System",
-    live: null,
-  },
-  {
     id: "code-vault",
     title: "Code Vault",
     thesis:
@@ -228,6 +179,7 @@ const PROJECTS = [
     github: "https://github.com/Yuvraj-Malik/Code-Vault",
     live: "https://lead.pratham.codes",
   },
+  
   {
     id: "air-canvas",
     title: "Air Canvas",
@@ -381,55 +333,51 @@ const PROJECTS = [
     github: "https://github.com/Yuvraj-Malik/Anime-Higher-Lower",
     live: "https://anime-clash.netlify.app",
   },
-  {
-    id: "bomb-defuse",
-    title: "Bomb Defuse",
-    thesis:
-      "A physical reaction game built using microcontroller logic and real-time hardware feedback.",
-    category: "Embedded",
-    status: "shipped",
-    type: "hardware",
-    tech: ["Arduino C++", "Embedded I/O"],
-    highlights: [
-      "Randomized LED pattern engine",
-      "Timeout-based pressure simulation",
-      "Hardware-level input polling + buzzer feedback",
-    ],
-    authoritySignal: "Pure hardware logic — no OS, no runtime, no abstractions",
-    overview: {
-      problem:
-        "Wanted to build something that required thinking in real hardware constraints — no OS, no runtime, direct register-level control.",
-      approach:
-        "Designed a randomized LED challenge game on Arduino with hardware interrupt-based input polling and a buzzer feedback system for correct/incorrect patterns.",
-      outcome:
-        "A physical reaction game that runs entirely on microcontroller logic with millisecond-accurate timing.",
-    },
-    architecture: {
-      description:
-        "Arduino C++ with direct I/O register manipulation. Randomized pattern generation via hardware entropy seeding. Buzzer and LED feedback driven by PWM output.",
-      decisions: [
-        "Hardware interrupts over polling for input — ensures zero missed presses under load",
-        "PWM buzzer tones encode feedback (correct/incorrect/timeout) without a sound library",
-        "Entropy seeding from analog noise for true randomization on constrained hardware",
+    {
+      id: "bomb-defuse",
+      title: "Bomb Defuse",
+      thesis:
+        "A physical reaction game built using microcontroller logic and real-time hardware feedback.",
+      category: "Embedded",
+      status: "shipped",
+      type: "hardware",
+      tech: ["Arduino C++", "Embedded I/O"],
+      highlights: [
+        "Randomized LED pattern engine",
+        "Timeout-based pressure simulation",
+        "Hardware-level input polling + buzzer feedback",
       ],
-    },
-    challenges: [
-      "Button debounce on physical hardware — implemented software debounce with 20ms threshold",
-      "Timing accuracy without OS scheduler — used hardware timer registers directly",
-      "LED pattern visibility under different lighting — calibrated resistor values for consistent brightness",
-    ],
-    metrics: [
-      { label: "Input Response", value: "<5ms", context: "hardware interrupt" },
-      {
-        label: "Pattern Randomness",
-        value: "True",
-        context: "analog entropy seed",
+      authoritySignal: "Pure hardware logic — no OS, no runtime, no abstractions",
+      overview: {
+        problem:
+          "Wanted to build something that required thinking in real hardware constraints — no OS, no runtime, direct register-level control.",
+        approach:
+          "Designed a randomized LED challenge game on Arduino with hardware interrupt-based input polling and a buzzer feedback system for correct/incorrect patterns.",
+        outcome:
+          "A physical reaction game that runs entirely on microcontroller logic with millisecond-accurate timing.",
       },
-      { label: "Hardware Platform", value: "Arduino", context: "bare metal" },
-    ],
-    github: "https://github.com/Yuvraj-Malik/Bomb-Defuse",
-    live: null,
-  },
+      architecture: {
+        description:
+          "Arduino C++ with direct I/O register manipulation. Randomized pattern generation via hardware entropy seeding. Buzzer and LED feedback driven by PWM output.",
+        decisions: [
+          "Hardware interrupts over polling for input — ensures zero missed presses under load",
+          "PWM buzzer tones encode feedback (correct/incorrect/timeout) without a sound library",
+          "Entropy seeding from analog noise for true randomization on constrained hardware",
+        ],
+      },
+      challenges: [
+        "Button debounce on physical hardware — implemented software debounce with 20ms threshold",
+        "Timing accuracy without OS scheduler — used hardware timer registers directly",
+        "LED pattern visibility under different lighting — calibrated resistor values for consistent brightness",
+      ],
+      metrics: [
+        { label: "Input Response", value: "<5ms", context: "hardware interrupt" },
+        { label: "Pattern Randomness", value: "True", context: "analog entropy seed" },
+        { label: "Hardware Platform", value: "Arduino", context: "bare metal" },
+      ],
+      github: "https://github.com/Yuvraj-Malik/Bomb-Defuse",
+      live: null,
+    },
 ];
 
 const ENGINEERING_DECISIONS = [
@@ -467,14 +415,6 @@ function getProjectImagePaths(projectId) {
     return ["/images/projects/Jarvis-1.png", "/images/projects/Jarvis-2.png"];
   }
 
-  if (projectId === "stark-paper-analyzer") {
-    return [
-      "/images/projects/Stark-1.png",
-      "/images/projects/Stark-2.png",
-      "/images/projects/Stark-3.png",
-      "/images/projects/Stark-4.png",
-    ];
-  }
 
   if (projectId === "anime-clash") {
     return [

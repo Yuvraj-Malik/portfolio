@@ -46,7 +46,7 @@ const PORTFOLIO = {
   projects: [
     { name: "Spatial Console",      tech: ["Three.js", "MediaPipe", "React Three Fiber"], desc: "Browser-based 3D spatial builder controlled entirely by hand gestures." },
     { name: "Jarvis",               tech: ["Python", "LLM APIs", "Edge-TTS"],             desc: "Fault-tolerant multi-LLM voice assistant with real desktop automation." },
-    { name: "Stark Paper Analyzer", tech: ["FastAPI", "Gemini 2.5", "React"],             desc: "Transforms research PDFs into structured intelligence-ready outputs." },
+    
     { name: "Code Vault",           tech: ["React 19", "Node.js", "MongoDB"],             desc: "Team-based live coding arena. Hosted 30-team campus competition." },
     { name: "Air Canvas",           tech: ["Python", "OpenCV", "MediaPipe"],              desc: "Touchless drawing interface on a 5000�5000 canvas using hand gestures." },
     { name: "AI Pose Detection",    tech: ["TensorFlow Lite", "MoveNet", "OpenCV"],       desc: "Real-time exercise form scoring using biomechanical state machines." },
@@ -394,8 +394,7 @@ function localAIResponse(q) {
     return `Jarvis � multi-LLM voice assistant controlling my desktop: WhatsApp, YouTube, email. Multi-provider fallback for 99%+ uptime. Built in Python.`;
   if (t.match(/spatial|\b3d\b|gesture|hand tracking/))
     return `Spatial Console � browser-based 3D builder controlled by hand gestures. No mouse, no keyboard. Just MediaPipe + React Three Fiber in your browser.`;
-  if (t.match(/stark|paper|analyzer|\bpdf\b|research/))
-    return `Stark Paper Analyzer � upload a research PDF, get structured intelligence. FastAPI + Gemini 2.5 + React. Turns dense papers into something readable.`;
+  
   if (t.match(/code vault|coding arena|competition/))
     return `Code Vault � live team-based coding arena. Hosted a 30-team campus competition with zero downtime. React 19, Node.js, MongoDB.`;
   if (t.match(/air canvas|drawing|touchless/))

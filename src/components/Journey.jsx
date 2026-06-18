@@ -34,13 +34,6 @@ const TIMELINE = [
   },
   {
     year: "2026",
-    title: "Stark Paper Analyzer",
-    type: "project",
-    tip: "Research PDF → structured intelligence",
-    stack: "FastAPI · Gemini 2.5 · React",
-  },
-  {
-    year: "2026",
     title: "Anime Clash",
     type: "project",
     tip: "Deterministic daily anime popularity game",

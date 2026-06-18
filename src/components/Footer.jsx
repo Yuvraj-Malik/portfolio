@@ -73,7 +73,6 @@ const NAV_LINKS = [
 
 const PROJECTS = [
   { label: "Spatial Console", id: "spatial-console" },
-  { label: "Stark Paper Analyzer", id: "stark-paper-analyzer" },
   { label: "Jarvis", id: "jarvis" },
   { label: "Code Vault", id: "code-vault" },
   { label: "Air Canvas", id: "air-canvas" },
