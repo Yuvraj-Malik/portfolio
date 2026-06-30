@@ -218,7 +218,7 @@ export default function Footer() {
                   },
                   {
                     icon: <LeetCodeIcon />,
-                    href: "https://leetcode.com/u/Yuvraj_Malik/",
+                    href: "https://leetcode.com/u/Yuvraj-Malik/",
                     label: "LeetCode",
                   },
                 ].map((s, i) => (
