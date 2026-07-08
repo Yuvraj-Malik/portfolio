@@ -1,10 +1,10 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import Navbar          from "./components/Navbar";
-import Hero            from "./components/Hero";
-import About           from "./components/About";
-import Preloader       from "./components/PreLoader";
-import CommandPalette  from "./components/CommandPalette";
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import About from "./components/About";
+import Preloader from "./components/PreLoader";
+import CommandPalette from "./components/CommandPalette";
 
 const Contact  = lazy(() => import("./components/Contact"));
 const Projects = lazy(() => import("./components/Projects"));

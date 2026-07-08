@@ -833,7 +833,7 @@ export default function About() {
                     Yuvraj Malik
                   </p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                    {["2nd Year COE", "TIET Patiala"].map(
+                    {["3rd Year COE", "TIET Patiala"].map(
                       (pill) => (
                         <span
                           key={pill}
