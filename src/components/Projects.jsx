@@ -78,7 +78,7 @@ const PROJECTS = [
       },
     ],
     github: "https://github.com/Yuvraj-Malik/spatial-console",
-    live: null,
+    live: "https://spatial-console.yuvrajm.dev/",
   },
   {
     id: "code-vault",
