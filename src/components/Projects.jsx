@@ -23,115 +23,61 @@ const PROJECTS = [
   {
     id: "spatial-console",
     title: "Spatial Console",
-    // Showcase: hook + short description
     thesis: "Build in 3D using just your hands.",
     category: "AI System",
     status: "active",
     type: "ai",
     tech: ["MediaPipe Hands", "Three.js", "React Three Fiber"],
-    // Showcase: key features as highlights
     highlights: [
-      "Control a 3D cursor using live hand tracking",
-      "Create, move, and place cubes using gestures",
-      "Snap structures cleanly onto a grid",
-      "Build entirely touch-free, directly in the browser",
+      "Control a 3D cursor and place voxels using live hand tracking",
+      "Grid-based spatial partitioning keeps collision checks fast at scale",
+      "First-person walkthrough mode to explore builds from inside",
+      "Runs entirely in-browser — no mouse, no keyboard, no install",
     ],
-    // Showcase: interaction description as authority signal
     authoritySignal:
       "Move your hand → the cursor follows. Gesture → a cube appears. Drag → it snaps perfectly into place.",
-    // Engineered: overview
     overview: {
       problem:
         "Creating and manipulating 3D content typically depends on a mouse, keyboard, and complex tools — making spatial interaction unintuitive and inaccessible for many users.",
       approach:
-        "Built a touchless 3D building system where MediaPipe tracks hand landmarks, gesture logic interprets intent, and a React Three Fiber scene updates in real time.",
+        "Built a touchless 3D building system where MediaPipe tracks hand landmarks, gesture logic interprets intent, a grid-partitioned collision system keeps checks fast as structures grow, and a React Three Fiber scene updates in real time.",
       outcome:
-        "A browser-based spatial environment where your hand becomes the controller — no mouse, no keyboard, just real-time gesture interaction with instant visual feedback.",
+        "A browser-based spatial building tool where your hand becomes the controller — no mouse, no keyboard, with a first-person walkthrough mode to explore what you've built.",
     },
-    // Engineered: architecture
     architecture: {
       description:
         "Webcam Input → Hand Landmarks (MediaPipe) → Gesture Controller → Action Controller → State (Reducer) → 3D Renderer → UI Feedback. Gesture interpretation and rendering logic are fully separated to keep each layer independently testable.",
       decisions: [
+        "Implemented 3×3 grid spatial partitioning for collision checks, reducing narrow-phase checks by 95–98% across benchmark scenes",
         "Separated gesture interpretation from rendering logic — changes to one don't affect the other",
         "Used grid snapping for predictable, reliable placement without free-form ambiguity",
         "Added continuous visual feedback (cursor previews) so intent is always visible to the user",
       ],
     },
-    // Engineered: challenges mapped as problem → solution pairs
     challenges: [
       "Noisy hand tracking caused unstable cursor — applied smoothing and threshold-based position updates",
       "Differentiating intentional gestures from natural motion — introduced gesture gating using confidence scores and timing checks",
-      "State-driven architecture minimizes re-renders — efficient snapping and lightweight rendering keep the scene responsive",
+      "Naive collision checks didn't scale with structure size — added spatial-locality partitioning to cut narrow-phase checks by 95–98%",
+      "State-driven architecture minimizes re-renders — efficient snapping and lightweight rendering keep the scene responsive during concurrent gesture tracking",
     ],
-    // Engineered: metrics reframed around performance + trade-offs
     metrics: [
       {
-        label: "Rendering Architecture",
-        value: "State-driven",
-        context: "minimises re-renders",
+        label: "Collision Optimization",
+        value: "95–98%",
+        context: "reduction in narrow-phase checks (grid partitioning)",
       },
       {
-        label: "Placement System",
-        value: "Grid snap",
-        context: "predictable & reliable",
+        label: "Production Bundle",
+        value: "457 KB gzip",
+        context: "main bundle size",
       },
       {
-        label: "Stability trade-off",
-        value: "Reliability",
-        context: "prioritised over latency",
+        label: "Runtime Performance",
+        value: "150+ FPS",
+        context: "sustained during concurrent gesture tracking",
       },
     ],
     github: "https://github.com/Yuvraj-Malik/spatial-console",
-    live: null,
-  },
-  {
-    id: "jarvis",
-    title: "Jarvis",
-    thesis:
-      "A resilient, multi-provider voice assistant engineered for real desktop automation and fault tolerance.",
-    category: "AI System",
-    status: "shipped",
-    type: "ai",
-    tech: ["Python", "LLM APIs", "Threading", "Edge-TTS"],
-    highlights: [
-      "Modular brain/router/tool architecture",
-      "Multi-LLM fallback (Groq, Gemini, Mistral)",
-      "Persistent session memory + system-level automation",
-    ],
-    authoritySignal: "Fault-tolerant multi-provider architecture",
-    overview: {
-      problem:
-        "Existing voice assistants are reactive and siloed — they answer questions but can't execute multi-step desktop workflows.",
-      approach:
-        "Designed a modular brain/router/tool architecture where a central router dispatches intents to specialized tool modules, with multi-LLM fallback for reliability.",
-      outcome:
-        "A personal desktop AI that handles voice commands, automates workflows, and maintains session context across interactions.",
-    },
-    architecture: {
-      description:
-        "Three-module system: Speech input → Intent router → Tool executor. Router uses lightweight classification before calling LLM to reduce latency. Tools are isolated modules with defined I/O contracts.",
-      decisions: [
-        "Multi-LLM fallback (Groq → Gemini → Mistral) ensures 99%+ uptime",
-        "Isolated tool modules allow hot-swapping without restarting the assistant",
-        "Edge-TTS chosen over cloud TTS for zero-latency local synthesis",
-      ],
-    },
-    challenges: [
-      "Intent ambiguity between similar commands — resolved with a two-stage classification pipeline",
-      "Session memory bloat over long conversations — implemented sliding window with summary compression",
-      "Cross-platform subprocess control — abstracted OS-specific calls behind a unified interface",
-    ],
-    metrics: [
-      { label: "Intent Classification", value: "~94%", context: "accuracy" },
-      {
-        label: "Voice Response Latency",
-        value: "<1.2s",
-        context: "end-to-end",
-      },
-      { label: "LLM Fallback Success", value: "99%+", context: "uptime" },
-    ],
-    github: "https://github.com/Yuvraj-Malik/Jarvis",
     live: null,
   },
   {
