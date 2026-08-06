@@ -125,7 +125,69 @@ const PROJECTS = [
     github: "https://github.com/Yuvraj-Malik/Code-Vault",
     live: "https://lead.pratham.codes",
   },
-  
+  {
+  id: "ich-segmentation-gan",
+  title: "ICH Segmentation GAN",
+  thesis: "Translating raw CT scans into hemorrhage masks with a custom Pix2Pix pipeline.",
+  category: "AI System",
+  status: "complete",
+  type: "ai",
+  tech: ["Python", "PyTorch", "Pix2Pix GAN", "PatchGAN"],
+  highlights: [
+    "Custom Pix2Pix GAN reframes hemorrhage segmentation as image-to-image translation",
+    "PatchGAN discriminator penalizes blurry boundaries to sharpen lesion edges",
+    "Weighted loss function (30x penalty on missed hemorrhage pixels) counters 98%+ class imbalance",
+    "Evaluated across Dice, Recall, Precision, and IoU on a held-out test set",
+  ],
+  authoritySignal:
+    "0.72 Dice coefficient, 80% recall — tuned to flag conservative boundaries rather than miss a bleed.",
+  overview: {
+    problem:
+      "Standard segmentation models tend to predict near-empty masks on CT scans, since over 98% of a typical scan is healthy tissue or background — extreme class imbalance drives models toward minimizing loss by predicting nothing.",
+    approach:
+      "Built a Pix2Pix GAN with a UNet generator (skip connections to preserve small-lesion positioning) and a PatchGAN discriminator (70×70 receptive field, penalizes blurry output). Combined adversarial, pixel-weighted BCE, and Dice loss into a single objective, with a 30x penalty weight on missed hemorrhage pixels to counter class imbalance.",
+    outcome:
+      "A model that reliably captures 80% of true hemorrhage regions (recall) with a 0.72 Dice overlap against expert-labeled ground truth, deliberately tuned toward catching more true positives at the cost of some over-segmentation.",
+  },
+  architecture: {
+    description:
+      "CT Scan → Hounsfield Windowing ([-100, 200] HU) → Normalization (256×256) → UNet Generator → PatchGAN Discriminator → Composite Loss (Adversarial + 100×Pixel + 100×Dice) → Binary Mask Output.",
+    decisions: [
+      "Chose PatchGAN over a global discriminator to force locally sharp boundaries instead of averaged, blurry predictions",
+      "Applied a 30x loss weight on true hemorrhage pixels to prevent the model from collapsing to empty-mask predictions",
+      "Clipped CT values to a fixed Hounsfield range to strip skull artifacts and isolate soft tissue before training",
+    ],
+  },
+  challenges: [
+    "Extreme class imbalance (98%+ background) caused early models to predict blank masks — addressed with weighted BCE loss",
+    "Standard UNet segmentation produced blurry lesion boundaries — addressed by adopting a PatchGAN adversarial setup",
+    "Balancing recall against over-segmentation — tuned loss weighting to favor catching true positives, accepting lower precision as a deliberate tradeoff",
+  ],
+  metrics: [
+    {
+      label: "Dice Coefficient",
+      value: "0.7225",
+      context: "overlap with expert ground truth",
+    },
+    {
+      label: "Recall",
+      value: "80.05%",
+      context: "true hemorrhage pixels captured",
+    },
+    {
+      label: "Precision",
+      value: "65.84%",
+      context: "traded for higher recall",
+    },
+    {
+      label: "Mean IoU",
+      value: "0.5656",
+      context: "Jaccard index across lesions",
+    },
+  ],
+  github: "https://github.com/Yuvraj-Malik/pix2pix",
+  live: null,
+},
   {
     id: "air-canvas",
     title: "Air Canvas",
@@ -379,6 +441,13 @@ function getProjectImagePaths(projectId) {
     ];
   }
 
+  if (projectId === "ich-segmentation-gan") {
+    return ["/images/projects/ich-segmentation-gan-1.png", "/images/projects/ich-segmentation-gan-2.png", 
+      "/images/projects/ich-segmentation-gan-3.png"
+    ];
+  }
+  
+
   if (projectId === "bomb-defuse") {
     return ["/images/projects/Bomb-1.png", "/images/projects/Bomb-2.png"];
   }
@@ -497,40 +566,31 @@ function ProjectImageBox({
         }}
       >
         {!imageFailed ? (
-          <picture
+          <img
+            src={activeImage}
+            alt={`Project preview ${activeIndex + 1}`}
+            decoding="async"
+            loading="eager"
+            fetchPriority="high"
             style={{
               width: "100%",
               height: "100%",
+              objectFit: "cover",
+              objectPosition: "top",
               display: "block",
+              cursor: "zoom-in",
+              transition: "opacity 0.4s ease-in-out, filter 0.3s ease",
+              opacity: isFading ? 0 : 1,
+              filter: isLoaded
+                ? "saturate(0.9) contrast(0.95)"
+                : "blur(10px) saturate(0.8) contrast(0.9)",
+              transform: "scale(0.98)",
+              transformOrigin: "center",
             }}
-          >
-            <source srcSet={toWebpPath(activeImage)} type="image/webp" />
-            <img
-              src={activeImage}
-              alt={`Project preview ${activeIndex + 1}`}
-              decoding="async"
-              loading="eager"
-              fetchPriority="high"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                objectPosition: "top",
-                display: "block",
-                cursor: "zoom-in",
-                transition: "opacity 0.4s ease-in-out, filter 0.3s ease",
-                opacity: isFading ? 0 : 1,
-                filter: isLoaded
-                  ? "saturate(0.9) contrast(0.95)"
-                  : "blur(10px) saturate(0.8) contrast(0.9)",
-                transform: "scale(0.98)",
-                transformOrigin: "center",
-              }}
-              onClick={() => setFullscreenIndex(activeIndex)}
-              onLoad={() => setIsLoaded(true)}
-              onError={() => setImageFailed(true)}
-            />
-          </picture>
+            onClick={() => setFullscreenIndex(activeIndex)}
+            onLoad={() => setIsLoaded(true)}
+            onError={() => setImageFailed(true)}
+          />
         ) : (
           <span
             style={{
@@ -679,27 +739,21 @@ function ProjectImageBox({
             cursor: "zoom-out",
           }}
         >
-          <picture style={{ display: "block" }}>
-            <source
-              srcSet={toWebpPath(images[fullscreenIndex])}
-              type="image/webp"
-            />
-            <img
-              src={images[fullscreenIndex]}
-              alt={`Fullscreen project preview ${fullscreenIndex + 1}`}
-              loading="lazy"
-              decoding="async"
-              style={{
-                width: "min(1100px, 92vw)",
-                maxHeight: "88vh",
-                objectFit: "contain",
-                borderRadius: 12,
-                border: `1px solid ${dark ? "#444" : "rgba(255,255,255,0.8)"}`,
-                boxShadow: "0 28px 80px rgba(0,0,0,0.45)",
-              }}
-              onClick={(e) => e.stopPropagation()}
-            />
-          </picture>
+          <img
+            src={images[fullscreenIndex]}
+            alt={`Fullscreen project preview ${fullscreenIndex + 1}`}
+            loading="lazy"
+            decoding="async"
+            style={{
+              width: "min(1100px, 92vw)",
+              maxHeight: "88vh",
+              objectFit: "contain",
+              borderRadius: 12,
+              border: `1px solid ${dark ? "#444" : "rgba(255,255,255,0.8)"}`,
+              boxShadow: "0 28px 80px rgba(0,0,0,0.45)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
         </div>
       )}
     </>
