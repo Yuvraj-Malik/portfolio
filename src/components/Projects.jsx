@@ -1448,14 +1448,16 @@ function ProjectExpanded({ project, dark, c, mode, onClose, isNarrow }) {
           display: "grid",
           gridTemplateColumns: isNarrow ? "1fr" : "1fr 1.6fr",
           gap: isNarrow ? 24 : 48,
+          minWidth: 0,
         }}
       >
         {/* Left — problem statement, highlights, tech, authority, buttons */}
-        <div>
+        <div style={{ minWidth: 0 }}>
           <div
             style={{
               display: "flex",
               alignItems: "center",
+              flexWrap: "wrap",
               gap: 10,
               marginBottom: 6,
             }}
@@ -1463,11 +1465,13 @@ function ProjectExpanded({ project, dark, c, mode, onClose, isNarrow }) {
             <span
               style={{
                 fontFamily: "'Instrument Serif', Georgia, serif",
-                fontSize: 28,
+                fontSize: "clamp(22px, 6vw, 28px)",
                 fontWeight: 400,
                 color: dark ? "#fff" : "#050505",
                 letterSpacing: "-0.02em",
                 lineHeight: 1.1,
+                wordBreak: "break-word",
+                minWidth: 0,
               }}
             >
               {project.title}
@@ -1621,7 +1625,7 @@ function ProjectExpanded({ project, dark, c, mode, onClose, isNarrow }) {
         </div>
 
         {/* Right — smaller preview + full tabbed deep-dive */}
-        <div>
+        <div style={{ minWidth: 0 }}>
           <ProjectImageBox
             key={`${project.id}-engineer-image-box`}
             projectId={project.id}
@@ -1637,6 +1641,7 @@ function ProjectExpanded({ project, dark, c, mode, onClose, isNarrow }) {
               display: "flex",
               borderBottom: `1px solid ${dark ? "#222" : "#e8e8e8"}`,
               marginBottom: 20,
+              overflowX: "auto",
             }}
           >
             {TABS.map((t) => (
@@ -1653,6 +1658,8 @@ function ProjectExpanded({ project, dark, c, mode, onClose, isNarrow }) {
                   fontSize: 11,
                   letterSpacing: "0.08em",
                   padding: "6px 14px",
+                  whiteSpace: "nowrap",
+                  flexShrink: 0,
                   color:
                     activeTab === t
                       ? dark
