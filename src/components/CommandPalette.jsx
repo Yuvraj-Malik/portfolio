@@ -374,7 +374,7 @@ function localAIResponse(q) {
     return `Yes � open to interesting opportunities. Full-time, internship, or freelance. The work has to be meaningful. Reach me at ${PORTFOLIO.email}`;
 
   // -- FUTURE GOALS ---------------------------------------------------------
-  if (t.match(/goal|future|plan|dream|ambition|where do you see|5 years|aspiration|what do you want|aage kya/))
+  if (t.match(/\b(goal|future|plan|dream|ambition)\b|where do you see|5 years|aspiration|what do you want|aage kya/))
     return `Build systems that feel like science fiction � and eventually, build the company around one of them. For now: ship things that matter, learn obsessively, stay ahead.`;
 
   // -- COLLEGE / EDUCATION --------------------------------------------------
@@ -470,9 +470,9 @@ async function callGroq(messages, signal) {
       : "You are Yuvraj Malik. Answer in first person. Be confident, concise, and direct. Do not speak in third person. Keep answers short (2-3 sentences).";
 
     const models = [
-      "llama3-70b-8192",
-      "llama-3.3-70b-versatile",
-      "llama-3.1-8b-instant",
+      "openai/gpt-oss-20b",
+      "openai/gpt-oss-120b",
+      "qwen/qwen3.6-27b",
     ];
 
     for (const model of models) {
